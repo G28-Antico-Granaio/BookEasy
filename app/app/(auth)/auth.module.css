@@ -1,0 +1,31 @@
+/*form*/
+.form {
+    background-color: antiquewhite;
+
+    border-radius: 15px;
+
+    width: 500px;
+    padding: 15px;
+    text-align: center;
+}
+
+/*links*/
+.link {
+    color: #0645AD;
+}
+
+/*tel_number*/
+.prefix, .postfix {
+    margin: 2.5px;
+}
+.prefix {
+    width: 15%;
+}
+.postfix {
+    width: 55%;
+}
+
+/*private-area*/
+.ul {
+    list-style: none;
+}
