@@ -28,6 +28,7 @@ function Private_Area() {
     } catch (error: any) {
       
       message.error(error.response.data.message);
+      
     } finally {
 
       setLoading(false);
@@ -76,7 +77,7 @@ function Private_Area() {
       </div>
 
       <ul className={style.ul}>
-        <li><a href={''} onClick={onDelete} className={style.link}>Elimina l&apos;Account</a></li>
+        <li><a href={'/delete-account'} className={style.link}>Elimina l&apos;Account</a></li>
       </ul>
     </main>
   )

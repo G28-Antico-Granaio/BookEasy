@@ -5,9 +5,6 @@ import Image from 'next/image'
 import style from './components.module.css'
 import logo from '@/img/duck.jpg'
 import user from '@/img/duck.jpg'
-import it_flag from '@/img/duck.jpg'
-import en_flag from '@/img/duck.jpg'
-import de_flag from '@/img/duck.jpg'
 
 function Header() {
   return (

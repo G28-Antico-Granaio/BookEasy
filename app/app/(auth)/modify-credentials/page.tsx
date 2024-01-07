@@ -2,10 +2,16 @@
 
 import React from 'react';
 
-import { Form, Button } from 'antd';
-import Link from 'next/link';
+import { Form, Input, Select, Button, message } from 'antd';
+
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { NextResponse } from 'next/server';
+
 
 import style from '../auth.module.css'
+
+const { Option } = Select;
 
 interface user{
     name: string;
@@ -16,44 +22,131 @@ interface user{
 } 
 
 function Modify_Credentials() {
-  return (
-    <main>
-    <div className={style.form}>
 
-        <h1>Modifica Credenziali</h1>
+    const [form] = Form.useForm();
 
-        <hr />
+    const router = useRouter();
+    const [loading, setLoading] = React.useState(false);
+    const onChange = async (values: user) => {
+    
+        try {
+            setLoading(true);
 
-        <Form>
+            await axios.post('/api/auth/modify-credentials', values);
+            message.success('Modifica delle Credenziali effettuata');
+            router.push("/private-area");
 
-            <Form.Item name={'Name'}
-                rules={getAntdFieldRequiredRule('Inserisci il tuo Nome')}>
-                <input type="text" placeholder='Nome'/>
-            </Form.Item>
+        } catch (error: any) {
 
-            <Form.Item name={'surname'}
-                rules={getAntdFieldRequiredRule('Inserisci il tuo Cognome')}>
-                <input type="email" placeholder='Cognome'/>
-            </Form.Item>
+            return NextResponse.json({
+                message: error.message,
+            },
+                {
+                    status: 400
+                }
+            );
 
-            <Form.Item name={'tel_number'}
-                rules={getAntdFieldRequiredRule('Inserire un numero di Telefono valido')}>
-                    <input className={style.prefix} type="number" placeholder='Prefisso'/>
-                    <input className={style.postfix} type="number" placeholder='Numnero di Telefono'/>
-            </Form.Item>
+        } finally {
 
-            <Form.Item name={'email'}
-                rules={getAntdFieldRequiredRule('Inserisci un indirizzo E-Mail valido')}>
-                <input type="email" placeholder='E-Mail'/>
-            </Form.Item>
+            setLoading(false);
+        }
+    };
 
 
-            <Button htmlType='submit'>
-                Conferma le Modifiche
-            </Button>
+    const prefixSelector = (
+        <Form.Item name="tel_area_code" noStyle>
+            <Select>
+                <Option value="39">+39</Option>
+                <Option value="44">+44</Option>
+                <Option value="49">+49</Option>
+            </Select>
+        </Form.Item>
+    );
 
-        </Form>
-    </div>
-</main>
+    return (
+        <main>
+            <div className={style.form}>
+
+                <h1>Modifica Credenziali</h1>
+
+                <hr />
+
+                <Form
+                    name='register'
+                    form={form}
+                    onFinish={onChange}
+                    initialValues={{ tel_area_code: '39' }}
+                    scrollToFirstError>
+
+                    <h1>Registrati</h1>
+
+                    <hr />
+
+                    <Form.Item
+                        name={'name'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Inserisci il tuo nome'
+                            },
+                        ]}>
+
+                        <Input placeholder='Nome'/>
+
+                    </Form.Item>
+
+                    <Form.Item
+                        name={'surname'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Inserisci il tuo Cognome'
+                            },
+                        ]}>
+
+                        <Input placeholder='Cognome'/>
+
+                    </Form.Item>
+
+                    <Form.Item
+                        className={style.numb}
+                        name={'tel_number'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Inserisci il tuo Numero di Telefono'
+                            },
+                        ]}>
+
+                        <Input addonBefore={prefixSelector} placeholder='Numnero di Telefono'
+                        style={{
+                            width: '75%',
+                        }}/>
+                    
+                    </Form.Item>
+
+                    <Form.Item
+                        name={'email'}
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'E-Mail inserita non è valida'
+                            },
+                            {
+                                required: true,
+                                message: 'Inserire un indirizzo E-Mail'
+                            },
+                        ]}>
+                        <Input placeholder='E-Mail'/>
+                    </Form.Item>
+
+
+                    <Button htmlType='submit' block loading={loading}>
+                        Conferma le Modifiche
+                    </Button>
+
+                </Form>
+            </div>
+        </main>
     )
 }export default Modify_Credentials
