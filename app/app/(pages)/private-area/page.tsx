@@ -3,12 +3,12 @@
 import React from 'react'
 
 import Image from 'next/image'
-import { message } from 'antd';
+import { Button, message } from 'antd';
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-import style from '../auth.module.css'
+import style from '../(auth)/auth.module.css'
 import map from '@/img/duck.jpg'
 
 
@@ -26,11 +26,9 @@ function Private_Area() {
       router.push("/login")
 
     } catch (error: any) {
-      
       message.error(error.response.data.message);
       
     } finally {
-
       setLoading(false);
     }
   }
@@ -44,8 +42,16 @@ function Private_Area() {
     <main>
 
       <ul className={style.ul}>
-        <li><a href={'/modify-credentials'} className={style.link}>Modifica le credenziali</a></li>
-        <li><a href={''} onClick={onLogout} className={style.link}>Logout</a></li>
+        <li>
+          <Button htmlType='submit' formAction={'/modify-credentials'} block loading={loading}>
+            Modifica le Credenziali
+          </Button>
+        </li>
+        <li>
+          <Button  htmlType='submit' onClick={onLogout} block loading={loading}>
+            Logout
+          </Button>
+        </li>
       </ul>
 
       <hr />

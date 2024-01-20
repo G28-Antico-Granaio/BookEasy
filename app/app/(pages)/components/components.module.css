@@ -76,7 +76,7 @@
     white-space: nowrap;
     overflow: hidden;
 
-    background-image: url('../../img/duck.jpg');
+    background-image: url('../../../img/duck.jpg');
     background-size: contain;
 }
 .dropdown_container > .dropdown > .dropdown_item > .locale > a {

@@ -9,7 +9,7 @@ import axios from 'axios';
 import { NextResponse } from 'next/server';
 
 
-import style from '../auth.module.css'
+import style from '../(auth)/auth.module.css'
 
 const { Option } = Select;
 
@@ -66,11 +66,6 @@ function Modify_Credentials() {
     return (
         <main>
             <div className={style.form}>
-
-                <h1>Modifica Credenziali</h1>
-
-                <hr />
-
                 <Form
                     name='register'
                     form={form}
@@ -78,7 +73,7 @@ function Modify_Credentials() {
                     initialValues={{ tel_area_code: '39' }}
                     scrollToFirstError>
 
-                    <h1>Registrati</h1>
+                    <h1>Modifica Credenziali</h1>
 
                     <hr />
 

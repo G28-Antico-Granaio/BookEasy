@@ -92,9 +92,11 @@ function Login(){
                     
                     </Form.Item>
 
-                    <Link href='/password_recovery' className={style.link}>
-                        Recupera Password
-                    </Link>
+                    <Form.Item>
+                        <Link href='/password_recovery' className={style.link} prefetch={false}>
+                            Recupera Password
+                        </Link>
+                    </Form.Item>
 
                     <Button htmlType='submit' block loading={loading}>
                         Accedi

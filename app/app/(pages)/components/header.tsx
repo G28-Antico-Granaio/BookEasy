@@ -5,6 +5,7 @@ import Image from 'next/image'
 import style from './components.module.css'
 import logo from '@/img/duck.jpg'
 import user from '@/img/duck.jpg'
+import Link from 'next/link'
 
 function Header() {
   return (
@@ -40,9 +41,9 @@ function Header() {
 
         <div className={style.header_item}>
           <div className={style.user_icon}>
-            <a href={`/private-area`} className={style.user}>
+            <Link href={`/private-area`} className={style.user}>
               <Image src={user} alt='private area' width={50} height={50} />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
