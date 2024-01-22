@@ -46,19 +46,18 @@ function Login(){
     }
 
     return(
-        <main>
-            <div className={style.form}>
+        <section className='container'>
+            <section className={style.form}>
 
                 <Form
                 name='login'
                 form={form}
                 onFinish={onLogin}
                 scrollToFirstError>
-
-                    <h1>Login</h1>
+                    <h2>Login</h2>
 
                     <hr />
-
+                    
                     <Form.Item
                         name={'email'}
                         rules={[
@@ -72,7 +71,10 @@ function Login(){
                             },
                         ]}>
 
-                        <Input placeholder='E-Mail'/>
+                        <Input placeholder='E-Mail'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
                     </Form.Item>
 
@@ -88,6 +90,7 @@ function Login(){
                         <Input.Password placeholder='Password'
                         style={{
                             width: '75%',
+                            height: '3rem',
                         }}/>
                     
                     </Form.Item>
@@ -114,7 +117,7 @@ function Login(){
                         </Link>
                     </div>
                 </Form>
-            </div>
-        </main>
+            </section>
+        </section>
     )
 }export default Login

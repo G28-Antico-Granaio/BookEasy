@@ -64,7 +64,7 @@ function Modify_Credentials() {
     );
 
     return (
-        <main>
+        <section className='container'>
             <div className={style.form}>
                 <Form
                     name='register'
@@ -73,7 +73,7 @@ function Modify_Credentials() {
                     initialValues={{ tel_area_code: '39' }}
                     scrollToFirstError>
 
-                    <h1>Modifica Credenziali</h1>
+                    <h2>Modifica Credenziali</h2>
 
                     <hr />
 
@@ -86,7 +86,10 @@ function Modify_Credentials() {
                             },
                         ]}>
 
-                        <Input placeholder='Nome'/>
+                        <Input placeholder='Nome'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
                     </Form.Item>
 
@@ -99,7 +102,10 @@ function Modify_Credentials() {
                             },
                         ]}>
 
-                        <Input placeholder='Cognome'/>
+                        <Input placeholder='Cognome'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
                     </Form.Item>
 
@@ -132,7 +138,10 @@ function Modify_Credentials() {
                                 message: 'Inserire un indirizzo E-Mail'
                             },
                         ]}>
-                        <Input placeholder='E-Mail'/>
+                        <Input placeholder='E-Mail'
+                        style={{
+                            height: '3rem',
+                        }}/>
                     </Form.Item>
 
 
@@ -142,6 +151,6 @@ function Modify_Credentials() {
 
                 </Form>
             </div>
-        </main>
+        </section>
     )
 }export default Modify_Credentials

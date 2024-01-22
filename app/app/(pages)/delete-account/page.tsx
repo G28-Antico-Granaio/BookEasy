@@ -8,8 +8,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 
-
-import style from '../auth.module.css'
+import style from '@/app/(pages)/(auth)/auth.module.css'
 
 interface user{
     password: string;
@@ -21,13 +20,13 @@ function Delete_Account() {
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const onLogin = async (values: user) => {
+    const onDelete = async (values: user) => {
         try {
             setLoading(true);
 
             await axios.post("/api/auth/delete-account", values);
-            message.success("Login Effettuato");
-            router.push("/private-area")
+            message.success("Account Eliminato");
+            router.push("/")
 
         } catch (error: any) {
 
@@ -45,22 +44,28 @@ function Delete_Account() {
     }
     
   return (
-    <main>
+    <section className='container'>
+
         <h1>Eliminazione Account</h1>
 
-        <p>
+        <section className={style.blabla}>
             Quando elimini il tuo account, non potrai più recuperare
             le tue vecchie credemziali e lo storico delle prenotazioni.
             Inoltre non sarà più possibile prenotare online in questo 
             ristornate.
-        </p>
+        </section>
 
-        <p>
+        <section className={style.blabla}>
             Se desideri procedere con l&apos;operazione, inserisci la
             password e clicca conferma
-        </p>
+        </section>
 
-        <Form>
+        <Form
+            name='delete'
+            form={form}
+            onFinish={onDelete}
+            scrollToFirstError>
+
             <Form.Item
                 name={'password'}
                 rules={[
@@ -72,15 +77,19 @@ function Delete_Account() {
 
                 <Input.Password placeholder='Password'
                 style={{
-                    width: '75%',
+                    width: '25%',
+                    height: '3rem'
                 }}/>
 
             </Form.Item>
 
-            <Button htmlType='submit' block loading={loading}>
-                Conferma 
+            <Button htmlType='submit' block loading={loading} style={{
+                    width: '25% !important',
+                    height: '3rem'
+                }}>
+                Cancella definitivamente l&apos;account 
             </Button>
         </Form>
-    </main>
+    </section>
   )
 } export default Delete_Account

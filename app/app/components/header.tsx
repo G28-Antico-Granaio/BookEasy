@@ -1,0 +1,139 @@
+'use client'
+
+import React from 'react'
+
+import Image from 'next/image'
+
+import style from './components.module.css'
+import logo from '@/img/logo.png'
+import user from '@/img/duck.jpg'
+
+
+
+import { usePathname, useRouter  } from 'next/navigation'
+import { message } from 'antd'
+
+function Header() {
+
+  const router = useRouter();
+  const onPriv = async () => {
+    router.push('/private-area')
+  }
+  const onHome = async () => {
+    router.push('/')
+  }
+
+  const it_flag = '/it.png';
+  const en_flag = '/en.png';
+  const de_flag = '/de.png';
+
+  const onLocale = async (locale: number) => {
+    const element = document.getElementById('flag');
+    
+    if (element !== null) {
+      if (locale === 0) {
+        element.style.backgroundImage = `url(${it_flag})`;
+        message.success('Lingua cambiata');
+      } else if (locale === 1) {
+        element.style.backgroundImage = `url(${en_flag})`;
+        message.success('Language changed');
+      } else if (locale === 2) {
+        element.style.backgroundImage = `url(${de_flag})`;
+        message.success('Sprache geändert');
+      } else {
+        message.warning('error');
+      }
+    }
+  };
+
+  const pathname = usePathname();
+  let show_header = true;
+  if (pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/private-area"){
+
+    show_header = false;
+  }
+  
+  if(show_header === false){
+    return (
+      <header className={style.header}>
+        <div className={style.container}>
+          
+          <div className={style.header_item}></div>
+
+          <div className={style.header_item}></div>
+
+          <div className={style.header_item}>
+            <a onClick={onHome}>
+              <div className={style.restaurant_icon}>
+                <div className={style.logo}><Image src={logo} alt='logo' width={100} height={100} /></div>
+                <div className={style.title}><h1>Antico Granaio</h1></div>
+              </div>
+            </a>
+          </div>
+
+          <div className={style.header_item}>
+            <div className={style.dropdown_container}>
+              <div className={style.dropdown}>
+                <span className={style.span} id='flag'>hh</span>
+                <div className={style.dropdown_item}>
+                  <hr className={style.hr}/>
+                  <a className={style.locale_it} onClick={() => onLocale(0)}>it</a>
+                  <a className={style.locale_en} onClick={() => onLocale(1)}>en</a>
+                  <a className={style.locale_de} onClick={() => onLocale(2)}>de</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div></div>
+
+        </div>
+      </header>
+    )
+  } else {
+    return (
+      <header className={style.header}>
+        <div className={style.container}>
+          
+          <div className={style.header_item}></div>
+  
+          <div className={style.header_item}></div>
+  
+          <div className={style.header_item}>
+            <a onClick={onHome}>
+              <div className={style.restaurant_icon}>
+                <div className={style.logo}><Image src={logo} alt='logo' width={100} height={100} /></div>
+                <div className={style.title}><h1>Antico Granaio</h1></div>
+              </div>
+            </a>
+          </div>
+
+          <div className={style.header_item}>
+            <div className={style.dropdown_container}>
+              <div className={style.dropdown}>
+                <span className={style.span} id='flag'>hh</span>
+                <div className={style.dropdown_item}>
+                  <hr className={style.hr}/>
+                  <a className={style.locale_it} onClick={() => onLocale(0)}>it</a>
+                  <a className={style.locale_en} onClick={() => onLocale(1)}>en</a>
+                  <a className={style.locale_de} onClick={() => onLocale(2)}>de</a>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div className={style.header_item}>
+            <div className={style.user_icon}>
+              <a onClick={onPriv} className={style.user}>
+                <Image src={user} alt='private area' width={50} height={50} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+    )
+  }
+} export default Header
+

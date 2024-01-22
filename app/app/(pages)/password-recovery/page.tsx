@@ -2,43 +2,61 @@
 
 import React from 'react';
 
-import { Form, Button } from 'antd';
-import { getAntdFieldRequiredRule } from '@/app/helpers/validation';
+import { Form, Button, Input } from 'antd';
 
-import style from '../../auth.module.css'
+import style from '../(auth)/auth.module.css'
+import Link from 'next/link';
+
 
 interface user{
     email: string;
 }
 
 function Password_Recovery() {
-  return (
-    <main>
-        <div className={style.form}>
+    return (
+        <section className='container'>
+            <div className={style.form}>
+                <Form
+                name='password-recovery'
+                scrollToFirstError>
 
-            <h1>Modifica Password</h1>
+                    <h2>Recupero password</h2>
 
-            <Form>
+                    <hr />
 
-                <Form.Item name={'email'}
-                    rules={getAntdFieldRequiredRule('Inserire un indirizzo E-Mail valido')}>
-                    <input type='email' placeholder='esempio@dominio.com'/>
-                </Form.Item>
+                    <Form.Item
+                        name={'email'}
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'E-Mail inserita non è valida'
+                            },
+                            {
+                                required: true,
+                                message: 'Inserire un indirizzo E-Mail'
+                            },
+                        ]}>
 
-                <div>
-                    Si prega di controllare la casella di posta elettronica per il messaggio 
-                    di recuper password. In caso di non ricezione si consiglia di verificare 
-                    la casella dello spam o che l&apos;indirizzo e-mail scritto nella casella sopra 
-                    sia corrretto e premere il bottone &quot;reinvia e-mail&quot;
-                </div>
+                        <Input placeholder='E-Mail'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
-                <Button htmlType='submit'>
-                    Renvia E-Mail
-                </Button>
+                    </Form.Item>
 
-            </Form>
+                    <section className={style.blabla}>
+                        Si prega di controllare la casella di posta elettronica 
+                        per il messagio di recupero password.
+                        Nel caso di non ricezione si prega di controllarelo spam 
+                        o che la mail riportata sopra sia corretta ed eventualmente 
+                        modificarla
+                    </section>
 
-        </div>
-    </main>
-  )
+                    <Button htmlType='submit' block>
+                        Accedi
+                    </Button>
+                </Form>
+            </div>
+        </section>
+    )
 }export default Password_Recovery

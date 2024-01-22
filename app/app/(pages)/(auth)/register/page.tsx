@@ -56,17 +56,17 @@ function Register() {
 
 
     const prefixSelector = (
-        <Form.Item name="tel_area_code" noStyle>
-            <Select>
-                <Option value="39">+39</Option>
-                <Option value="44">+44</Option>
-                <Option value="49">+49</Option>
-            </Select>
-        </Form.Item>
+      <Form.Item name="tel_area_code" noStyle>
+        <Select>
+          <Option value="39">+39</Option>
+          <Option value="44">+44</Option>
+          <Option value="49">+49</Option>
+        </Select>
+      </Form.Item>
     );
 
     return (
-        <main>
+        <section className='container'>
             <div className={style.form}>
 
                 <Form
@@ -89,7 +89,10 @@ function Register() {
                             },
                         ]}>
 
-                        <Input placeholder='Nome'/>
+                        <Input placeholder='Nome'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
                     </Form.Item>
 
@@ -102,7 +105,10 @@ function Register() {
                             },
                         ]}>
 
-                        <Input placeholder='Cognome'/>
+                        <Input placeholder='Cognome'
+                        style={{
+                            height: '3rem',
+                        }}/>
 
                     </Form.Item>
 
@@ -119,6 +125,7 @@ function Register() {
                         <Input addonBefore={prefixSelector} placeholder='Numnero di Telefono'
                         style={{
                             width: '75%',
+                            height: '3rem',
                         }}/>
                     
                     </Form.Item>
@@ -135,7 +142,10 @@ function Register() {
                                 message: 'Inserire un indirizzo E-Mail'
                             },
                         ]}>
-                        <Input placeholder='E-Mail'/>
+                        <Input placeholder='E-Mail'
+                        style={{
+                            height: '3rem',
+                        }}/>
                     </Form.Item>
 
                     <hr />
@@ -153,6 +163,7 @@ function Register() {
                         <Input.Password placeholder='Password'
                         style={{
                             width: '75%',
+                            height: '3rem'
                         }}/>
                     
                     </Form.Item>
@@ -179,6 +190,7 @@ function Register() {
                         <Input.Password placeholder='Conferma Password'
                         style={{
                             width: '75%',
+                            height: '3rem'
                         }}/>
                     
                     </Form.Item>
@@ -201,7 +213,7 @@ function Register() {
                     </div>
                 </Form>
             </div>
-        </main>
+        </section>
   )
 }
 

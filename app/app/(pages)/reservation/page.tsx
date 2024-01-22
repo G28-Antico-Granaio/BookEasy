@@ -60,10 +60,8 @@ function Reservation() {
     }
 
 
-
-
     return (
-        <main>
+        <section className='container'>
             <div className={style.form}>
 
                 <h1>Prenota</h1>
@@ -157,7 +155,7 @@ function Reservation() {
                 <div></div>
                 
             </div>
-        </main>
+        </section>
     )
 }
 

@@ -2,44 +2,95 @@
 
 import React from 'react';
 
-import { Form, Button } from 'antd';
-import { getAntdFieldRequiredRule } from '@/app/helpers/validation';
+import { Form, Button, Input, message } from 'antd';
 
-import style from '../../auth.module.css'
+import style from '../(auth)/auth.module.css'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 interface user{
     password: string;
-    conf_password: string;
 }
 
 function Reset_Password() {
-  return (
-        <main>
+
+    const [form] = Form.useForm();
+
+    const router = useRouter();
+    const [loading, setLoading] = React.useState(false);
+    const onSend = async (values: user) => {
+        message.warning("Funzione non ancora Implementata");
+    };
+    
+    return (
+        <section className='container'>
             <div className={style.form}>
 
-                <h1>Modifica Password</h1>
+            <Form
+                    name='register'
+                    form={form}
+                    onFinish={onSend}
+                    initialValues={{ tel_area_code: '39' }}
+                    scrollToFirstError>
 
-                <hr />
+                    <h2>Resetta la Password</h2>
 
-                <Form>
+                    <hr />
 
-                    <Form.Item name={'password'}
-                        rules={getAntdFieldRequiredRule('Inserire una Password')}>
-                        <input type="password" placeholder='Password'/>
+                    <Form.Item
+                        name={'password'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Inserisci la tua Password'
+                            },
+                        ]}
+                        hasFeedback>
+                            
+                        <Input.Password placeholder='Password'
+                        style={{
+                            width: '75%',
+                            height: '3rem',
+                        }}/>
+                    
                     </Form.Item>
 
-                    <Form.Item name={'password'}
-                        rules={getAntdFieldRequiredRule('Inserire la Conferma della Password')}>
-                        <input type="password" placeholder='Conferma Password'/>
+                    <Form.Item
+                        name={'conf_password'}
+                        dependencies={['password']}
+                        hasFeedback
+                        rules={[
+                            {
+                              required: true,
+                              message: 'Conferma la password',
+                            },
+                            ({ getFieldValue }) => ({validator(_, value) {
+
+                                if (!value || getFieldValue('password') === value) {
+                                  return Promise.resolve();
+                                }
+                                    return Promise.reject(new Error('Le password inserite non coincidono!'));
+                                },
+                            }),
+                        ]}>
+
+                        <Input.Password placeholder='Conferma Password'
+                        style={{
+                            width: '75%',
+                            height: '3rem',
+                        }}/>
+                    
                     </Form.Item>
 
-                    <Button htmlType='submit'>
+
+                    <Button htmlType='submit' block loading={loading}>
                         Conferma
                     </Button>
-
                 </Form>
             </div>
-        </main>
+        </section>
     )
 }
 
