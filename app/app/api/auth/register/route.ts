@@ -1,59 +1,56 @@
+// Import necessary modules and configurations
 import { connect_DB } from "@/configs/dbConfig";
 import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-//connect to database
+// Connect to the database
 connect_DB();
 
-//api
-export async function POST(req :NextRequest) {
+// API endpoint for handling user registration
+export async function POST(req: NextRequest) {
     try {
-        //get form data
+        // Get form data from the request body
         const req_body = await req.json();
 
-        //check if user exist
+        // Check if the user already exists
         const user_exist = await User.findOne({ email: req_body.email });
 
-        //handle non existing user
+        // Handle existing user
         if (user_exist) {
-            throw new Error("ERRORE: Esiste già un utente registrato con questo indirizzo e-mail");
+            throw new Error("(!!) Esiste già un utente registrato con questo indirizzo e-mail");
         }
 
-        //generate salt
+        // Generate salt for password hashing
         const salt = await bcrypt.genSalt(10);
 
-        //hash form password
+        // Hash the user's password
         const hashed_password = await bcrypt.hash(req_body.password, salt);
         req_body.password = hashed_password;
 
-        //create new user
+        // Create a new user instance with the form data
         const new_user = new User(req_body);
 
-        //save new user
+        // Save the new user to the database
         await new_user.save();
 
-        //return success
+        // Return success response
         return NextResponse.json({
+            success: true,
             message: "Utente Creato",
-            data: new_user,
-        },
-            {
-                status: 200
-            }
-        );
-
+        }, {
+            status: 200
+        });
     } catch (error: any) {
-        //error message
-        console.log("ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/register'\n");
+        // Log the error message
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/register' --> ", error.message);
 
-        //return error
+        // Return error response
         return NextResponse.json({
-            message: error.message,
-        },
-            {
-                status: 400
-            }
-        );
+            success: false,
+            message: error.message || "Si è verificato un errore durante la registrazione dell'utente",
+        }, {
+            status: 400
+        });
     }
 }

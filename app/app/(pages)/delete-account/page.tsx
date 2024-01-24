@@ -12,6 +12,7 @@ import style from '@/app/(pages)/(auth)/auth.module.css'
 
 interface user{
     password: string;
+    email: string,
 }
 
 function Delete_Account() {
@@ -20,28 +21,33 @@ function Delete_Account() {
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
+
     const onDelete = async (values: user) => {
         try {
             setLoading(true);
 
-            await axios.post("/api/auth/delete-account", values);
+            const email: string | null = localStorage.getItem('email') || '';
+
+            const data: user = {
+                ...values,
+                email
+            };
+
+            await axios.post("/api/auth/delete-account", data);
             message.success("Account Eliminato");
-            router.push("/")
-
+            router.push("/");
         } catch (error: any) {
-
             return NextResponse.json({
                 message: error.message,
-            },
-                {
-                    status: 400
-                }
-            );
+            }, {
+                status: 400
+            });
         } finally {
-
+            localStorage.removeItem('email')
+            
             setLoading(false);
         }
-    }
+    };
     
   return (
     <section className='container'>

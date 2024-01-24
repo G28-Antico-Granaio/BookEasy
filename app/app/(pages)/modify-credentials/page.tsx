@@ -13,7 +13,7 @@ import style from '../(auth)/auth.module.css'
 
 const { Option } = Select;
 
-interface user{
+interface User{
     name: string;
     surname: string;
     tel_number: number;
@@ -27,25 +27,47 @@ function Modify_Credentials() {
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const onChange = async (values: user) => {
+
+    React.useEffect(() => {
+        const onLoad = async () => {
+          try {
+            const email: string | null = localStorage.getItem('email') || '';
+            const response = await axios.get(`/api/user/${email}`);
+            const user: User = response.data.data;
     
+            form.setFieldsValue({
+              name: user.name,
+              surname: user.surname,
+              tel_number: user.tel_number,
+              tel_area_code: user.tel_area_code,
+              email: user.email,
+            });
+          } catch (error: any) {
+            console.log("Error fetching user data:", error);
+          }
+        }    
+        onLoad();
+      }, [form]);
+
+    
+    const onChange = async (values: User) => {
         try {
             setLoading(true);
 
-            await axios.post('/api/auth/modify-credentials', values);
+            const email: string | null = localStorage.getItem('email') || '';
+
+            await axios.post(`/api/modify-credentials/${email}`, values);
             message.success('Modifica delle Credenziali effettuata');
+
+            localStorage.setItem('email', values.email);
+
             router.push("/private-area");
-
         } catch (error: any) {
-
             return NextResponse.json({
                 message: error.message,
-            },
-                {
-                    status: 400
-                }
-            );
-
+            }, {
+                status: 400
+            });
         } finally {
 
             setLoading(false);
@@ -70,7 +92,6 @@ function Modify_Credentials() {
                     name='register'
                     form={form}
                     onFinish={onChange}
-                    initialValues={{ tel_area_code: '39' }}
                     scrollToFirstError>
 
                     <h2>Modifica Credenziali</h2>

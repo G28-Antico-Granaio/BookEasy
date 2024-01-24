@@ -10,7 +10,7 @@ import axios from 'axios'
 import { NextResponse } from 'next/server'
 
 import style from './reservation.module.css'
-import map from '@/img/duck.jpg'
+import map from '@/public/img/duck.jpg'
 
 
 const { Option } = Select;

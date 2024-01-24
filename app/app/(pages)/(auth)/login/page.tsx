@@ -11,7 +11,7 @@ import { NextResponse } from 'next/server';
 
 import style from '../auth.module.css'
 
-interface user{
+interface User{
     email: string;
     password: string;
 }
@@ -22,16 +22,19 @@ function Login(){
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const onLogin = async (values: user) => {
+    const onLogin = async (values: User) => {
         try {
             setLoading(true);
+            const response = await axios.post("/api/auth/login", values);
+            const result = response.data;
 
-            await axios.post("/api/auth/login", values);
+            localStorage.setItem('email', values.email);
+            localStorage.setItem('role', result.data.isAdmin);
+            localStorage.setItem('log', 'true');
+
             message.success("Login Effettuato");
             router.push("/private-area")
-
         } catch (error: any) {
-
             return NextResponse.json({
                 message: error.message,
             },
@@ -39,8 +42,7 @@ function Login(){
                     status: 400
                 }
             );
-        } finally {
-
+        } finally {            
             setLoading(false);
         }
     }

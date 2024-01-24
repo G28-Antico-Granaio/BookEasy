@@ -5,19 +5,18 @@ import React from 'react';
 import { Button } from 'antd';
 import Image from 'next/image';
 
-import img1 from '@/img/carosello/1.jpg'
-import img2 from '@/img/carosello/2.jpg'
-import img3 from '@/img/carosello/3.jpg'
-import star_full from '@/img/stars/star_full.png'
-import star_empty from '@/img/stars/star_empty.png'
+import img1 from '@/public/img/carosello/1.jpg'
+import img2 from '@/public/img/carosello/2.jpg'
+import img3 from '@/public/img/carosello/3.jpg'
 
 import { useRouter } from 'next/navigation';
+import Review from './components/review';
 
 export default function Home() {
 
   const router = useRouter();
   const onBook = async () => {
-    router.push('/modify-credentials')
+    router.push('/reservation')
   }
 
   return (
@@ -41,7 +40,7 @@ export default function Home() {
       <section className='column'>
         <div>
           <h2>Scarica il Menù</h2>
-          <a href='../download_files/menù.pdf' download>
+          <a href='../public/download_files/menù.pdf' download>
             <Button>Scarica</Button>
           </a>
         </div>
@@ -54,48 +53,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='review'>
-        <div className='star'>
-          <div>Location</div>
-          <div>
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-          </div>
-
-          <div>Menù</div>
-          <div>
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-          </div>
-
-          <div>Servizio</div>
-          <div>
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-          </div>
-
-          <div>Conto</div>
-          <div>
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_full} alt='img1' width={25} height={25} />
-            <Image src={star_empty} alt='img1' width={25} height={25} />
-          </div>
-        </div>
-        <p>
-          recensioni
-        </p>
+      <section>
+        <Review />
       </section>
+
     </section>
   )
 }

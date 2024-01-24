@@ -8,17 +8,17 @@ export const validateJWT = async (req: NextRequest) => {
 
         //handle non existing token
         if (!token) {
-            throw new Error("ERRORE: Nessun token presente")
+            throw new Error("Nessun token presente")
         }
 
         //decrypt token
         const decrypted_token: any = jwt.verify(token, process.env.JWT_SECRET!);
 
         //return user id
-        return decrypted_token.id;
+        return decrypted_token._id;
 
     } catch (error: any) {
         //error message
-        throw new Error("ERRORE: nella validazione del token", error);
+        throw new Error(" !! ERRORE: nella validazione del token --> " + error.message);
     }
 } 

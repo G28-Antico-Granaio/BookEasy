@@ -5,10 +5,8 @@ import React from 'react'
 import Image from 'next/image'
 
 import style from './components.module.css'
-import logo from '@/img/logo.png'
-import user from '@/img/duck.jpg'
-
-
+import logo from '@/public/img/logo.png'
+import user from '@/public/img/duck.jpg'
 
 import { usePathname, useRouter  } from 'next/navigation'
 import { message } from 'antd'
@@ -23,9 +21,9 @@ function Header() {
     router.push('/')
   }
 
-  const it_flag = '/it.png';
-  const en_flag = '/en.png';
-  const de_flag = '/de.png';
+  const it_flag = '/img/flags/it.png';
+  const en_flag = '/img/flags/en.png';
+  const de_flag = '/img/flags/de.png';
 
   const onLocale = async (locale: number) => {
     const element = document.getElementById('flag');
@@ -100,6 +98,8 @@ function Header() {
           <div className={style.header_item}></div>
   
           <div className={style.header_item}></div>
+
+          <div className={style.header_item}></div>
   
           <div className={style.header_item}>
             <a onClick={onHome}>
@@ -109,6 +109,8 @@ function Header() {
               </div>
             </a>
           </div>
+
+          <div className={style.header_item}></div>
 
           <div className={style.header_item}>
             <div className={style.dropdown_container}>
@@ -125,11 +127,11 @@ function Header() {
           </div>
   
           <div className={style.header_item}>
-            <div className={style.user_icon}>
-              <a onClick={onPriv} className={style.user}>
+            <a onClick={onPriv} className={style.user}>
+              <div className={style.user_icon}>
                 <Image src={user} alt='private area' width={50} height={50} />
-              </a>
-            </div>
+              </div>
+            </a>
           </div>
         </div>
       </header>

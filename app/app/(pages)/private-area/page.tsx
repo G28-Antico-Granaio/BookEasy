@@ -9,9 +9,10 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 import style from '../(auth)/auth.module.css'
-import map from '@/img/duck.jpg'
-import star_full from '@/img/stars/star_full.png'
-import star_empty from '@/img/stars/star_empty.png'
+import map from '@/public/img/duck.jpg'
+import star_full from '@/public/img/stars/star_full.png'
+import star_empty from '@/public/img/stars/star_empty.png'
+import Review from '@/app/components/review';
 
 
 
@@ -28,7 +29,10 @@ function Private_Area() {
     try {
       setLoading(true);
 
-      await axios.get("/api/auth/logout");
+      localStorage.removeItem('email');
+      localStorage.removeItem('role');
+      localStorage.setItem('log', 'fasle');
+
       message.success("Logout Effettuato");
       router.push("/login")
 
@@ -50,7 +54,6 @@ function Private_Area() {
 
   const onDelete = async () => {
     message.warning("Funzione non ancora Implementata");
-
   }
 
   const onRev = async () => {
@@ -61,13 +64,7 @@ function Private_Area() {
     message.warning("Funzione non ancora Implementata");
   }
 
-  const check_admin = async () => {
-    const current_user = await fetch("http://localhost:3000/api/current-user");
-    const user = await current_user.json();
-    return user.isAdmin;
-  }
-
-  if (() => check_admin()) {
+  if (localStorage.getItem('role') === 'false') {
     return(
       <section className='container'>
         <section className={style.link}>
@@ -117,6 +114,15 @@ function Private_Area() {
   } else {
     return (
       <section className='container'>
+        <section className={style.link}>
+            <a onClick={onModify}>Modifica le Credenziali</a>
+        </section>
+        <section className={style.link}>
+            <a onClick={onLogout}>Logout</a>
+        </section>
+
+        <hr />
+
         <section className={style.date}>
           <Form
             name='book'
@@ -191,48 +197,10 @@ function Private_Area() {
         </section>
 
         <section>
-        <section className='review'>
-          <div className='star'>
-            <div>Location</div>
-            <div>
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-            </div>
-
-            <div>Menù</div>
-            <div>
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-            </div>
-
-            <div>Servizio</div>
-            <div>
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-            </div>
-
-            <div>Conto</div>
-            <div>
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_full} alt='img1' width={25} height={25} />
-              <Image src={star_empty} alt='img1' width={25} height={25} />
-            </div>
-            </div>
-            <p>
-              recensioni
-            </p>
-          </section>
+              <Review />
+              <Review />
+              <Review />
+              <Review />
         </section>
       </section>
     )

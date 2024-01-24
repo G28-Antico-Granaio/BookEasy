@@ -25,34 +25,27 @@ interface user{
 
 function Register() {
 
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-    const router = useRouter();
-    const [loading, setLoading] = React.useState(false);
-    const onRegister = async (values: user) => {
-    
-        try {
-            setLoading(true);
-
-            await axios.post('/api/auth/register', values);
-            message.success('Registrazione effettuata con successo, ora effettuare il login');
-            router.push("/login");
-
-        } catch (error: any) {
-
-            return NextResponse.json({
-                message: error.message,
-            },
-                {
-                    status: 400
-                }
-            );
-
-        } finally {
-
-            setLoading(false);
-        }
-    };
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
+  const onRegister = async (values: user) => {
+    try {
+      setLoading(true);
+      await axios.post('/api/auth/register', values);
+      message.success('Registrazione effettuata con successo, ora effettuare il login');
+      router.push("/login");
+    } catch (error: any) {
+      return NextResponse.json({
+        message: error.message,
+      },
+      {
+        status: 400
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
     const prefixSelector = (
@@ -122,7 +115,7 @@ function Register() {
                             },
                         ]}>
 
-                        <Input addonBefore={prefixSelector} placeholder='Numnero di Telefono'
+                        <InputNumber addonBefore={prefixSelector} placeholder='Numnero di Telefono'
                         style={{
                             width: '75%',
                             height: '3rem',

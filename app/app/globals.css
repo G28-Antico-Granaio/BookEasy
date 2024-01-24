@@ -30,8 +30,13 @@ h2 {
   font-size: xx-large;
 }
 
+h3 {
+  margin: 0;
+  padding:  0;
+}
+
 hr {
-  width: 100%;
+  min-width: 100%;
 
   margin: 2rem;
 
@@ -70,7 +75,7 @@ Input {
   white-space: nowrap;
   overflow: hidden;
 
-  background-image: url('../img/flags/it.png');
+  background-image: url('../public/img/flags/it.png');
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -151,26 +156,3 @@ section {
 
   padding: 2rem;
 }
-
-/*review*/
-.review {
-  display: flex;
-  flex-direction: row;
-
-  justify-content: flex-start;
-
-  align-items: center;
-
-  background-color: #e4e2dc;
-  border-radius: 30px;
-
-  padding: 2rem;
-}
-
-.star {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 5px;
-  place-items: center;
-}
-

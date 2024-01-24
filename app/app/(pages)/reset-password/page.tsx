@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 
-interface user{
+interface User{
     password: string;
 }
 
@@ -20,15 +20,35 @@ function Reset_Password() {
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
-    const onSend = async (values: user) => {
-        message.warning("Funzione non ancora Implementata");
+    const onSend = async (values: User) => {
+        try {
+            setLoading(true);
+
+            const email: string | null = localStorage.getItem('email') || '';
+
+            await axios.post(`/api/reset-password/${email}`, values);
+            message.success('Password Modificata');
+
+            localStorage.clear();
+            localStorage.setItem('log', 'false');
+
+            router.push('/login');
+
+        } catch (error: any) {
+            return NextResponse.json({
+                message: error.message,
+            }, {
+                status: 400
+            });
+        } finally {
+            setLoading(false);
+        }
     };
     
     return (
         <section className='container'>
             <div className={style.form}>
-
-            <Form
+                <Form
                     name='register'
                     form={form}
                     onFinish={onSend}
@@ -63,13 +83,13 @@ function Reset_Password() {
                         hasFeedback
                         rules={[
                             {
-                              required: true,
-                              message: 'Conferma la password',
+                                required: true,
+                                message: 'Conferma la password',
                             },
                             ({ getFieldValue }) => ({validator(_, value) {
 
                                 if (!value || getFieldValue('password') === value) {
-                                  return Promise.resolve();
+                                    return Promise.resolve();
                                 }
                                     return Promise.reject(new Error('Le password inserite non coincidono!'));
                                 },
