@@ -10,6 +10,18 @@
     font-size: x-large;
 }
 
+/**/
+
+.hr {
+    width: 80%;
+
+    margin: 0 !important;
+
+    justify-self: auto;
+
+    border: 1px solid #ab9881;
+}
+
 /****************************************************/
 /*real header*/
 .container {
@@ -18,17 +30,19 @@
     clip-path: polygon(100% 0, 100% 85%, 50% 100%, 0 85%, 0 0);
 
     display: grid;
-    grid-template-columns: .25fr .5fr auto .5fr .25fr;
+    grid-template-columns: .25fr .25fr .5fr auto .5fr .25fr .25fr;
     gap: 5px;
+    align-content: center;
 
     padding: 20px;
-    min-height: 120px; /*padding + img-logo dimension*/
+    min-height: 120px;/*padding + img-logo dimension*/
 }
 .header_item {
     place-self: center;
 }
 
 /*logo*/
+
 .restaurant_icon {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -49,6 +63,8 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: medium;
 
+    z-index: 10;
+
     background-color: beige;
     padding: 5px 10px 5px 10px;
     border-radius: 15px;
@@ -64,25 +80,55 @@
     display: none;
 }
 .dropdown_container > .dropdown:hover > .dropdown_item{
-    padding: 5px;
     display: block;
 }
-.dropdown_container > .dropdown > .dropdown_item > .locale {
+.dropdown_container > .dropdown > .dropdown_item > .locale_it {
     display: block; 
-    padding: 5px 15px 5px 15px;
-    margin: 5px;
+    padding: 5px 10px 5px 10px;
+
+    height: 30px;
 
     text-indent: 200%;
     white-space: nowrap;
     overflow: hidden;
 
-    background-image: url('../../img/duck.jpg');
+    background-image: url('../../public/img/flags/it.png');
     background-size: contain;
+    background-repeat: no-repeat;
 }
-.dropdown_container > .dropdown > .dropdown_item > .locale > a {
+.dropdown_container > .dropdown > .dropdown_item > .locale_en {
+    display: block; 
+    padding: 5px 10px 5px 10px;
+
+    height: 30px;
+
+    text-indent: 200%;
+    white-space: nowrap;
+    overflow: hidden;
+
+    background-image: url('../../public/img/flags/en.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.dropdown_container > .dropdown > .dropdown_item > .locale_de {
+    display: block; 
+    padding: 5px 10px 5px 10px;
+
+    height: 30px;
+
+    text-indent: 200%;
+    white-space: nowrap;
+    overflow: hidden;
+
+    background-image: url('../../public/img/flags/de.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.locale_it > a, .locale_en > a, .locale_de > a {
     display: block !important;
 }
-.dropdown_container > .dropdown > .dropdown_item > .locale:hover {
+.locale_it:hover, .locale_en:hover, .locale_de:hover {
     filter: opacity(50%);
 }
 
@@ -91,17 +137,44 @@
 .footer {
     background-color: rgba(209, 195, 152, 83);
 
-    text-align: left;
+    text-align: center;
 
-    display: grid;
-    grid-template-columns: 5fr 1fr;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
 
-    min-height: 200px; /*padding + img-logo dimension*/
+    min-height: 400px; /*padding + img-logo dimension*/
     padding: 20px;
 }
+
 .footer_item {
-    align-self: center;
+    padding-top: 3rem;
+    text-align: inherit;
 }
-.footer > ul {
-    list-style: none;
+
+/*review*/
+.review {
+    width: 100%;
+    max-width: 800px;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    background-color: #e4e2dc;
+    border-radius: 30px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 2rem;
+}
+
+.star {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5px;
+    place-items: center;
 }

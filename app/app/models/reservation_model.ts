@@ -6,7 +6,7 @@ export const reservationSchema = new mongoose.Schema(
         date: { type: Date, required: true },
         turn: { type: Number, required: true },
         cover_number: { type: Number, required: true },
-        email: { type: String, required: true },
+        email: { type: String, required: true},
         name: { type: String, required: true },
         surname: { type: String, required: true }
     },

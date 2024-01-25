@@ -1,45 +1,54 @@
+// Import necessary modules and configurations
 import { connect_DB } from "@/configs/dbConfig";
 import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
+// Connect to the database
 connect_DB();
 
-export async function POST(req :NextRequest) {
-
+// API endpoint for handling user login
+export async function POST(req: NextRequest) {
     try {
+        // Get data from the form
         const req_body = await req.json();
 
+        // Check if the user exists
         const user = await User.findOne({ email: req_body.email });
+
+        // Handle non-existing user
         if (!user) {
-            throw new Error("non esiste un utente registrato con questo indirizzo e-mail");
+            throw new Error("(!!) Non esiste un utente registrato con questo indirizzo e-mail");
         }
 
+        // Check if the password is correct
         const password_match = await bcrypt.compare(req_body.password, user.password);
 
-        if(!password_match) {
-            throw new Error("Credenziali non valide");
+        // Handle wrong password
+        if (!password_match) {
+            throw new Error("(!!) Credenziali inserite non valide");
         }
 
-        const token = jwt.sign({id: user._id }, process.env.JWT_SECRET!, { expiresIn: "7d" });
-
-        const res = NextResponse.json({ message: "Login Effettuato", })
-        res.cookies.set("token", token, {
-            httpOnly: true,
-            path: '/',
-        });
-
-        return res;
-
-    } catch(error: any) {
-        console.log("login api nope", error);
+        // Success response with user data and isAdmin status
         return NextResponse.json({
-            message: error.message,
-        },
-            {
-                status: 400
-            }
-        );
+            success: true,
+            message: "Login Effettuato",
+            data: {
+                isAdmin: user.isAdmin,
+            },
+        }, {
+            status: 200
+        });
+    } catch (error: any) {
+        // Log the error message
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/login' --> ", error.message);
+
+        // Error response with
+        return NextResponse.json({
+            success: false,
+            message: error.message || "Si è verificato un errore durante il login dell'utente",
+        }, {
+            status: 400
+        });
     }
 }

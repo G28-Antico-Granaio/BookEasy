@@ -1,3 +1,4 @@
+/*tailwindcss*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,32 +8,37 @@
 
 /****************************************************/
 /*genereal*/
-html,
-body,
-body > div:first-child,
-div#__next,
-div#__next > div {
+html, body{
   height: 100%;
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
 
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(246, 245, 241);
+
   font-family: 'Arsenal', sans-serif !important;
-  
+
   text-align: center;
 }
 
 h2 {
   font-family: 'Belleza', sans-serif !important;
+
+  font-size: xx-large;
 }
 
-Input, Button {
-  width: 75% !important;
-  height: 35px !important;
+h3 {
+  margin: 0;
+  padding:  0;
 }
 
 hr {
-  margin: 20px;
+  min-width: 100%;
+
+  margin: 2rem;
 
   justify-self: stretch;
 
@@ -42,73 +48,111 @@ hr {
 a {
   color: black;
   text-decoration: none;
+
+  cursor: pointer;
 }
 
-.vr {
-  text-align: center;
+ul {
+  list-style: none;
+}
 
-  border: 2px solid #ab9881 !important;
+Button {
+  width: 75% !important; 
+  height: 3rem !important;
+}
 
-  margin-left: 50%;
+Input {
+  width: 75% !important; 
+}
 
-  height: 75%;
-  width: 0;
+#flag {
+  display: block;
+  padding: 5px 10px 5px 10px;
+
+  height: 30px;
+
+  text-indent: 2000%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  background-image: url('../public/img/flags/it.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 /****************************************************/
-/*main*/
+/* main */
 main {
   background-color: rgb(246, 245, 241);
 
-  display: grid;
-  place-items: center;
+  position: relative;
 
-  min-height: 90%;
-  min-width: 80%;
+  min-height: 80%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 1rem;
+
+  overflow: auto;
 }
 
+.container {
+  width: 100%;
+  max-width: 70%;
 
-.description, .column, .review, .images {
-  max-width: 80%;
-  min-width: 75%;
-
-  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
+section {
+  display: flex;
+  flex-direction: column;
 
-.images{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  min-height: 0;
 }
 
+.description, .images, .column, .review {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
 
+/*description*/
+.description {
+  width: 100%;
+  max-width: 70%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  font-size: large;
+  font-weight: lighter;
+}
+
+/*images*/
+.images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  justify-content: space-around;
+
+  align-items: center;
+}
+
+/*column*/
 .column {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-around;
+
   background-color: rgba(209, 195, 152, 45);
   border-radius: 15px;
 
-  display: grid;
-  grid-template-columns: 1fr .25fr 1fr;
-  gap: 5px;
-  place-items: center;
-}
-.column > div {
-  place-self: center stretch;
-}
-
-
-.review {
-  background-color: #e4e2dc;
-  border-radius: 30px;
-
-  display: grid;
-  grid-template-columns: 1fr .25fr 2fr;
-  gap: 5px;
-  place-items: center;
-}
-.star {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 5px;
-  place-items: center;
+  padding: 2rem;
 }
