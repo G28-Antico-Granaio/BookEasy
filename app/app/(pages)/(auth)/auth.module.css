@@ -1,0 +1,89 @@
+/*form*/
+.form {
+    background-color: antiquewhite;
+
+    border-radius: 15px;
+
+    width: 500px;
+    padding: 2rem;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+}
+
+/*links*/
+.link {
+    color: #0645AD;
+    margin: 0.5rem;
+}
+
+/*tel_number*/
+.prefix, .postfix {
+    margin: 2.5px;
+}
+.prefix {
+    width: 15%;
+}
+.postfix {
+    width: 55%;
+}
+
+/*delete-account*/
+.blabla {
+    width: 100%;
+    max-width: 60%;
+
+    margin: 2rem auto 2rem auto ;
+
+    font-size: large;
+    font-weight: lighter;
+}
+
+/*private area*/
+.date > form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    justify-content: space-around;
+
+    align-items: center;
+}
+
+.past_rev, .post_rev {
+    border-radius: 30px;
+
+    padding: 2rem 1rem 1rem 1rem;
+    margin: 2rem auto 2rem auto;
+
+    width: 100%;
+    max-width: 50%;
+}
+
+.past_rev > div, .post_rev > div {
+    margin: 1rem;
+}
+ 
+.post_rev {
+    background-color: rgba(209, 195, 152, 45);
+}
+
+.past_rev {
+    background-color: lightgray;
+}
+
+.review {
+    display: flex;
+    flex-direction: row;
+  
+    justify-content: flex-start;
+  
+    align-items: center;
+  
+    background-color: #e4e2dc;
+    border-radius: 30px;
+
+  }

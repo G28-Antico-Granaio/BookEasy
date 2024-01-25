@@ -1,0 +1,158 @@
+/*tailwindcss*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*import font*/
+@import url('https://fonts.googleapis.com/css2?family=Arsenal&family=Belleza&display=swap');
+
+/****************************************************/
+/*genereal*/
+html, body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(246, 245, 241);
+
+  font-family: 'Arsenal', sans-serif !important;
+
+  text-align: center;
+}
+
+h2 {
+  font-family: 'Belleza', sans-serif !important;
+
+  font-size: xx-large;
+}
+
+h3 {
+  margin: 0;
+  padding:  0;
+}
+
+hr {
+  min-width: 100%;
+
+  margin: 2rem;
+
+  justify-self: stretch;
+
+  border: 1px solid #ab9881;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+Button {
+  width: 75% !important; 
+  height: 3rem !important;
+}
+
+Input {
+  width: 75% !important; 
+}
+
+#flag {
+  display: block;
+  padding: 5px 10px 5px 10px;
+
+  height: 30px;
+
+  text-indent: 2000%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  background-image: url('../public/img/flags/it.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/****************************************************/
+/* main */
+main {
+  background-color: rgb(246, 245, 241);
+
+  position: relative;
+
+  min-height: 80%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 1rem;
+
+  overflow: auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 70%;
+
+  margin-left: auto;
+  margin-right: auto;
+  
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0;
+}
+
+.description, .images, .column, .review {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+/*description*/
+.description {
+  width: 100%;
+  max-width: 70%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  font-size: large;
+  font-weight: lighter;
+}
+
+/*images*/
+.images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  justify-content: space-around;
+
+  align-items: center;
+}
+
+/*column*/
+.column {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-around;
+
+  background-color: rgba(209, 195, 152, 45);
+  border-radius: 15px;
+
+  padding: 2rem;
+}
