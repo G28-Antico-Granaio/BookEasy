@@ -43,7 +43,7 @@ function Modify_Credentials() {
               email: user.email,
             });
           } catch (error: any) {
-            console.log("Error fetching user data:", error);
+            message.error(error.response.data.message);
           }
         }    
         onLoad();

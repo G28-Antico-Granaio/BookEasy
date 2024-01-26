@@ -1,12 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Form, Input, Button, message } from 'antd'
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 import style from '@/app/(pages)/(auth)/auth.module.css'
 
@@ -37,65 +36,71 @@ function Delete_Account() {
             message.success("Account Eliminato");
             router.push("/");
         } catch (error: any) {
-            return NextResponse.json({
-                message: error.message,
-            }, {
-                status: 400
-            });
+            message.error(error.response.data.message);
         } finally {
             localStorage.removeItem('email')
             
             setLoading(false);
         }
     };
+
+    const [userLog, setUserLog] = useState<string | null>(null);
+    React.useEffect(() => {
+        const log = localStorage.getItem('log');
+        setUserLog(log);
+    }, []);
     
-  return (
-    <section className='container'>
+    if (userLog === 'true') {
+        return (
+            <section className='container'>
 
-        <h1>Eliminazione Account</h1>
+                <h1>Eliminazione Account</h1>
 
-        <section className={style.blabla}>
-            Quando elimini il tuo account, non potrai più recuperare
-            le tue vecchie credemziali e lo storico delle prenotazioni.
-            Inoltre non sarà più possibile prenotare online in questo 
-            ristornate.
-        </section>
+                <section className={style.blabla}>
+                    Quando elimini il tuo account, non potrai più recuperare
+                    le tue vecchie credemziali e lo storico delle prenotazioni.
+                    Inoltre non sarà più possibile prenotare online in questo 
+                    ristornate.
+                </section>
 
-        <section className={style.blabla}>
-            Se desideri procedere con l&apos;operazione, inserisci la
-            password e clicca conferma
-        </section>
+                <section className={style.blabla}>
+                    Se desideri procedere con l&apos;operazione, inserisci la
+                    password e clicca conferma
+                </section>
 
-        <Form
-            name='delete'
-            form={form}
-            onFinish={onDelete}
-            scrollToFirstError>
+                <Form
+                    name='delete'
+                    form={form}
+                    onFinish={onDelete}
+                    scrollToFirstError>
 
-            <Form.Item
-                name={'password'}
-                rules={[
-                    {
-                        required: true,
-                        message: 'Inserisci la tua Password'
-                    }
-                ]}>
+                    <Form.Item
+                        name={'password'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Inserisci la tua Password'
+                            }
+                        ]}>
 
-                <Input.Password placeholder='Password'
-                style={{
-                    width: '25%',
-                    height: '3rem'
-                }}/>
+                        <Input.Password placeholder='Password'
+                        style={{
+                            width: '25%',
+                            height: '3rem'
+                        }}/>
 
-            </Form.Item>
+                    </Form.Item>
 
-            <Button htmlType='submit' block loading={loading} style={{
-                    width: '25% !important',
-                    height: '3rem'
-                }}>
-                Cancella definitivamente l&apos;account 
-            </Button>
-        </Form>
-    </section>
-  )
+                    <Button htmlType='submit' block loading={loading} style={{
+                            width: '25% !important',
+                            height: '3rem'
+                        }}>
+                        Cancella definitivamente l&apos;account 
+                    </Button>
+                </Form>
+            </section>
+        )
+    } else {
+        router.push('/login');
+    }
 } export default Delete_Account

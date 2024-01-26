@@ -5,10 +5,8 @@ import React from 'react';
 import { Form, Button, Input, message } from 'antd';
 
 import style from '../(auth)/auth.module.css'
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 interface User{
     password: string;
@@ -25,21 +23,14 @@ function Reset_Password() {
             setLoading(true);
 
             const email: string | null = localStorage.getItem('email') || '';
-
             await axios.post(`/api/reset-password/${email}`, values);
-            message.success('Password Modificata');
-
             localStorage.clear();
             localStorage.setItem('log', 'false');
 
+            message.success('Password Modificata');
             router.push('/login');
-
         } catch (error: any) {
-            return NextResponse.json({
-                message: error.message,
-            }, {
-                status: 400
-            });
+            message.error(error.response.data.message);
         } finally {
             setLoading(false);
         }

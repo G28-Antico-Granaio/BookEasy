@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Form, DatePicker, Select, message, InputNumber, Button } from 'antd'
 import Image from 'next/image'
@@ -30,27 +30,18 @@ interface check {}
 function Reservation() {
 
     const [form] = Form.useForm();
-
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
+
     const onReservation = async (values: reservation) => {
         try {
             setLoading(true);
             await axios.post("/api/reservation", values);
             message.success("Prenotazione Effettuata");
             router.push("/private-area");
-
         } catch (error: any) {
-            return NextResponse.json( {
-                message: error.message,
-            },
-                {
-                    status: 400
-                }
-            )
-
+            message.error(error.response.data.message);
         } finally {
-
             setLoading(false);
         }
     }
@@ -59,104 +50,113 @@ function Reservation() {
         message.warning("Funzione non ancora Implementata");
     }
 
+    const [userLog, setUserLog] = useState<string | null>(null);
+    React.useEffect(() => {
+        const log = localStorage.getItem('log');
+        setUserLog(log);
+    }, []);
 
-    return (
-        <section className='container'>
-            <div className={style.form}>
+    if (userLog === 'true') {
+        return (
+            <section className='container'>
+                <div className={style.form}>
 
-                <h1>Prenota</h1>
+                    <h1>Prenota</h1>
 
-                <hr />
+                    <hr />
 
-                <Form
-                name='reservation'
-                form={form}
-                onFinish={onReservation}
-                scrollToFirstError>
+                    <Form
+                    name='reservation'
+                    form={form}
+                    onFinish={onReservation}
+                    scrollToFirstError>
 
-                    <Form.Item
-                        name={'date'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Inserire una data'
-                            },
-                        ]}>
+                        <Form.Item
+                            name={'date'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Inserire una data'
+                                },
+                            ]}>
 
-                        <DatePicker />
+                            <DatePicker />
 
-                    </Form.Item>
+                        </Form.Item>
 
-                    <Form.Item
-                        name={'turn'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Inserire un turno'
-                            }
-                        ]}>
+                        <Form.Item
+                            name={'turn'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Inserire un turno'
+                                }
+                            ]}>
 
-                        <Select>
-                            <Option value="12.00" >12.00</Option>
-                            <Option value="14.00" >14.00</Option>
-                            <Option value="19.00" >19.00</Option>
-                            <Option value="21.00" >21.00</Option>
-                        </Select>
-                        
-                    </Form.Item>
+                            <Select>
+                                <Option value="12.00" >12.00</Option>
+                                <Option value="14.00" >14.00</Option>
+                                <Option value="19.00" >19.00</Option>
+                                <Option value="21.00" >21.00</Option>
+                            </Select>
+                            
+                        </Form.Item>
 
-                    <Form.Item
-                        name={'cover'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Inserire i coperti'
-                            }
-                        ]}>
+                        <Form.Item
+                            name={'cover'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Inserire i coperti'
+                                }
+                            ]}>
 
-                        <InputNumber min={1} max={8}/>
+                            <InputNumber min={1} max={8}/>
 
-                    </Form.Item>
+                        </Form.Item>
 
-                    <Form.Item
-                        name={'table'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Inserire un tavolo'
-                            }
-                        ]}>
+                        <Form.Item
+                            name={'table'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Inserire un tavolo'
+                                }
+                            ]}>
 
-                        <InputNumber min={1} max={20} />
-                        
-                    </Form.Item>
+                            <InputNumber min={1} max={20} />
+                            
+                        </Form.Item>
 
-                    <Button htmlType='submit' block onClick={onCheck}>
-                        Controlla Disponibilità
-                    </Button>
+                        <Button htmlType='submit' block onClick={onCheck}>
+                            Controlla Disponibilità
+                        </Button>
 
-                    <div>
-                        <Image src={map} alt="map" width={1000} height={500} />
-                    </div>
+                        <div>
+                            <Image src={map} alt="map" width={1000} height={500} />
+                        </div>
 
-                    <p>
-                        Si ricorda che, se dopo 30 minuti dall&apos;inizio 
-                        del turno non ci si presenta a reclamare la prenotazione, 
-                        essa non sarà più valida e il tavolo potrebbe venire 
-                        riassegnato
-                    </p>
+                        <p>
+                            Si ricorda che, se dopo 30 minuti dall&apos;inizio 
+                            del turno non ci si presenta a reclamare la prenotazione, 
+                            essa non sarà più valida e il tavolo potrebbe venire 
+                            riassegnato
+                        </p>
 
-                    <Button htmlType='submit' block loading={loading}>
-                        Prenota
-                    </Button>
+                        <Button htmlType='submit' block loading={loading}>
+                            Prenota
+                        </Button>
 
-                </Form>
+                    </Form>
 
-                <div></div>
-                
-            </div>
-        </section>
-    )
+                    <div></div>
+                    
+                </div>
+            </section>
+        )
+    } else {
+        router.push('login');
+    }
 }
 
 export default Reservation

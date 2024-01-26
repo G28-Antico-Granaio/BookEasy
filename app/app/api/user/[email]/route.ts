@@ -33,7 +33,7 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
             success: false,
             message: error.message || "Si è verificato un errore durante il recupero delle informazioni dell'utente",
         }, {
-            status: 404,
+            status: error.status || 500
         });
     }
 }

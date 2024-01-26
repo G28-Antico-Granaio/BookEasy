@@ -15,10 +15,10 @@ function Header() {
 
   const router = useRouter();
   const onPriv = async () => {
-    router.push('/private-area')
+    await router.push('/private-area')
   }
   const onHome = async () => {
-    router.push('/')
+    await router.push('/')
   }
 
   const it_flag = '/img/flags/it.png';
@@ -58,6 +58,8 @@ function Header() {
       <header className={style.header}>
         <div className={style.container}>
           
+          <div className={style.header_item}></div>
+
           <div className={style.header_item}></div>
 
           <div className={style.header_item}></div>

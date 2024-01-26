@@ -65,7 +65,7 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
       success: false,
       message: error.message || "Si è verificato un errore durante il reset della password",
     }, {
-      status: 400
+      status: error.status || 500
     });
   }
 }

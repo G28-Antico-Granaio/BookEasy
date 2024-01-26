@@ -16,7 +16,7 @@ export default function Home() {
 
   const router = useRouter();
   const onBook = async () => {
-    router.push('/reservation')
+    await router.push('/reservation')
   }
 
   return (

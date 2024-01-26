@@ -45,6 +45,13 @@ hr {
   border: 1px solid #ab9881;
 }
 
+.hr_r_l {
+  min-width: 80%;
+
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 a {
   color: black;
   text-decoration: none;
@@ -59,10 +66,42 @@ ul {
 Button {
   width: 75% !important; 
   height: 3rem !important;
+
+  border-radius: 30px !important;
+
+  background-color: rgba(209, 195, 152, 83) !important;
+  color: #8B4513 !important;
+
+  font-size: large !important;
+  font-weight: bold !important;
+}
+
+Button:hover {
+  border-color: #8B4513 !important;
 }
 
 Input {
-  width: 75% !important; 
+  width: 75% !important;
+
+  font-size: large !important;
+  
+  border-radius: 30px !important;
+}
+
+.ant-input::placeholder {
+  text-align: center;
+}
+
+.ant-input-number, .ant-input-password {
+  width: 100%;
+  max-width: 75%;
+  height: 3rem;
+  border-radius: 30px;
+}
+
+.ant-input-number-input::placeholder {
+  text-align: center;
+  line-height: 3rem !important;
 }
 
 #flag {
