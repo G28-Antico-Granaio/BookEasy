@@ -20,7 +20,6 @@ interface user{
     tel_area_code: number;
     email: string;
     password: string;
-    conf_password: string;
 }
 
 function Register() {

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
     const response = await fetch(`http://localhost:3000/api/user/${params.email}`);
     
     // Handle non-existing user
-    if (!response) {
+    if (!response.ok) {
       throw new Error("(!!) Utente non trovato");
     }
 

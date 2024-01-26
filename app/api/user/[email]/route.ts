@@ -17,6 +17,10 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
         // Find user by email
         const user = await User.findOne({ email: params.email });
 
+        if (!user){
+            throw new Error("(!!) Utente non Trovato");
+        }
+
         // Return success response with user data
         return NextResponse.json({
             success: true,

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-export const userSchema = new mongoose.Schema(
+export const reviewSchema = new mongoose.Schema(
     {
-        _id: {type: String, required: true},
+        _id: { type: String, required: true },
         name: { type: String, required: true },
         surname: { type: String, required: true },
         location: { type: Number, required: true },
@@ -16,4 +16,4 @@ export const userSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.models["Review"] || mongoose.model("Review", userSchema);
+export default mongoose.models["Review"] || mongoose.model("Review", reviewSchema);
