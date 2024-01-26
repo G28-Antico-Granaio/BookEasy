@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import style from '../(auth)/auth.module.css'
 import map from '@/public/img/duck.jpg'
 import Review from '@/app/components/review';
+import Loader from '@/app/components/loader';
 
 
 
@@ -59,16 +60,24 @@ function Private_Area() {
   }
   
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userLog, setUserLog] = useState<string | null>(null);
+  const [loadingUserLog, setLoadingUserLog] = useState(true)
+
   React.useEffect(() => {
     const role = localStorage.getItem('role');
     setUserRole(role);
-  }, []);
 
-  const [userLog, setUserLog] = useState<string | null>(null);
-  React.useEffect(() => {
     const log = localStorage.getItem('log');
     setUserLog(log);
+
+    setLoadingUserLog(false);
   }, []);
+
+  if(loadingUserLog){
+    return(
+        <Loader />
+    )
+  }
   
   if (userLog === 'true') {
     if (userRole === 'false') {

@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server'
 
 import style from './reservation.module.css'
 import map from '@/public/img/duck.jpg'
+import Loader from '@/app/components/loader'
 
 
 const { Option } = Select;
@@ -51,10 +52,18 @@ function Reservation() {
     }
 
     const [userLog, setUserLog] = useState<string | null>(null);
+    const [loadingUserLog, setLoadingUserLog] = useState(true)
     React.useEffect(() => {
         const log = localStorage.getItem('log');
         setUserLog(log);
+        setLoadingUserLog(false)
     }, []);
+    
+    if(loadingUserLog){
+        return(
+            <Loader />
+        )
+    }
 
     if (userLog === 'true') {
         return (

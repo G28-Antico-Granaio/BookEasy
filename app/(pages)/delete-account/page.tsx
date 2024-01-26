@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 import style from '@/app/(pages)/(auth)/auth.module.css'
+import Loader from '@/app/components/loader';
 
 interface user{
     password: string;
@@ -45,11 +46,19 @@ function Delete_Account() {
     };
 
     const [userLog, setUserLog] = useState<string | null>(null);
+    const [loadingUserLog, setLoadingUserLog] = useState(true)
     React.useEffect(() => {
         const log = localStorage.getItem('log');
         setUserLog(log);
+        setLoadingUserLog(false)
     }, []);
     
+    if(loadingUserLog){
+        return(
+            <Loader />
+        )
+    }
+
     if (userLog === 'true') {
         return (
             <section className='container'>
