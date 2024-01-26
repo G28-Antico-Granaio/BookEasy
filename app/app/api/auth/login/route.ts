@@ -10,7 +10,7 @@ connect_DB();
 // API endpoint for handling user login
 export async function POST(req: NextRequest) {
     try {
-        // Get data from the form
+        // Get form data from the request body
         const req_body = await req.json();
 
         // Check if the user exists
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
             success: false,
             message: error.message || "Si è verificato un errore durante il login dell'utente",
         }, {
-            status: 400
+            status: error.status || 500
         });
     }
 }

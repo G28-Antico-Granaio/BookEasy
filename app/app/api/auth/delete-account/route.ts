@@ -12,6 +12,7 @@ connect_DB();
 // API route handling POST requests
 export async function POST(req: NextRequest) {
     try {
+        // Get form data from the request body
         const req_body = await req.json();
 
         // Get user
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
         
         // Handle wrong password
         if (!password_match) {
-            throw new Error("ERRORE: Credenziali inserite non valide");
+            throw new Error("(!!) Credenziali inserite non valide");
         }
 
         // Delete the user from the database based on their email
@@ -30,20 +31,22 @@ export async function POST(req: NextRequest) {
 
         // Return success response
         return NextResponse.json({
+            success: true,
             message: "Eliminazione account Effettuata",
-        },
-        {
+        }, {
             status: 200
         });
 
     } catch (error: any) {
         // Log and return error response
-        console.log(" !! ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/delete-account' --> " + error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/delete-account' --> ", error.message);
+
+        // Return error response with a meaningful message
         return NextResponse.json({
-            message: error.message,
-        },
-        {
-            status: 400
+            success: false,
+            message: error.message || "Si è verificato un errore durante la cancellazione dell'account",
+        },{
+            status: error.status || 500
         });
     }
 }

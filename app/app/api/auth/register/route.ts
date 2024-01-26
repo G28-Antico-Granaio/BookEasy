@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
             success: false,
             message: error.message || "Si è verificato un errore durante la registrazione dell'utente",
         }, {
-            status: 400
+            status: error.status || 500
         });
     }
 }

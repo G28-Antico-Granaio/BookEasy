@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 import style from '../auth.module.css'
 
@@ -19,9 +18,9 @@ interface User{
 function Login(){
 
     const [form] = Form.useForm();
-
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
+
     const onLogin = async (values: User) => {
         try {
             setLoading(true);
@@ -35,13 +34,7 @@ function Login(){
             message.success("Login Effettuato");
             router.push("/private-area")
         } catch (error: any) {
-            return NextResponse.json({
-                message: error.message,
-            },
-                {
-                    status: 400
-                }
-            );
+            message.error(error.response.data.message);
         } finally {            
             setLoading(false);
         }
@@ -58,7 +51,7 @@ function Login(){
                 scrollToFirstError>
                     <h2>Login</h2>
 
-                    <hr />
+                    <hr className='hr_r_l' />
                     
                     <Form.Item
                         name={'email'}
@@ -89,11 +82,7 @@ function Login(){
                             },
                         ]}>
                             
-                        <Input.Password placeholder='Password'
-                        style={{
-                            width: '75%',
-                            height: '3rem',
-                        }}/>
+                        <Input.Password placeholder='Password'/>
                     
                     </Form.Item>
 
@@ -103,11 +92,14 @@ function Login(){
                         </Link>
                     </Form.Item>
 
-                    <Button htmlType='submit' block loading={loading}>
+                    <Button htmlType='submit' block loading={loading}
+                    style={{
+                        fontSize: '',
+                    }}>
                         Accedi
                     </Button>
 
-                    <hr />
+                    <hr className='hr_r_l'/>
 
                     <div>
                         Non hai gà un account?
