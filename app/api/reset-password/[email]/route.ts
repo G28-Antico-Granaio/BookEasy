@@ -13,7 +13,7 @@ interface Params {
 connect_DB();
 
 // API endpoint for resetting user password
-export async function POST(req: NextRequest, { params }: { params: Params }) {
+export async function PUT(req: NextRequest, { params }: { params: Params }) {
   try {
     // Parse request body
     const req_body = await req.json();

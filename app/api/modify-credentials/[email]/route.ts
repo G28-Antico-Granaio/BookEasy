@@ -12,7 +12,7 @@ interface Params {
 connect_DB();
 
 // API endpoint for modifying user credentials
-export async function POST(req: NextRequest, { params }: { params: Params }) {
+export async function PUT(req: NextRequest, { params }: { params: Params }) {
   try {
     // Get form data from the request body
     const req_body = await req.json();

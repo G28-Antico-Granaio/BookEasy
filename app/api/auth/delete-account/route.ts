@@ -10,13 +10,17 @@ import bcrypt from "bcryptjs";
 connect_DB();
 
 // API route handling POST requests
-export async function POST(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
     try {
         // Get form data from the request body
         const req_body = await req.json();
 
         // Get user
         const user = await User.findOne({ email: req_body.email });
+
+        if (!user) {
+            throw new Error("(!!) Login non effettuato");
+        }
         
         // Compare the provided password with the stored hashed password
         const password_match = await bcrypt.compare(req_body.password, user.password);

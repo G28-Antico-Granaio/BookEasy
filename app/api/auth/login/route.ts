@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 connect_DB();
 
 // API endpoint for handling user login
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
     try {
         // Get form data from the request body
         const req_body = await req.json();
