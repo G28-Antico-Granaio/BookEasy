@@ -4,10 +4,57 @@ import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+/**
+ * @swagger
+ * /api/reset-password/{email}:
+ *   put:
+ *     summary: Reset user password
+ *     description: Resets user password based on the provided email.
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: The email of the user whose password needs to be reset.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: User registration data.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Created. User password reset successfully.
+ *       409:
+ *         description: Bad Request. Old and new passwords are the same.
+ *       404:
+ *         description: Not Found. User not found.
+ *       400:
+ *         description: Unprocessable Entity. Unable to process the request due to invalid data.
+ *       500:
+ *         description: Internal Server Error. An error occurred while resetting the user password.
+ */
+
+
 // Define interface for route parameters
 interface Params {
   email: string;
 }
+
+class my_error extends Error {
+  status: number;
+  constructor(text: string, status: number) {
+    super(text);
+    this.status = status;
+  }
+} 
 
 // Connect to the database
 connect_DB();
@@ -23,7 +70,7 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     
     // Handle non-existing user
     if (!response.ok) {
-      throw new Error("(!!) Utente non trovato");
+      throw new my_error("(!!) Utente non trovato", 404);
     }
 
     // Extract user data from the response
@@ -34,7 +81,7 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     
     // Handle matching old and new passwords
     if (is_password_different) {
-      throw new Error("(!!) Password vecchia e nuova corrispondono");
+      throw new my_error("(!!) Password vecchia e nuova corrispondono", 409);
     }
 
     // Generate salt and hash the new password
@@ -43,18 +90,23 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     req_body.password = hashed_password;
 
     // Update user password in the database
-    await User.findOneAndUpdate(
+    const updated_user = await User.findOneAndUpdate(
       { email: params.email },
       req_body,
       { new: true }
     );
+
+    // Handle user not found
+    if (!updated_user) {
+      throw new my_error("(!!) Utente non trovato durante l'aggiornamento della password", 400);
+    }
 
     // Return success response
     return NextResponse.json({
       success: true,
       message: "Password modificata",
     }, {
-      status: 200
+      status: 201
     });
   } catch (error: any) {
     // Log the error message

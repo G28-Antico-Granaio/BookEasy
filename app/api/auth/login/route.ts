@@ -4,6 +4,45 @@ import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: User Login
+ *     description: Authenticates a user based on the provided email and password.
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       description: User registration data.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: OK. User successfully logged in.
+ *       404:
+ *         description: Not Found. User not found.
+ *       401:
+ *         description: Unauthorized. Invalid credentials.
+ *       500:
+ *         description: Internal Server Error. An error occurred during user login.
+ */
+
+class my_error extends Error {
+    status: number;
+    constructor(text: string, status: number) {
+      super(text);
+      this.status = status;
+    }
+} 
+
 // Connect to the database
 connect_DB();
 
@@ -18,7 +57,7 @@ export async function GET(req: NextRequest) {
 
         // Handle non-existing user
         if (!user) {
-            throw new Error("(!!) Non esiste un utente registrato con questo indirizzo e-mail");
+            throw new my_error("(!!) Non esiste un utente registrato con questo indirizzo e-mail", 404);
         }
 
         // Check if the password is correct
@@ -26,7 +65,7 @@ export async function GET(req: NextRequest) {
 
         // Handle wrong password
         if (!password_match) {
-            throw new Error("(!!) Credenziali inserite non valide");
+            throw new my_error("(!!) Credenziali inserite non valide", 401);
         }
 
         // Success response with user data and isAdmin status
@@ -37,7 +76,7 @@ export async function GET(req: NextRequest) {
                 isAdmin: user.isAdmin,
             },
         }, {
-            status: 200
+            status: 201
         });
     } catch (error: any) {
         // Log the error message

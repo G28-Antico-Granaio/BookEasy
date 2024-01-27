@@ -35,6 +35,10 @@ h3 {
   padding:  0;
 }
 
+p {
+  text-align: left;
+}
+
 hr {
   min-width: 100%;
 
@@ -63,24 +67,24 @@ ul {
   list-style: none;
 }
 
-Button {
+.ant-btn {
   width: 75% !important; 
   height: 3rem !important;
 
   border-radius: 30px !important;
 
-  background-color: rgba(209, 195, 152, 83) !important;
+  background-color: white !important;
   color: #8B4513 !important;
 
   font-size: large !important;
   font-weight: bold !important;
 }
 
-Button:hover {
+.ant-btn:hover {
   border-color: #8B4513 !important;
 }
 
-Input {
+.ant-input {
   width: 75% !important;
 
   font-size: large !important;
@@ -97,6 +101,10 @@ Input {
   max-width: 75%;
   height: 3rem;
   border-radius: 30px;
+}
+
+.ant-input-number:hover, .ant-input-password:hover, .ant-input:hover {
+  border-color: #8B4513 !important;
 }
 
 .ant-input-number-input::placeholder {
@@ -175,7 +183,7 @@ section {
 .images {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.75rem;
 
   justify-content: space-around;
@@ -194,4 +202,23 @@ section {
   border-radius: 15px;
 
   padding: 2rem;
+}
+
+
+
+.example {
+  text-align: left;
+}
+
+.risponse {
+  align-content: center;
+}
+
+.response-col_description {
+  align-content: start;
+  align-content: left;
+}
+
+.parameters-col_name, .highlight-code, .model-box {
+  text-align: left;
 }

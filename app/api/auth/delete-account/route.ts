@@ -6,6 +6,50 @@ import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+/**
+ * @swagger
+ * /api/auth/delete-account:
+ *   delete:
+ *     summary: Delete user account
+ *     description: Deletes the user account based on the provided email and password.
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: The email of the user whose account needs to be deleted.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: User registration data.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: OK. User account deletion successful.
+ *       404:
+ *         description: Not Found. User not found.
+ *       401:
+ *         description: Unauthorized. Invalid credentials.
+ *       500:
+ *         description: Internal Server Error. An error occurred during account deletion.
+ */
+
+class my_error extends Error {
+    status: number;
+    constructor(text: string, status: number) {
+      super(text);
+      this.status = status;
+    }
+} 
+
 // Connect to the database
 connect_DB();
 
@@ -19,7 +63,7 @@ export async function DELETE(req: NextRequest) {
         const user = await User.findOne({ email: req_body.email });
 
         if (!user) {
-            throw new Error("(!!) Login non effettuato");
+            throw new my_error("(!!) Login non effettuato", 404);
         }
         
         // Compare the provided password with the stored hashed password
@@ -27,7 +71,7 @@ export async function DELETE(req: NextRequest) {
         
         // Handle wrong password
         if (!password_match) {
-            throw new Error("(!!) Credenziali inserite non valide");
+            throw new my_error("(!!) Credenziali inserite non valide", 401);
         }
 
         // Delete the user from the database based on their email

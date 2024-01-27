@@ -4,6 +4,52 @@ import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: User Registration
+ *     description: Handles user registration and password hashing.
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       description: User registration data.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               surname:
+ *                 type: string
+ *               tel_number:
+ *                 type: number
+ *               tel_area_code:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: OK. User successfully registered.
+ *       409:
+ *         description: Bad Request. User already exists.
+ *       500:
+ *         description: Internal Server Error. An error occurred during user registration.
+
+ */
+
+class my_error extends Error {
+    status: number;
+    constructor(text: string, status: number) {
+      super(text);
+      this.status = status;
+    }
+} 
+
 // Connect to the database
 connect_DB();
 
@@ -18,7 +64,7 @@ export async function POST(req: NextRequest) {
 
         // Handle existing user
         if (user_exist) {
-            throw new Error("(!!) Esiste già un utente registrato con questo indirizzo e-mail");
+            throw new my_error("(!!) Esiste già un utente registrato con questo indirizzo e-mail", 409);
         }
 
         // Generate salt for password hashing
@@ -39,7 +85,7 @@ export async function POST(req: NextRequest) {
             success: true,
             message: "Utente Creato",
         }, {
-            status: 200
+            status: 201
         });
     } catch (error: any) {
         // Log the error message
