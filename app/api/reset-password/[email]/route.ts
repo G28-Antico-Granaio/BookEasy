@@ -30,14 +30,12 @@ import bcrypt from "bcryptjs";
  *               password:
  *                 type: string
  *     responses:
- *       201:
+ *       200:
  *         description: Created. User password reset successfully.
  *       409:
  *         description: Bad Request. Old and new passwords are the same.
  *       404:
  *         description: Not Found. User not found.
- *       400:
- *         description: Unprocessable Entity. Unable to process the request due to invalid data.
  *       500:
  *         description: Internal Server Error. An error occurred while resetting the user password.
  */
