@@ -2,6 +2,6 @@
 const nextConfig = {
     pageExtensions: ['ts', 'tsx'],
 
-    distDir: 'dist'
+    output: 'export'
 }
 module.exports = nextConfig
