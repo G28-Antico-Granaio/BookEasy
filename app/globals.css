@@ -87,6 +87,8 @@ ul {
 .ant-input {
   width: 75% !important;
 
+  min-height: 3rem !important;
+
   font-size: large !important;
   
   border-radius: 30px !important;
@@ -112,20 +114,7 @@ ul {
   line-height: 3rem !important;
 }
 
-#flag {
-  display: block;
-  padding: 5px 10px 5px 10px;
 
-  height: 30px;
-
-  text-indent: 2000%;
-  white-space: nowrap;
-  overflow: hidden;
-
-  background-image: url('../public/img/flags/it.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
 
 /****************************************************/
 /* main */
