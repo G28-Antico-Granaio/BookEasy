@@ -19,7 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User registration data.
+ *       description: User credentials modification data.
  *       required: true
  *       content:
  *         application/json:

@@ -16,11 +16,10 @@ import bcrypt from "bcryptjs";
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user whose password needs to be reset.
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User registration data.
+ *       description: User password reset data.
  *       required: true
  *       content:
  *         application/json:
@@ -30,15 +29,18 @@ import bcrypt from "bcryptjs";
  *               password:
  *                 type: string
  *     responses:
- *       200:
- *         description: Created. User password reset successfully.
- *       409:
- *         description: Bad Request. Old and new passwords are the same.
+ *       201:
+ *         description: OK. User password reset successfully.
+ *       400:
+ *         description: Bad Request. User not found during password update or old and new passwords are the same.
  *       404:
  *         description: Not Found. User not found.
  *       500:
- *         description: Internal Server Error. An error occurred while resetting the user password.
+ *         description: Internal Server Error. An error occurred while resetting the user password.rd
  */
+
+// Your existing code remains unchanged
+
 
 
 // Define interface for route parameters

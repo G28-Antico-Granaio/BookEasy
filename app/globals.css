@@ -119,37 +119,56 @@ ul {
 }
 
 /****************************************************/
-/* main */
+/*main*/
 main {
-    background-color: rgb(246, 245, 241);
-  
-    position: relative;
-  
-    min-height: 80%;
-  
-    margin-left: auto;
-    margin-right: auto;
-  
-    padding: 1rem;
-  
-    overflow: auto;
-  }
-  
-  .container {
-    width: 100%;
-    max-width: 70%;
-  
-    margin-left: auto;
-    margin-right: auto;
-    
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-  }
-  
-  section {
-    display: flex;
-    flex-direction: column;
-  
-    min-height: 0;
-  }
+  background-color: rgb(246, 245, 241);
 
+  position: relative;
+
+  min-height: 80%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 1rem;
+
+  overflow: auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 70%;
+
+  margin-left: auto;
+  margin-right: auto;
+  
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0;
+}
+
+/****************************************************/
+/*swagger*/
+.example {
+  text-align: left;
+}
+.risponse {
+  align-content: center;
+}
+.response-col_description {
+  align-content: start;
+  align-content: left;
+}
+.parameters-col_name, .highlight-code, .model-box {
+  text-align: left;
+}
+
+p, h4 {
+  text-align: left;
+}

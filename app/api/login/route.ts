@@ -6,14 +6,14 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/auth/login:
+ * /api/login:
  *   post:
  *     summary: User Login
  *     description: Authenticates a user based on the provided email and password.
  *     tags:
  *       - User
  *     requestBody:
- *       description: User registration data.
+ *       description: User login data.
  *       required: true
  *       content:
  *         application/json:
@@ -22,8 +22,10 @@ import bcrypt from "bcryptjs";
  *             properties:
  *               email:
  *                 type: string
+ *                 description: The user's email address.
  *               password:
  *                 type: string
+ *                 description: The user's password for authentication.
  *     responses:
  *       201:
  *         description: OK. User successfully logged in.

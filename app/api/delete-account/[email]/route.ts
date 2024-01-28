@@ -8,21 +8,21 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/auth/delete-account:
- *   delete:
+ * /api/delete-account/{email}:
+ *   post:
  *     summary: Delete user account
  *     description: Deletes the user account based on the provided email and password.
  *     tags:
  *       - User
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: email
  *         required: true
  *         description: The email of the user whose account needs to be deleted.
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User registration data.
+ *       description: User deletion data.
  *       required: true
  *       content:
  *         application/json:
@@ -31,6 +31,7 @@ import bcrypt from "bcryptjs";
  *             properties:
  *               password:
  *                 type: string
+ *                 description: The user's password for authentication.
  *     responses:
  *       200:
  *         description: OK. User account deletion successful.

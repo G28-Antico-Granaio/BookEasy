@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/auth/register:
+ * /api/register:
  *   post:
  *     summary: User Registration
  *     description: Handles user registration and password hashing.
@@ -36,11 +36,11 @@ import bcrypt from "bcryptjs";
  *       201:
  *         description: OK. User successfully registered.
  *       409:
- *         description: Bad Request. User already exists.
+ *         description: Conflict. User already exists.
  *       500:
  *         description: Internal Server Error. An error occurred during user registration.
-
  */
+
 
 class my_error extends Error {
     status: number;
