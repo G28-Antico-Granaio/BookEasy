@@ -1,3 +1,6 @@
+/****************************************************/
+/*general*/
+
 /*form*/
 .form {
     background-color: antiquewhite;
@@ -13,23 +16,19 @@
     text-align: center;
 }
 
-/*links*/
 .link {
     color: #0645AD;
     margin: 0.5rem;
 }
 
-/*tel_number*/
-.prefix, .postfix {
-    margin: 2.5px;
-}
-.prefix {
-    width: 15%;
-}
-.postfix {
-    width: 55%;
+.hr_form {
+    min-width: 80%;
+
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
+/****************************************************/
 /*delete-account*/
 .blabla {
     width: 100%;
@@ -86,4 +85,4 @@
     background-color: #e4e2dc;
     border-radius: 30px;
 
-  }
+}

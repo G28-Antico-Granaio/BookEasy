@@ -1,5 +1,5 @@
 // Import necessary modules and configurations
-import { connect_DB } from "@/configs/dbConfig";
+import { connect_DB } from "../../../config/db-config";
 
 import User from "@/app/models/user_model";
 
@@ -42,6 +42,11 @@ import bcrypt from "bcryptjs";
  *         description: Internal Server Error. An error occurred during account deletion.
  */
 
+// Define interface for route parameters
+interface Params {
+    email: string;
+}
+
 class my_error extends Error {
     status: number;
     constructor(text: string, status: number) {
@@ -54,13 +59,13 @@ class my_error extends Error {
 connect_DB();
 
 // API route handling POST requests
-export async function DELETE(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: Params }) {
     try {
         // Get form data from the request body
         const req_body = await req.json();
 
         // Get user
-        const user = await User.findOne({ email: req_body.email });
+        const user = await User.findOne({ email: params.email });
 
         if (!user) {
             throw new my_error("(!!) Login non effettuato", 404);

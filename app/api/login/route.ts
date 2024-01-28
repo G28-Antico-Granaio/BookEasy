@@ -1,5 +1,5 @@
 // Import necessary modules and configurations
-import { connect_DB } from "@/configs/dbConfig";
+import { connect_DB } from "../../config/db-config";
 import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
@@ -47,12 +47,11 @@ class my_error extends Error {
 connect_DB();
 
 // API endpoint for handling user login
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
-        // Get form data from the request body
         const req_body = await req.json();
 
-        // Check if the user exists
+        // check if user exists in the DB or not
         const user = await User.findOne({ email: req_body.email });
 
         // Handle non-existing user

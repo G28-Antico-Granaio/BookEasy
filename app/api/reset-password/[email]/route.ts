@@ -1,5 +1,5 @@
 // Import necessary modules and configurations
-import { connect_DB } from "@/configs/dbConfig";
+import { connect_DB } from "../../../config/db-config";
 import User from "@/app/models/user_model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";

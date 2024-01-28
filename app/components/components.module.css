@@ -1,17 +1,9 @@
+/****************************************************/
 /*import font title*/
 @import url('https://db.onlinewebfonts.com/c/07cb29fdcb073fff840edc6de2067b50?family=Amsterdam+Four_ttf'); 
 
-/*header*/
-/*set color on lower corners*/
-.header {
-    background-color:rgb(246, 245, 241);;
-    
-    font-family: "Amsterdam Four_ttf";
-    font-size: x-large;
-}
-
-/**/
-
+/****************************************************/
+/*general*/
 .hr {
     width: 80%;
 
@@ -20,6 +12,16 @@
     justify-self: auto;
 
     border: 1px solid #ab9881;
+}
+
+/****************************************************/
+/*header*/
+/*set color on lower corners*/
+.header {
+    background-color:rgb(246, 245, 241);;
+    
+    font-family: "Amsterdam Four_ttf";
+    font-size: x-large;
 }
 
 /****************************************************/
@@ -42,7 +44,6 @@
 }
 
 /*logo*/
-
 .restaurant_icon {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -124,7 +125,6 @@
     background-size: contain;
     background-repeat: no-repeat;
 }
-
 .locale_it > a, .locale_en > a, .locale_de > a {
     display: block !important;
 }
@@ -146,7 +146,7 @@
     justify-content: space-around;
     align-items: flex-start;
 
-    min-height: 400px; /*padding + img-logo dimension*/
+    min-height: 350px; /*padding + img-logo dimension*/
     padding: 20px;
 }
 
@@ -155,6 +155,7 @@
     text-align: inherit;
 }
 
+/****************************************************/
 /*review*/
 .review {
     width: 100%;
@@ -177,4 +178,33 @@
     grid-template-columns: 1fr 2fr;
     gap: 5px;
     place-items: center;
+}
+
+/****************************************************/
+/*loader*/
+.loader {
+    background-color: rgba(0, 0, 0, 0.75);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+  
+  .spinner {
+    height: 8px;
+    width: 8px;
+    border: 4px solid #fff;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+  
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

@@ -1,7 +1,5 @@
 'use client'
 
-import React from 'react'
-
 import Image from 'next/image'
 
 import style from './components.module.css'
@@ -26,21 +24,23 @@ function Header() {
   const de_flag = '/img/flags/de.png';
 
   const onLocale = async (locale: number) => {
-    const element = document.getElementById('flag');
-    
-    if (element !== null) {
-      if (locale === 0) {
-        element.style.backgroundImage = `url(${it_flag})`;
-        message.success('Lingua cambiata');
-      } else if (locale === 1) {
-        element.style.backgroundImage = `url(${en_flag})`;
-        message.success('Language changed');
-      } else if (locale === 2) {
-        element.style.backgroundImage = `url(${de_flag})`;
-        message.success('Sprache geändert');
-      } else {
-        message.warning('error');
-      }
+    if (document.getElementById('flag')) {
+        const element = document.getElementById('flag');
+        
+        if (element !== null) {
+            if (locale === 0) {
+                element.style.backgroundImage = `url(${it_flag})`;
+                message.success('Lingua cambiata');
+            } else if (locale === 1) {
+                element.style.backgroundImage = `url(${en_flag})`;
+                message.success('Language changed');
+            } else if (locale === 2) {
+                element.style.backgroundImage = `url(${de_flag})`;
+                message.success('Sprache geändert');
+            } else {
+                message.warning('error');
+            }
+        }
     }
   };
 

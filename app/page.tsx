@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from 'antd';
 import Image from 'next/image';
 
+import style from './page.module.css'
 import img1 from '@/public/img/carosello/1.jpg'
 import img2 from '@/public/img/carosello/2.jpg'
 import img3 from '@/public/img/carosello/3.jpg'
@@ -21,7 +22,7 @@ export default function Home() {
 
   return (
     <section className='container'>
-      <section className='description'>
+      <section className={style.description}>
         Benvenuti all&apos;Antico Granaio, dove l&apos;arte culinaria si fonde 
         per creare un&apos;esperienza gastronomica incredibile. Situato in un 
         ambiente accogliente e raffinato, il nostro ristorante vi invita a gustare 
@@ -31,13 +32,13 @@ export default function Home() {
         attento e cordiale vi farà sentire a casa.
       </section>
 
-      <section className='images'>
+      <section className={style.images}>
           <Image src={img1} alt='img1' width={375} height={225} />
           <Image src={img2} alt='img2' width={500} height={300} />
           <Image src={img3} alt='img3' width={375} height={225} />
       </section>
 
-      <section className='column'>
+      <section className={style.column}>
         <div>
           <h2>Scarica il Menù</h2>
           <a href='../public/download_files/menù.pdf' download>

@@ -7,7 +7,7 @@ import { Button, DatePicker, Form, InputNumber, Select, message } from 'antd';
 
 import { useRouter } from 'next/navigation';
 
-import style from '../(auth)/auth.module.css'
+import style from '../reach.module.css'
 import map from '@/public/img/duck.jpg'
 import Review from '@/app/components/review';
 import Loader from '@/app/components/loader';
@@ -24,19 +24,24 @@ function Private_Area() {
 
   const onLogout = async () => {
     try {
-      setLoading(true);
+      if (localStorage.getItem('email') && localStorage.getItem('role') && localStorage.getItem('log')) {
+        setLoading(true);
 
-      localStorage.removeItem('email');
-      localStorage.removeItem('role');
-      localStorage.setItem('log', 'false');
+        localStorage.removeItem('email');
+        localStorage.removeItem('role');
+        localStorage.setItem('log', 'false');
 
-      message.success("Logout Effettuato");
-      router.push("/login");
+        message.success("Logout Effettuato");
+        router.push("/login");
+      } else {
+        message.warning("Impossibile eseguire il logout");
+      }
     } catch (error: any) {
       message.error(error.response.data.message);
     } finally {
       setLoading(false);
     }
+  
   };
 
   const onModify = async () => {
@@ -64,13 +69,15 @@ function Private_Area() {
   const [loadingUserLog, setLoadingUserLog] = useState(true)
 
   React.useEffect(() => {
-    const role = localStorage.getItem('role');
-    setUserRole(role);
+    if (localStorage.getItem('role') && localStorage.getItem('log')) {
+      const role = localStorage.getItem('role');
+      setUserRole(role);
 
-    const log = localStorage.getItem('log');
-    setUserLog(log);
+      const log = localStorage.getItem('log');
+      setUserLog(log);
 
-    setLoadingUserLog(false);
+      setLoadingUserLog(false);
+    }
   }, []);
 
   if(loadingUserLog){
@@ -131,7 +138,7 @@ function Private_Area() {
       return (
         <section className='container'>
           <section className={style.link}>
-              <a onClick={onModify}>Modifica le Credenziali</a>
+            <a onClick={onModify}>Modifica le Credenziali</a>
           </section>
           <section className={style.link}>
             <a onClick={onLogout}>Logout</a>
