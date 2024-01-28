@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 import style from '../auth.module.css'
 

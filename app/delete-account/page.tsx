@@ -7,7 +7,7 @@ import { Form, Input, Button, message } from 'antd'
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
-import style from '@/app/(pages)/(auth)/auth.module.css'
+import style from '@/app/(auth)/auth.module.css'
 import Loader from '@/app/components/loader';
 
 interface user{

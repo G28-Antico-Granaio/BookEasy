@@ -7,7 +7,6 @@ import Image from 'next/image'
 
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
-import { NextResponse } from 'next/server'
 
 import style from './reservation.module.css'
 import map from '@/public/img/duck.jpg'
