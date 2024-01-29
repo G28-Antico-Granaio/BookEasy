@@ -168,5 +168,7 @@ function Reserve() {
                 </section>
             </section>
         )
+    } else {
+        router.push('/login');
     }
 } export default Reserve
