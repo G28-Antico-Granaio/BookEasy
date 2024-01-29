@@ -16,6 +16,13 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+interface reserve {
+  _id: string;
+  table_id: number;
+  date: Date;
+  turn: number;
+  cover_number: number;
+}
 
 const { Option } = Select;
 dayjs.extend(customParseFormat);
@@ -139,11 +146,8 @@ function Private_Area() {
 
           <section>
             <h2>Prenotazioni Attive</h2>
-            {newData.map((reservation) => {
+            {newData.map((reservation: reserve) => {
             return (
-              /*
-               * Questa parte su VSCode da errore ma compila comunuqe
-              */
               <div key={reservation.table_id} className={style.post_rev}>
                 <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
                 <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
@@ -159,11 +163,8 @@ function Private_Area() {
             <h2>Prenotazioni Passate</h2>
             <div>Fino a 7 giorni fa</div>
 
-            {oldData.map((reservation) => {
+            {oldData.map((reservation: reserve) => {
             return (
-              /*
-               * Questa parte su VSCode da errore ma compila comunuqe
-              */
               <div key={reservation.table_id} className={style.past_rev}>
                 <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
                 <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>

@@ -17,7 +17,7 @@ import Loader from '@/app/components/loader';
 
 interface Reservation {
     table_id: number;
-    date: string;
+    date: Date;
     turn: number;
     cover_numer: number;
     email: string;
