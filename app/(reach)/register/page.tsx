@@ -30,8 +30,8 @@ function Register() {
   const onRegister = async (values: user) => {
     try {
       setLoading(true);
-      await axios.post('/api/register', values);
-      message.success('Registrazione effettuata con successo, ora effettuare il login');
+      await axios.post('/api/users/register', values);
+      message.success('Registrazione effettuata');
       router.push("/login");
     } catch (error: any) {
       message.error(error.response.data.message);
@@ -107,7 +107,7 @@ function Register() {
             },
           ]}>
 
-            <InputNumber addonBefore={prefixSelector} placeholder='Numnero di Telefono'
+            <InputNumber addonBefore={prefixSelector} placeholder='Numero di Telefono'
               style={{
                 width: '75%',
                 height: '3rem',
@@ -139,8 +139,16 @@ function Register() {
               name={'password'}
               rules={[
                   {
-                      required: true,
-                      message: 'Inserisci la tua Password'
+                    required: true,
+                    message: 'Inserisci la tua Password'
+                  },
+                  {
+                    min: 8,
+                    message: 'La password deve essere composta da almeno 8 caratteri',
+                  },
+                  {
+                    pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
+                    message: 'La password deve contenere almeno un numero e un carattere speciale',
                   },
               ]}
               hasFeedback>

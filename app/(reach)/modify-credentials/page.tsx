@@ -42,7 +42,7 @@ function Modify_Credentials() {
     const onLoad = async () => {
       try {
         const email: string | null = localStorage.getItem('email') || '';
-        const response = await axios.get(`/api/user/${email}`);
+        const response = await axios.get(`/api/users/user/${email}`);
         const user: User = response.data.data;
 
         form.setFieldsValue({

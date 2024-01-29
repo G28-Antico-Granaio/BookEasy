@@ -26,7 +26,7 @@ function Delete_Account() {
       setLoading(true);
 
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.post(`/api/delete-account/${email}`, values);
+      await axios.post(`/api/users/delete-account/${email}`, values);
 
       localStorage.clear();
       localStorage.setItem('log', 'false');

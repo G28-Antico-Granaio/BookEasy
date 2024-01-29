@@ -17,7 +17,7 @@ export default function Home() {
 
   const router = useRouter();
   const onBook = async () => {
-    await router.push('/reservation')
+    await router.push('/reserve')
   }
 
   const downloadButtonRef = useRef<HTMLButtonElement>(null);

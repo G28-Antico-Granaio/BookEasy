@@ -13,7 +13,7 @@ function Footer() {
         </div>
 
         <div className={style.footer_item}>
-            <h3>Come puoi conttattarci:</h3>
+            <h3>Come puoi contattarci:</h3>
             <br />
             <div>
                 <h3>Numero di Telefono:</h3>

@@ -23,7 +23,7 @@ function Reset_Password() {
       setLoading(true);
 
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.put(`/api/reset-password/${email}`, values);
+      await axios.put(`/api/users/reset-password/${email}`, values);
       localStorage.clear();
       localStorage.setItem('log', 'false');
 

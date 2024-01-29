@@ -1,7 +1,7 @@
 // Import necessary modules and configurations
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/app/models/user_model";
-import { connect_DB } from "../../../config/db-config";
+import { connect_DB } from "../../../../config/db-config";
 
 /**
  * @swagger

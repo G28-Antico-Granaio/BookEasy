@@ -1,5 +1,5 @@
 // Import necessary modules and configurations
-import { connect_DB } from "../../../config/db-config";
+import { connect_DB } from "../../../../config/db-config";
 
 import User from "@/app/models/user_model";
 
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
 
     } catch (error: any) {
         // Log and return error response
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/delete-account' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/users/delete-account' --> ", error.message);
 
         // Return error response with a meaningful message
         return NextResponse.json({

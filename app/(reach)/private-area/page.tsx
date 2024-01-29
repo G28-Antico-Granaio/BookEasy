@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 
 import Image from 'next/image'
-import { Button, DatePicker, Form, InputNumber, Select, message } from 'antd';
+import { Button, DatePicker, Form, Select, message } from 'antd';
 
 import { useRouter } from 'next/navigation';
 
@@ -11,10 +11,14 @@ import style from '../reach.module.css'
 import map from '@/public/img/plan.png'
 import Review from '@/app/components/review';
 import Loader from '@/app/components/loader';
+import axios from 'axios';
 
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 
 const { Option } = Select;
+dayjs.extend(customParseFormat);
 
 function Private_Area() {
 
@@ -52,11 +56,20 @@ function Private_Area() {
     await router.push('/delete-account')
   }
 
-  const onDelete = async () => {
-    message.warning("Funzione non ancora Implementata");
+  const onDelete = async (_id: string) => {
+    try {
+      setLoading(true);
+
+      await axios.delete(`/api/reservations/delete-reservation/${_id}`)
+      message.success("Prenotazione Eliminata")
+    } catch (error: any) {
+      message.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const onRev = async () => {
+  const onRev = async (_id: string) => {
     message.warning("Funzione non ancora Implementata");
   }
 
@@ -66,7 +79,9 @@ function Private_Area() {
   
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userLog, setUserLog] = useState<string | null>(null);
-  const [loadingUserLog, setLoadingUserLog] = useState(true)
+  const [loadingUserLog, setLoadingUserLog] = useState(true);
+  const [newData, setNewData] = useState([]);
+  const [oldData, setOldData] = useState([]);
 
   React.useEffect(() => {
     if (localStorage.getItem('role') && localStorage.getItem('log')) {
@@ -78,6 +93,29 @@ function Private_Area() {
 
       setLoadingUserLog(false);
     }
+
+    const onReserveNew =async () => {
+      try {
+        const email: string | null = localStorage.getItem('email');
+        const response = await axios.get(`/api/reservations/new-reservation/${email}`);
+        setNewData(response.data.data);
+      } catch (error: any) {
+        message.error(error.response.data.message);
+      }
+    };
+
+    const onReserveOld =async () => {
+      try {
+        const email: string | null = localStorage.getItem('email');
+        const response = await axios.get(`/api/reservations/old-reservation/${email}`);
+        setOldData(response.data.data);
+      } catch (error: any) {
+        message.error(error.response.data.message);
+      }
+    };
+
+    onReserveNew();
+    onReserveOld();
   }, []);
 
   if(loadingUserLog){
@@ -101,17 +139,18 @@ function Private_Area() {
 
           <section>
             <h2>Prenotazioni Attive</h2>
-            <div className={style.post_rev}>
-              <div>Prenotazione Paranzo - 26/12/2023</div>
-              <div>Orario: 12.00 - 13.30 | 2 Persone | Tavolo 13</div>
-              <a className={style.link} onClick={onDelete}>Cancella la prenotazione</a>
-            </div>
-
-            <div className={style.post_rev}>
-              <div>Prenotazione Cena - 15/01/2024</div>
-              <div>Orario: 19.30 - 21.00 | 4 Persone | Tavolo 7</div>
-              <a className={style.link} onClick={onDelete}>Cancella la prenotazione</a>
-            </div>
+            {newData.map((reservation) => {
+            return (
+              /*
+               * Questa parte su VSCode da errore ma compila comunuqe
+              */
+              <div key={reservation.table_id} className={style.post_rev}>
+                <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
+                <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
+                <a className={style.link} onClick={() => onDelete(reservation._id)}>Cancella la prenotazione</a>
+              </div>
+            );
+          })}
           </section>
 
           <hr />
@@ -120,11 +159,18 @@ function Private_Area() {
             <h2>Prenotazioni Passate</h2>
             <div>Fino a 7 giorni fa</div>
 
-            <div className={style.past_rev}>
-              <div>Prenotazione Cena - 20/09/2023</div>
-              <div>Orario: 19.30 - 21.00 | 6 Persone | Tavolo 18</div>
-              <a className={style.link} onClick={onRev}>Recensisci Prenotazione</a>
-            </div>
+            {oldData.map((reservation) => {
+            return (
+              /*
+               * Questa parte su VSCode da errore ma compila comunuqe
+              */
+              <div key={reservation.table_id} className={style.past_rev}>
+                <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
+                <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
+                <a className={style.link} onClick={() => onRev(reservation._id)}>Recensisci Prenotazione</a>
+              </div>
+            );
+          })}
           </section>
 
           <hr />
@@ -148,7 +194,7 @@ function Private_Area() {
 
           <section className={style.date}>
             <Form
-              name='book'
+              name='check'
               form={form}
               onFinish={onDate}
               scrollToFirstError>
@@ -162,10 +208,9 @@ function Private_Area() {
                     message: 'Selezionare una data'
                   }
                 ]}>
-                <DatePicker 
-                  style={{
-                    width: '10rem',
-                }}/>
+                <DatePicker
+                  disabledDate={(current) => current && current < dayjs().startOf('day')}
+                />
               </Form.Item>
 
               <Form.Item
@@ -185,23 +230,6 @@ function Private_Area() {
                   <Option value="19.00" >19.00</Option>
                   <Option value="21.00" >21.00</Option>
                 </Select>
-              </Form.Item>
-
-              <Form.Item
-                label='Coperti'
-                name={'cover'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Inserire i coperti'
-                  }
-                ]}>
-
-                <InputNumber min={1} max={8}
-                  style={{
-                    width: '10rem',
-                  }}/>
-
               </Form.Item>
               
               <Button htmlType='submit' block loading={loading} style={{

@@ -24,7 +24,7 @@ function Login(){
   const onLogin = async (values: User) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/login", values);
+      const response = await axios.post("/api/users/login", values);
       const result = response.data;
 
       localStorage.setItem('email', values.email);
