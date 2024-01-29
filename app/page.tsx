@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Button } from 'antd';
 import Image from 'next/image';
@@ -19,6 +19,29 @@ export default function Home() {
   const onBook = async () => {
     await router.push('/reservation')
   }
+
+  const downloadButtonRef = useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    const handleDownload = () => {
+      const link = document.createElement('a');
+      link.href = '/download/menu.pdf'; // Update with the path to your PDF file in the public directory
+      link.download = 'menu.pdf';
+      link.click();
+    };
+
+    const buttonRefCurrent = downloadButtonRef.current;
+
+    if (buttonRefCurrent) {
+      buttonRefCurrent.addEventListener('click', handleDownload);
+    }
+
+    return () => {
+      if (buttonRefCurrent) {
+        buttonRefCurrent.removeEventListener('click', handleDownload);
+      }
+    };
+  }, []);
 
   return (
     <section className='container'>
@@ -41,9 +64,7 @@ export default function Home() {
       <section className={style.column}>
         <div>
           <h2>Scarica il Menù</h2>
-          <a href='../public/download_files/menù.pdf' download>
-            <Button>Scarica</Button>
-          </a>
+            <Button ref={downloadButtonRef}>Scarica</Button>
         </div>
         
         <div>

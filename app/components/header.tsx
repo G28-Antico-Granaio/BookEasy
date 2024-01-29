@@ -17,7 +17,7 @@ function Header() {
     await router.push('/private-area')
   }
   const onHome = async () => {
-    await router.push('/')
+    await router.push('/');
   }
 
   const it_flag = '/img/flags/it.png';
@@ -60,10 +60,10 @@ function Header() {
   }
 
   const [loading, setLoading] = React.useState(false);
-  const [newUser, setNewUser] = useState<string | null>(null);
+  const [logUser, setLogUser] = useState<string | null>(null);
   React.useEffect(() => {
       const logged = localStorage.getItem('log');
-      setNewUser(logged);
+      setLogUser(logged);
   }, []);
   
   if(show_header === false){
@@ -106,7 +106,7 @@ function Header() {
       </header>
     )
   } else {
-    if (newUser === 'true') {
+    if (logUser === 'true') {
       return (
         <header className={style.header}>
           <div className={style.container}>
@@ -152,7 +152,7 @@ function Header() {
           </div>
         </header>
       )
-    } else {
+    } if(logUser === 'false' || logUser === null) {
       return (
         <header className={style.header}>
           <div className={style.container}>

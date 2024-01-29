@@ -41,6 +41,7 @@
 }
 
 /*private area*/
+/*admin*/
 .date > form {
     display: flex;
     flex-direction: row;
@@ -52,6 +53,19 @@
     align-items: center;
 }
 
+.plan {
+    margin: 3rem auto 3rem auto;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 3rem;
+}
+
+
+/*user*/
 .past_rev, .post_rev {
     border-radius: 30px;
 
@@ -72,17 +86,4 @@
 
 .past_rev {
     background-color: lightgray;
-}
-
-.review {
-    display: flex;
-    flex-direction: row;
-  
-    justify-content: flex-start;
-  
-    align-items: center;
-  
-    background-color: #e4e2dc;
-    border-radius: 30px;
-
 }

@@ -8,7 +8,7 @@ import { Button, DatePicker, Form, InputNumber, Select, message } from 'antd';
 import { useRouter } from 'next/navigation';
 
 import style from '../reach.module.css'
-import map from '@/public/img/duck.jpg'
+import map from '@/public/img/plan.png'
 import Review from '@/app/components/review';
 import Loader from '@/app/components/loader';
 
@@ -216,10 +216,10 @@ function Private_Area() {
           </section>
 
           <section className={style.plan}>
-            <Image src={map} alt="map" width={1000} height={500} />
+            <Image src={map} alt="map" width={950} height={700} />
           </section>
 
-          <section>
+          <section className={style.review}>
                 <Review />
                 <Review />
                 <Review />
