@@ -6,7 +6,7 @@ import Footer from "./components/footer";
 
 
 export const metadata: Metadata = {
-  title: "BookEasy - Antico Granaio",
+  title: "Antico Granaio",
 };
 
 export default function RootLayout({

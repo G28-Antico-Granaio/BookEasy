@@ -14,18 +14,19 @@ function Footer() {
 
         <div className={style.footer_item}>
             <h3>Come puoi conttattarci:</h3>
+            <br />
             <div>
-                <h4>Numero di Telefono:</h4>
-                <p>
+                <h3>Numero di Telefono:</h3>
+                <div>
                     <a href="tel:+391234567890">+39 1234567890</a>
-                </p>
+                </div>
             </div>
             <br />
             <div>
-                <h4>E-Mail: </h4>
-                <p>
+                <h3>E-Mail: </h3>
+                <div>
                     <a href="mailto:info@anticogranaio.it">info@anticogranaio.it</a>
-                </p>
+                </div>
             </div>
         </div>
 
