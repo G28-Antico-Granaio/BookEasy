@@ -31,7 +31,7 @@ import bcrypt from "bcryptjs";
  *     responses:
  *       201:
  *         description: OK. User password reset successfully.
- *       400:
+ *       404:
  *         description: Bad Request. User not found during password update or old and new passwords are the same.
  *       404:
  *         description: Not Found. User not found.

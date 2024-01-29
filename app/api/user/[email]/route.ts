@@ -20,18 +20,7 @@ import { connect_DB } from "../../../config/db-config";
  *           type: string
  *     responses:
  *       200:
- *         description: OK. User information retrieved successfully.
- *         content:
- *           application/json:
- *             example:
- *               success: true
- *               data: 
- *                 name: "string"
- *                 surname: "string"
- *                 tel_number: "string"
- *                 tel_area_code: "string"
- *                 email: "string"
- *                 password: "string"
+ *         description: OK. User information retrieved successfully.    
  *       404:
  *         description: Not Found. User not found.
  *       500:
