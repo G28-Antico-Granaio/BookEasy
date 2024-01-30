@@ -26,9 +26,6 @@ function Header() {
   const onHome = async () => {
     router.push('/');
   }
-  if (usePathname() === '/') {
-    window.location.reload();
-  }
 
   const it_flag = '/img/flags/it.png';
   const en_flag = '/img/flags/en.png';
