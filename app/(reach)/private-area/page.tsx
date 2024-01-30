@@ -144,9 +144,8 @@ function Private_Area() {
             <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
             <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
             <a className={style.link} onClick={() => onRev(reservation._id)}>Recensisci Prenotazione</a>
-          </div>
-        );
-      })}
+          </div>);        
+        })}
       </section>
 
       <hr />

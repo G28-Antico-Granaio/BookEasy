@@ -34,11 +34,36 @@ function Reserve() {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
 
-    let table: number;
+    const [checkValues, setCheckValues] = React.useState<Reservation | null>(null);
+
+    const [selectedTables, setSelectedTables] = useState<number[]>([]);
+
+    const onCheck =async (values: Reservation) => {
+        try {
+            setLoading(true);
+
+            setCheckValues(values);
+
+            const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
+
+            const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
+            const data = response.data.data;
+
+            const newSelectedTables  = data.map((reservation: any) => reservation.table_id);
+            setSelectedTables(newSelectedTables);
+
+            message.success('Dati Raccolti');
+
+        } catch (error: any) {
+            message.error(error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const onReserve = async (values: Reservation) => {
         try {
-            if (table === null) {
+            if (selectedArea === null || selectedArea === undefined) {
                 throw new Error("Selezionare un tavolo");
             }
 
@@ -53,7 +78,7 @@ function Reserve() {
                 email: user.email,
                 name: user.name,
                 surname: user.surname,
-                table_id: table
+                table_id: selectedArea
             };
 
             await axios.post('/api/reservations/reserve', data);
@@ -81,7 +106,6 @@ function Reserve() {
         });
         
         if (selectedArea) {
-            table = selectedArea.id;
             setSelectedArea(selectedArea.id);
         } else {
             setSelectedArea(null);
@@ -114,9 +138,9 @@ function Reserve() {
         <section className='container'>
             <section className={style.date}>
                 <Form
-                    name='login'
+                    name='check'
                     form={form}
-                    onFinish={onReserve}
+                    onFinish={onCheck}
                     scrollToFirstError>
 
                     <Form.Item
@@ -131,6 +155,7 @@ function Reserve() {
 
                         <DatePicker
                             disabledDate={(current) => current && current < dayjs().startOf('day')}
+                            format='YYYY-MM-DD'
                         />
                         
                     </Form.Item>
@@ -177,6 +202,15 @@ function Reserve() {
                         }}/>
 
                     </Form.Item>
+
+                    <Button htmlType="submit" block loading={loading}
+                        style={{
+                            marginTop: '3rem',
+                            marginRight: 'auto',
+                            marginLeft: 'auto'
+                    }}>
+                        Controlla
+                    </Button>
                 </Form>
             </section>
 
@@ -196,8 +230,23 @@ function Reserve() {
                         }}
                     />
                 )}
-            </section>
 
+                {selectedTables.map((tableId) => (
+                    <div
+                        key={tableId}
+                        style={{
+                            position: 'absolute',
+                            top: clickableAreas[tableId - 1].y,
+                            left: clickableAreas[tableId - 1].x,
+                            width: clickableAreas[tableId - 1].width,
+                            height: clickableAreas[tableId - 1].height,
+                            backgroundColor: 'rgba(200, 0, 0, 0.5)',
+                            border: '2px solid red',
+                        }}
+                    />
+                    ))}
+
+            </section>
 
             <br />
 
@@ -210,7 +259,18 @@ function Reserve() {
             <br />
 
             <section>
-                <Button form='login' htmlType='submit' block loading={loading}
+                <Button onClick={async () => {
+                            try {
+                                setLoading(true);
+                                if (checkValues) {
+                                    await onReserve(checkValues);
+                                }
+                            } catch (error: any) {
+                                message.error(error.response.data.message);
+                            } finally {
+                                setLoading(false);
+                            }
+                        }} htmlType='submit' block loading={loading}
                     style={{
                         marginTop: '3rem',
                         marginRight: 'auto',

@@ -27,8 +27,6 @@ function Modify_Credentials() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
-  const [userLog, setUserLog] = useState<string | null>(null);
-
   React.useEffect(() => {
     const log = localStorage.getItem('log');
     const role = localStorage.getItem('role');
@@ -137,7 +135,7 @@ function Modify_Credentials() {
             },
           ]}>
 
-            <Input addonBefore={prefixSelector} placeholder='Numnero di Telefono'
+            <Input addonBefore={prefixSelector} placeholder='Numero di Telefono'
               style={{
                 width: '75%',
             }}/>

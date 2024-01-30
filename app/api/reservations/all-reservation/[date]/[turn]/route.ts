@@ -7,14 +7,6 @@ interface Params {
     turn: number;
 }
 
-class my_error extends Error {
-    status: number;
-    constructor(text: string, status: number) {
-      super(text);
-      this.status = status;
-    }
-} 
-
 connect_DB();
 
 export async function GET(req: NextRequest, {params} : {params: Params}) {
@@ -24,15 +16,16 @@ export async function GET(req: NextRequest, {params} : {params: Params}) {
             date: params.date,
         });
 
+        let message: string = "Prenotazioni Caricate"
         if (!data || data.length === 0) {
-            throw new my_error("(!!) Non ci sono prenotazioni", 404)
+            message = "Non ci sono prenotazioni"
         }
 
         return NextResponse.json({
             success: true,
-            message: "Prenotazioni Caricate",
+            message: message,
             data: data,
-        }, {    
+        }, {
             status: 200,
         }) 
     } catch (error: any) {

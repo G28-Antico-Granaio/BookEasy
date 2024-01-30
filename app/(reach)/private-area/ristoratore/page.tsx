@@ -124,8 +124,10 @@ function Private_Area() {
         </section>
 
         <section className={style.plan}>
-            <Image src={map} alt="map" width={950} height={700} />
+            <Image src={map} alt="map" width={500} height={500} />
         </section>
+
+        <hr />
 
         <section className={style.review}>
             <Review />
