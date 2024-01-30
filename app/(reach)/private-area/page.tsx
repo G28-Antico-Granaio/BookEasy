@@ -56,6 +56,7 @@ function Private_Area() {
     try {
       await axios.delete(`/api/reservations/delete-reservation/${_id}`)
       message.success("Prenotazione Eliminata")
+      window.location.reload();
     } catch (error: any) {
       message.error(error.response.data.message);
     }

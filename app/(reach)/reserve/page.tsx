@@ -34,8 +34,14 @@ function Reserve() {
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
 
-    const onReserve =async (values: Reservation) => {
+    let table: number;
+
+    const onReserve = async (values: Reservation) => {
         try {
+            if (table === null) {
+                throw new Error("Selezionare un tavolo");
+            }
+
             setLoading(true);
 
             const email: string | null = localStorage.getItem('email') || '';
@@ -47,19 +53,54 @@ function Reserve() {
                 email: user.email,
                 name: user.name,
                 surname: user.surname,
-                table_id: 1
-            }
-            
+                table_id: table
+            };
+
             await axios.post('/api/reservations/reserve', data);
 
             message.success('Prenotazione Effettuata');
             router.push('/private-area');
         } catch (error: any) {
-            message.error(error.response.data.message);
+            message.error(error.message);
         } finally {
             setLoading(false);
         }
     };
+
+    const [selectedArea, setSelectedArea] = useState<number | null>(null);
+    const handleClick = (event: { nativeEvent: { offsetX: any; offsetY: any } }) => {
+        const { offsetX, offsetY } = event.nativeEvent;
+
+        const selectedArea = clickableAreas.find((area) => {
+            const isInside =
+                offsetX >= area.x &&
+                offsetX <= area.x + area.width &&
+                offsetY >= area.y &&
+                offsetY <= area.y + area.height;
+            return isInside;
+        });
+        
+        if (selectedArea) {
+            table = selectedArea.id;
+            setSelectedArea(selectedArea.id);
+        } else {
+            setSelectedArea(null);
+        }
+    }
+   
+    const clickableAreas = [
+        { id: 1, x: 0, y: 0, width: 100, height: 100 },
+        { id: 2, x: 195, y: 0, width: 100, height: 100 },
+        { id: 3, x: 397, y: 0, width: 100, height: 100 },
+        { id: 4, x: 99, y: 100, width: 100, height: 100 },
+        { id: 5, x: 299, y: 100, width: 100, height: 100 },
+        { id: 6, x: 397, y: 200, width: 100, height: 100 },
+        { id: 7, x: 99, y: 300, width: 100, height: 100 },
+        { id: 8, x: 299, y: 300, width: 100, height: 100 },
+        { id: 9, x: 0, y: 397, width: 100, height: 100 },
+        { id: 10, x: 196, y: 397, width: 100, height: 100 },
+        { id: 11, x: 397, y: 397, width: 100, height: 100 }
+    ];      
 
     React.useEffect(() => {
         const log = localStorage.getItem('log');
@@ -137,12 +178,26 @@ function Reserve() {
 
                     </Form.Item>
                 </Form>
-
             </section>
 
-            <section className={style.plan}>
-                <Image src={map} alt="map" width={950} height={700} />
+            <section onClick={handleClick} className={style.plan} style={{ position: 'relative' }}>
+                <Image src={map} alt="map" id='map' width={500} height={500} />
+
+                {selectedArea !== null && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: clickableAreas[selectedArea - 1].y,
+                            left: clickableAreas[selectedArea - 1].x,
+                            width: clickableAreas[selectedArea - 1].width,
+                            height: clickableAreas[selectedArea - 1].height,
+                            backgroundColor: 'rgba(169, 169, 169, 0.5)',
+                            border: '2px solid #696969',
+                        }}
+                    />
+                )}
             </section>
+
 
             <br />
 
@@ -161,7 +216,7 @@ function Reserve() {
                         marginRight: 'auto',
                         marginLeft: 'auto'
                     }}>
-                    Controlla
+                    Prenota
                 </Button>
             </section>
         </section>
