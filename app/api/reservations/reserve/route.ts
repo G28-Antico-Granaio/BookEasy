@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
             turn: req_body.turn
         });
 
-        //req_body.date = new Date(2012, 7, 14);
         if (!exist_reservation) {
             const new_reservation = new Reservation(req_body);
 
