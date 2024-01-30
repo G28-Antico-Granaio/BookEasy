@@ -38,7 +38,7 @@ function Reserve() {
 
     const [selectedTables, setSelectedTables] = useState<number[]>([]);
 
-    const onCheck =async (values: Reservation) => {
+    const onCheck = async (values: Reservation) => {
         try {
             setLoading(true);
 
