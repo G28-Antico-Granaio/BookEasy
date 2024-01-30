@@ -14,7 +14,14 @@ function Header() {
 
   const router = useRouter();
   const onPriv = async () => {
-    router.push('/private-area')
+    const role = localStorage.getItem('role');
+    if (role === 'false') {
+      router.push('/private-area') ;
+    } else if (role === 'true') {
+      router.push('/private-area/ristoratore')
+    } else if (!role) {
+      router.push('/login')
+    }
   }
   const onHome = async () => {
     router.push('/');

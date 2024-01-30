@@ -27,12 +27,18 @@ function Login(){
       const response = await axios.post("/api/users/login", values);
       const result = response.data;
 
-      localStorage.setItem('email', values.email);
-      localStorage.setItem('role', result.data.isAdmin);
-      localStorage.setItem('log', 'true');
+      await localStorage.setItem('email', values.email);
+      await localStorage.setItem('role', result.data.isAdmin);
+      await localStorage.setItem('log', 'true');
+
+      const role = localStorage.getItem('role');
 
       message.success("Login Effettuato");
-      router.push("/private-area")
+      if (role === 'true') {
+        router.push("/private-area/ristoratore");
+      } else {
+        router.push("/private-area");
+      }
     } catch (error: any) {
       message.error(error.response.data.message);
     } finally {            

@@ -17,7 +17,12 @@ export default function Home() {
 
   const router = useRouter();
   const onBook = async () => {
-    await router.push('/reserve')
+    const log = localStorage.getItem('log')
+    if (log === 'true') {
+      await router.push('/reserve')
+    } else {
+      router.push("/login");
+    }
   }
 
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
