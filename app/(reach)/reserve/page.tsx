@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import Image from 'next/image'
 import { Button, DatePicker, Form, InputNumber, Select, message } from 'antd'
@@ -65,110 +65,98 @@ function Reserve() {
     const [loadingUserLog, setLoadingUserLog] = useState(true)
 
     React.useEffect(() => {
-        if (localStorage.getItem('role')) {
-
         const log = localStorage.getItem('log');
-        setUserLog(log);
-
-        setLoadingUserLog(false);
+        const role = localStorage.getItem('role');
+        if (!log || !role) {
+            router.push('/login');
         }
-    }, []);
+    }, [router]);
 
-    if(loadingUserLog){
-        return(
-          <Loader />
-        )
-    }
-    
-    if (userLog === 'true') {
-        return (
-            <section className='container'>
-                <section className={style.date}>
-                    <Form
-                        name='login'
-                        form={form}
-                        onFinish={onReserve}
-                        scrollToFirstError>
+    return (
+        <section className='container'>
+            <section className={style.date}>
+                <Form
+                    name='login'
+                    form={form}
+                    onFinish={onReserve}
+                    scrollToFirstError>
 
-                        <Form.Item
-                            label='Date'
-                            name={'date'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'seleziona una data'
-                                }
-                            ]}>
-
-                            <DatePicker
-                                disabledDate={(current) => current && current < dayjs().startOf('day')}
-                            />
-                            
-                        </Form.Item>
-
-                        <Form.Item
-                            label='Turno'
-                            name={'turn'}
-                            rules={[
+                    <Form.Item
+                        label='Date'
+                        name={'date'}
+                        rules={[
                             {
                                 required: true,
-                                message: 'seleziona un turno',
+                                message: 'seleziona una data'
                             }
-                            ]}>
+                        ]}>
 
-                            <Select style={{
-                                width: '10rem',
-                                }}>
-                                <Option value="12.00" >12.00</Option>
-                                <Option value="14.00" >14.00</Option>
-                                <Option value="19.00" >19.00</Option>
-                                <Option value="21.00" >21.00</Option>
-                            </Select>
-
-                        </Form.Item>
+                        <DatePicker
+                            disabledDate={(current) => current && current < dayjs().startOf('day')}
+                        />
                         
-                        <Form.Item
-                            label='Coperti'
-                            name={'cover_number'}
-                            rules={[
-                            {
-                                required: true,
-                                message: 'Inserire i coperti'
-                            }
-                            ]}>
+                    </Form.Item>
 
-                            <InputNumber min={1} max={8}
-                            style={{
-                                width: '10rem',
-                            }}/>
+                    <Form.Item
+                        label='Turno'
+                        name={'turn'}
+                        rules={[
+                        {
+                            required: true,
+                            message: 'seleziona un turno',
+                        }
+                        ]}>
 
-                        </Form.Item>
-                    </Form>
+                        <Select style={{
+                            width: '10rem',
+                            }}>
+                            <Option value="12.00" >12.00</Option>
+                            <Option value="14.00" >14.00</Option>
+                            <Option value="19.00" >19.00</Option>
+                            <Option value="21.00" >21.00</Option>
+                        </Select>
 
-                </section>
+                    </Form.Item>
+                    
+                    <Form.Item
+                        label='Coperti'
+                        name={'cover_number'}
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Inserire i coperti'
+                        }
+                        ]}>
 
-                <section className={style.plan}>
-                    <Image src={map} alt="map" width={950} height={700} />
-                </section>
+                        <InputNumber min={1} max={8}
+                        style={{
+                            width: '10rem',
+                        }}/>
 
-                <br />
+                    </Form.Item>
+                </Form>
 
-                <section>
-                    Si ricorda che, se dopo 30 minuti dall&apos;inizio del turno selezionato 
-                    non ci si presenta a reclamare la prenotazioe, essa non sarà più valida 
-                    e il tavolo potrebbe essere ri assegnato
-                </section>
-
-                <br />
-
-                <section>
-                    <Button form='login' htmlType='submit' block loading={loading}>
-                        Controlla
-                    </Button>
-                </section>
             </section>
-        )
-    } else {
-        router.push('/login');
-    }
+
+            <section className={style.plan}>
+                <Image src={map} alt="map" width={950} height={700} />
+            </section>
+
+            <br />
+
+            <section>
+                Si ricorda che, se dopo 30 minuti dall&apos;inizio del turno selezionato 
+                non ci si presenta a reclamare la prenotazioe, essa non sarà più valida 
+                e il tavolo potrebbe essere ri assegnato
+            </section>
+
+            <br />
+
+            <section>
+                <Button form='login' htmlType='submit' block loading={loading}>
+                    Controlla
+                </Button>
+            </section>
+        </section>
+    )
 } export default Reserve

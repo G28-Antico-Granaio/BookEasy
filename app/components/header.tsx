@@ -14,10 +14,11 @@ function Header() {
 
   const router = useRouter();
   const onPriv = async () => {
-    await router.push('/private-area')
+    router.push('/private-area')
   }
   const onHome = async () => {
-    await router.push('/');
+    router.push('/');
+    window.location.reload();
   }
 
   const it_flag = '/img/flags/it.png';
