@@ -25,6 +25,8 @@ function Header() {
   }
   const onHome = async () => {
     router.push('/');
+  }
+  if (usePathname() === '/') {
     window.location.reload();
   }
 
