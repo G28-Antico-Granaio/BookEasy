@@ -16,13 +16,19 @@ import Review from './components/review';
 export default function Home() {
 
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
+
   const onBook = async () => {
+    setLoading(true);
+
     const log = localStorage.getItem('log')
     if (log === 'true') {
       await router.push('/reserve')
     } else {
       router.push("/login");
     }
+
+    setLoading(false);
   }
 
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +36,7 @@ export default function Home() {
   React.useEffect(() => {
     const handleDownload = () => {
       const link = document.createElement('a');
-      link.href = '/download/menu.pdf'; // Update with the path to your PDF file in the public directory
+      link.href = '/download/menu.pdf';
       link.download = 'menu.pdf';
       link.click();
     };
@@ -69,14 +75,16 @@ export default function Home() {
       <section className={style.column}>
         <div>
           <h2>Scarica il Menù</h2>
-            <Button ref={downloadButtonRef}>Scarica</Button>
+            <Button ref={downloadButtonRef} block loading={loading}>
+              Scarica
+            </Button>
         </div>
         
         <div>
           <h2>Prenota il Tavolo</h2>
-          <a onClick={onBook}>
-            <Button>Prenota</Button>
-          </a>
+            <Button htmlType='submit' block onClick={onBook} loading={loading}>
+              Prenota
+            </Button>
         </div>
       </section>
 

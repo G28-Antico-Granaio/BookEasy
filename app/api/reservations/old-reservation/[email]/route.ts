@@ -41,7 +41,7 @@ export async function GET(req: NextRequest, {params}: {params: Params}) {
             status: 200,
         })        
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservations/get-all-reservation' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservations/old-reservation' --> ", error.message);
 
         return NextResponse.json({
             success: false,

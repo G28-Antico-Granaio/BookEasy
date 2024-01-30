@@ -1,8 +1,5 @@
-// Import necessary modules and configurations
 import { connect_DB } from "../../../../config/db-config";
-
 import User from "@/app/models/user_model";
-
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
@@ -43,7 +40,6 @@ import bcrypt from "bcryptjs";
  *         description: Internal Server Error. An error occurred during account deletion.
  */
 
-// Define interface for route parameters
 interface Params {
     email: string;
 }
@@ -56,34 +52,24 @@ class my_error extends Error {
     }
 } 
 
-// Connect to the database
 connect_DB();
 
-// API route handling POST requests
 export async function POST(req: NextRequest, { params }: { params: Params }) {
     try {
-        // Get form data from the request body
         const req_body = await req.json();
 
-        // Get user
         const user = await User.findOne({ email: params.email });
-
         if (!user) {
             throw new my_error("(!!) Login non effettuato", 404);
         }
         
-        // Compare the provided password with the stored hashed password
         const password_match = await bcrypt.compare(req_body.password, user.password);
-        
-        // Handle wrong password
         if (!password_match) {
             throw new my_error("(!!) Credenziali inserite non valide", 401);
         }
 
-        // Delete the user from the database based on their email
         await User.findOneAndDelete({ email: user.email });
 
-        // Return success response
         return NextResponse.json({
             success: true,
             message: "Eliminazione account Effettuata",
@@ -92,10 +78,8 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
         });
 
     } catch (error: any) {
-        // Log and return error response
         console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/users/delete-account' --> ", error.message);
 
-        // Return error response with a meaningful message
         return NextResponse.json({
             success: false,
             message: error.message || "Si è verificato un errore durante la cancellazione dell'account",

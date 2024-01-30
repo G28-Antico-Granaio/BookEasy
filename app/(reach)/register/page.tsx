@@ -108,6 +108,10 @@ function Register() {
           ]}>
 
             <InputNumber addonBefore={prefixSelector} placeholder='Numero di Telefono'
+              min={1000000000} max={9999999999}
+              controls={false}
+              formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
+              parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}
               style={{
                 width: '75%',
                 height: '3rem',
@@ -187,7 +191,7 @@ function Register() {
           <hr className='hr_r_l' />
 
           <div>
-            Hai gà un account?
+            Hai già un account?
 
           <br />
 

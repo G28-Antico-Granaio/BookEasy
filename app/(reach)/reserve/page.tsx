@@ -61,9 +61,6 @@ function Reserve() {
         }
     };
 
-    const [userLog, setUserLog] = useState<string | null>(null);
-    const [loadingUserLog, setLoadingUserLog] = useState(true)
-
     React.useEffect(() => {
         const log = localStorage.getItem('log');
         const role = localStorage.getItem('role');
@@ -129,8 +126,13 @@ function Reserve() {
                         ]}>
 
                         <InputNumber min={1} max={8}
+                        controls={false}
+                        formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
+                        parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}
                         style={{
                             width: '10rem',
+                            height: '2rem',
+                            fontSize: 'medium'
                         }}/>
 
                     </Form.Item>
@@ -153,7 +155,12 @@ function Reserve() {
             <br />
 
             <section>
-                <Button form='login' htmlType='submit' block loading={loading}>
+                <Button form='login' htmlType='submit' block loading={loading}
+                    style={{
+                        marginTop: '3rem',
+                        marginRight: 'auto',
+                        marginLeft: 'auto'
+                    }}>
                     Controlla
                 </Button>
             </section>
