@@ -74,11 +74,10 @@ function Private_Area() {
     }
   }
 
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [formModal] = Form.useForm();
+  const [loading, setLoading] = useState(false);  
 
-  
+  const [pastModalVisible, setPastModalVisible] = useState(false);
+  const [currentPastReservation, setCurrentPastReservation] = useState<Reservation | null>(null);
 
   const onRev = async (values: Review, reservation: Reservation) => {
     try {
@@ -102,17 +101,18 @@ function Private_Area() {
     } catch (error: any) {
       message.error(error.response.data.message)
     } finally {
-      setOpen(false);
+      setPastModalVisible(false);
       setLoading(false);
     }    
   };
 
   const onCancel = () => {
-    setOpen(false);
+    setPastModalVisible(false);
   };
 
-  const showModal = () => {
-    setOpen(true);
+  const showModal = (reservation: Reservation) => {
+    setCurrentPastReservation(reservation);
+    setPastModalVisible(true);
   };
   
   const [newData, setNewData] = useState([]);
@@ -189,18 +189,17 @@ function Private_Area() {
             <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
             <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
 
-            <a className={style.link} onClick={showModal}>Recensisci Prenotazione</a>
+            <a className={style.link} onClick={() => showModal(reservation)}>Recensisci Prenotazione</a>
 
             <Modal
-              title="Risposta"
-              open={open}
+              title="Recensione"
+              open={pastModalVisible}
               onCancel={onCancel}
               footer={null}>
 
               <Form 
-                form={formModal}
                 name="Response"
-                onFinish={(values) => onRev(values, reservation)}>
+                onFinish={(values) => {if(currentPastReservation){onRev(values, currentPastReservation)}} }>
 
                 <Form.Item
                   label='Location'

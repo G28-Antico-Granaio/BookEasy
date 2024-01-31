@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 
 import style from '../../reach.module.css'
 import map from '@/public/img/plan.png'
-import Review from '@/app/components/review';
 import axios from 'axios';
 
 import dayjs from 'dayjs';
@@ -213,7 +212,7 @@ function Private_Area() {
     }
 
     const onLoad = async () => {
-      const response = await axios.get('/api/reviews/all-review')
+      const response = await axios.get('/api/reviews/no-response-review')
       setNewData(response.data.data);
     }
 

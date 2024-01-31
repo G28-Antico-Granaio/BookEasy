@@ -1,17 +1,32 @@
 'use client'
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { Button } from 'antd';
 import Image from 'next/image';
 
 import style from './page.module.css'
+import styled from './(reach)/reach.module.css'
+
 import img1 from '@/public/img/carosello/1.jpg'
 import img2 from '@/public/img/carosello/2.jpg'
 import img3 from '@/public/img/carosello/3.jpg'
 
 import { useRouter } from 'next/navigation';
-import Review from './components/review';
+import axios from 'axios';
+
+interface Review {
+  _id: string;
+  name: string;
+  surname: string;
+  date: Date;
+  location: number;
+  menu: number;
+  service: number;
+  bill: number;
+  comment: string;
+  response: string;
+}
 
 export default function Home() {
 
@@ -33,7 +48,17 @@ export default function Home() {
 
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
 
+  const [newData, setNewData] = useState([]);
+
   React.useEffect(() => {
+
+    const onLoad = async () => {
+      const response = await axios.get('/api/reviews/last-reviews');
+      setNewData(response.data.data);
+    }
+
+    onLoad();
+
     const handleDownload = () => {
       const link = document.createElement('a');
       link.href = '/download/menu.pdf';
@@ -89,9 +114,42 @@ export default function Home() {
       </section>
 
       <section>
-        <Review />
-      </section>
+        <h2>Recensioni</h2>
+          {newData.map((review: Review) => {
+            return (
+              <div key={review._id} className={styled.review}>
 
+                <div className={styled.star}>
+                  <h3>Location</h3>
+                  <div>{`${review.location}/5`}</div>
+              
+                  <h3>Menù</h3>
+                  <div>{`${review.menu}/5`}</div>
+
+                  <h3>Servizio</h3>
+                  <div>{`${review.service}/5`}</div>
+
+                  <h3>Conto</h3>
+                  <div>{`${review.bill}/5`}</div>
+                </div>
+
+                <div className={style.text}>
+                  <p><b>{`${review.name} ${review.surname}`}</b>{` - ${new Date(review.date).toLocaleDateString('en-GB')}`}</p>
+                  <p>
+                    {review.comment}
+                  </p>
+                  {review.response !== undefined && (
+                    <div>
+                      <br />
+                      <p><b>Risposta Antico Granaio</b></p>
+                      <p>{`${review.response}`}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+      </section>
     </section>
   )
 }
