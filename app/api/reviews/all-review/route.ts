@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     try {
         
         const data = await Review.find({
-            response: 0
+          response: { $exists: false }
         });
     
         return NextResponse.json({

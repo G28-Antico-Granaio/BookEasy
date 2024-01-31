@@ -161,31 +161,6 @@
 }
 
 /****************************************************/
-/*review*/
-.review {
-    width: 100%;
-    max-width: 800px;
-
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-
-    background-color: #e4e2dc;
-    border-radius: 30px;
-
-    margin-left: auto;
-    margin-right: auto;
-
-    padding: 2rem;
-}
-
-.star {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 5px;
-    place-items: center;
-}
-
-/****************************************************/
 /*loader*/
 .loader {
     background-color: rgba(0, 0, 0, 0.75);

@@ -18,11 +18,11 @@ connect_DB();
 
 export async function PUT(req: NextRequest, { params } : { params: Params }) {
     try {
-        const req_body = req.json();
+        const req_body = await req.json();
 
-        const review = Review.findByIdAndUpdate(
-            { _id: params._id},
-            req_body,
+        const review = await Review.findByIdAndUpdate(
+            params._id,
+            { $set: { response: req_body.response } },
             { new: true }
         );
 

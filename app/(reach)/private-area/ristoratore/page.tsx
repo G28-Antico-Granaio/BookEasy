@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import Image from 'next/image'
-import { Button, DatePicker, Form, Select, Tooltip, message } from 'antd';
+import { Button, DatePicker, Form, Input, Modal, Select, Tooltip, message } from 'antd';
 
 import { useRouter } from 'next/navigation';
 
@@ -14,6 +14,8 @@ import axios from 'axios';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import mongoose from 'mongoose';
+import moment from 'moment';
 
 const { Option } = Select;
 dayjs.extend(customParseFormat);
@@ -28,11 +30,29 @@ interface Reservation {
   table_id: number;
   date: Date;
   turn: number;
+  status: Boolean;
   cover_number: number;
   email: string;
   name: string;
   surname: string;
 }
+
+interface Review {
+  _id: string;
+  name: string;
+  surname: string;
+  date: Date;
+  location: number;
+  menu: number;
+  service: number;
+  bill: number;
+  comment: string;
+}
+
+let tablesPrenotato: Reservation[] = [];
+let tablesLibero: Reservation[] = [];
+let tablesOccupato: Reservation[] = [];
+let allTables: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 function Private_Area() {
 
@@ -65,13 +85,42 @@ function Private_Area() {
     await router.push('/modify-credentials')
   }
 
-  const [selectedTables, setSelectedTables] = useState<number[]>([]);
-  const [tablesPrenotato, setTablesPrenotato] = useState<number[]>([]);
-  const [tablesLibero, setTablesLibero] = useState<number[]>([]);
-  const [tablesOccupato, setTablesOccupato] = useState<number[]>([]);
-  const [allTables, setAllTables] = useState<number[]>([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  const [open, setOpen] = useState(false);
+  const [formModal] = Form.useForm();
+
+  interface Response {
+    comment: string
+  }
+
+  const onResponse = async (response: Response, _id: string) => {
+    try {
+      setLoading(true);
+
+      await axios.put(`/api/reviews/response/${_id}`, response)
+      message.success("risposta Inaviata");
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
+      setOpen(false);
+      setLoading(false);
+
+      window.location.reload();
+    }    
+  };
+
+  const onCancel = () => {
+    setOpen(false);
+  };
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
 
   const onDate = async (values: Check) => {
+
+    localStorage.setItem('form', JSON.stringify(values));
+
     try {
       setLoading(true);
 
@@ -80,11 +129,29 @@ function Private_Area() {
       const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
       const data = response.data.data;
 
-      const newTables = data.map((reservation: any) => reservation.table_id);
-      setTablesPrenotato(newTables);
 
-      const nonSelectedTables = allTables.filter(tableId => !newTables.includes(tableId));
-      setTablesLibero(nonSelectedTables);
+      const newTables = data.map((reservation: any) => reservation);
+      const prenotatoTables = newTables.filter((reservation: Reservation) => !reservation.status);
+      const occupatoTables = newTables.filter((reservation: Reservation) => reservation.status);
+
+      tablesPrenotato  = prenotatoTables;
+      tablesOccupato = occupatoTables;
+
+      const nonSelectedTables = allTables.filter((tableId: number) => !newTables.some((newReservation: Reservation) => newReservation.table_id === tableId));
+
+      const fakeReservations: Reservation[] = nonSelectedTables.map((tableId: number) => ({
+        _id: new mongoose.Types.ObjectId().toString(),
+        table_id: tableId,
+        date: values.date,
+        turn: values.turn,
+        status: false,
+        cover_number: 0,
+        email: 'ristoratore@anticogranio.com',
+        name: 'Anonimo',
+        surname: 'Nobody',
+      }));
+
+      tablesLibero = fakeReservations;
 
       message.success('Dati Raccolti');
     } catch (error: any) {
@@ -94,61 +161,33 @@ function Private_Area() {
     }
   }
 
-  const [selectedArea, setSelectedArea] = useState<number | null>(null);
-  const handleClick = (event: { nativeEvent: { offsetX: any; offsetY: any } }) => {
-    const { offsetX, offsetY } = event.nativeEvent;
+  const liberoSelectRef = useRef('libero');
+  const prenotatoSelectRef = useRef('prenotato');
+  const occupatoSelectRef = useRef('occupato');
 
-    const selectedArea = clickableAreas.find((area) => {
-        const isInside =
-        offsetX >= area.x &&
-        offsetX <= area.x + area.width &&
-        offsetY >= area.y &&
-        offsetY <= area.y + area.height;
-      return isInside;
-    });
-      
-    if (selectedArea) {
-      setSelectedArea(selectedArea.id);
-    } else {
-      setSelectedArea(null);
-    }
-  }
-
-  const changeTableStatus = async (value: string, tableId: number) => {
+  const changeTableStatus = async (value: string, table: Reservation, prevValue: string) => {
     try {
-      if (value === 'lib') {
-        //await axios.delete(`/api/reservations/delete-reservation/${tableId}`);
-  
-        setTablesPrenotato((prevTables) => prevTables.filter((t) => t !== tableId));
-        setTablesLibero((prevTablesLibero) => [...prevTablesLibero, tableId]);
-        setTablesOccupato((prevTablesOccupato) => prevTablesOccupato.filter((t) => t !== tableId));
-      } else if (value === 'pre') {
-        //router.push('/reserve');
-  
-        const newReservation: Reservation = {
-          _id: '',
-          table_id: tableId,
-          date: new Date(),
-          turn: 0,
-          cover_number: 0,
-          email: '',
-          name: '',
-          surname: '',
-        };
-  
-        setTablesPrenotato((prevTablesPrenotato) => [...prevTablesPrenotato, tableId]);
-        setTablesLibero((prevTablesLibero) => prevTablesLibero.filter((t) => t !== tableId));
-        setTablesOccupato((prevTablesOccupato) => prevTablesOccupato.filter((t) => t !== tableId));
-      } else if (value === 'occ') {
-        setTablesOccupato((prevTablesOccupato) => [...prevTablesOccupato, tableId]);
-        setTablesPrenotato((prevTablesPrenotato) => prevTablesPrenotato.filter((t) => t !== tableId));
-        setTablesLibero((prevTablesLibero) => prevTablesLibero.filter((t) => t !== tableId));
+      if (value === 'libero') {
+        await axios.delete(`/api/reservations/delete-reservation/${table._id}`);
+      } else if (value === 'prenotato') {
+        if (prevValue === 'libero') {
+          await axios.post(`/api/reservations/reserve`, table);
+        } else if (prevValue === 'occupato') {
+          await axios.put(`/api/reservations/change-status/${table._id}`);
+        }
+      } else if (value === 'occupato') {
+        if (prevValue === 'prenotato') {
+          await axios.put(`/api/reservations/change-status/${table._id}`);
+        } else if (prevValue === 'libero') {
+          table.status = true;
+          await axios.post(`/api/reservations/reserve`, table);
+        }
       }
+      window.location.reload();
     } catch (error: any) {
-      // Handle errors
+      message.error(error.response.data.message)
     }
   };
-  
 
   const clickableAreas = [
     { id: 1, x: 0, y: 0, width: 100, height: 100 },
@@ -162,7 +201,9 @@ function Private_Area() {
     { id: 9, x: 0, y: 397, width: 100, height: 100 },
     { id: 10, x: 196, y: 397, width: 100, height: 100 },
     { id: 11, x: 397, y: 397, width: 100, height: 100 }
-]; 
+  ]; 
+
+  const [newData, setNewData] = useState([]);
 
   React.useEffect(() => {
     const log = localStorage.getItem('log');
@@ -170,7 +211,31 @@ function Private_Area() {
     if (!log || !role) {
       router.push("/login");
     }
-  }, [router]);
+
+    const onLoad = async () => {
+      const response = await axios.get('/api/reviews/all-review')
+      setNewData(response.data.data);
+    }
+
+    const formValues = localStorage.getItem('form');
+    if (formValues) {
+      const data = JSON.parse(formValues);
+      data.date = data.date ? moment(data.date) : null;
+      form.setFieldsValue({
+        date: data.date,
+        turn: data.turn
+      });
+
+      const info: Check = {
+        date: data.date,
+        turn: data.turn
+      };
+
+      onDate(info);
+    }
+
+    onLoad();
+  }, [form, router]);
   
   return (
     <section className='container'>
@@ -234,23 +299,24 @@ function Private_Area() {
           </Form>
         </section>
 
-        <section onClick={handleClick} className={style.plan} style={{ position: 'relative' }}>
+        <section className={style.plan} style={{ position: 'relative' }}>
           <Image src={map} alt="map" id='map' width={500} height={500} />
 
-          {tablesPrenotato.map((table) => (
+          {tablesPrenotato !== null && tablesPrenotato.map((table) => (
             <div
-              key={table}
+              key={table.table_id}
               style={{
                 position: 'absolute',
-                top: clickableAreas[table - 1].y,
-                left: clickableAreas[table - 1].x,
-                width: clickableAreas[table - 1].width,
-                height: clickableAreas[table - 1].height,
+                top: clickableAreas[table.table_id - 1].y,
+                left: clickableAreas[table.table_id - 1].x,
+                width: clickableAreas[table.table_id - 1].width,
+                height: clickableAreas[table.table_id - 1].height,
                 backgroundColor: 'rgba(150, 100, 0, 0.5)',
                 border: '2px solid yellow',
             }}>
+              <br />
 
-              {/*<Tooltip title={`${table.name} ${table.surname} - ${table.cover_number}`}>
+              <Tooltip title={`${table.name} ${table.surname} - ${table.cover_number}`}>
                 <span style={{
                   backgroundColor: 'beige',
                   borderRadius: '2px',
@@ -258,55 +324,83 @@ function Private_Area() {
                 }}>
                   info
                 </span>
-              </Tooltip>*/}
+              </Tooltip>
 
               <br />
+              <br />
 
-              <Select defaultValue={'prenotato'} onChange={(value) => changeTableStatus(value, table)}> 
-                <Option value="lib" >libero</Option>
-                <Option value="pre" >prenotato</Option>
-                <Option value="occ" >occupato</Option>
+              <Select defaultValue={'prenotato'} onChange={(value) => changeTableStatus(value, table, prenotatoSelectRef.current)}
+                style={{
+                  width: '100px'
+                }}>
+                <Option value="libero" >libero</Option>
+                <Option value="prenotato" >prenotato</Option>
+                <Option value="occupato" >occupato</Option>
               </Select>
             </div>
           ))}
 
-          {tablesLibero.map((table) => (
+          {tablesLibero !== null && tablesLibero.map((table) => (
             <div
-              key={table}
+              key={table.table_id}
               style={{
                 position: 'absolute',
-                top: clickableAreas[table - 1].y,
-                left: clickableAreas[table - 1].x,
-                width: clickableAreas[table - 1].width,
-                height: clickableAreas[table - 1].height,
+                top: clickableAreas[table.table_id - 1].y,
+                left: clickableAreas[table.table_id - 1].x,
+                width: clickableAreas[table.table_id - 1].width,
+                height: clickableAreas[table.table_id - 1].height,
                 backgroundColor: 'rgba(0, 200, 0, 0.5)',
                 border: '2px solid green',
             }}>
-
-              <Select defaultValue={'libero'} onChange={(value) => changeTableStatus(value, table)}> 
-                <Option value="lib" >libero</Option>
-                <Option value="pre" >prenotato</Option>
-                <Option value="occ" >occupato</Option>
+              <br />
+              <br />
+              <br />
+              <Select defaultValue={'libero'} onChange={(value) => changeTableStatus(value, table, liberoSelectRef.current)}
+                style={{
+                  width: '100px'
+                }}>
+                <Option value="libero" >libero</Option>
+                <Option value="prenotato" >prenotato</Option>
+                <Option value="occupato" >occupato</Option>
               </Select>
             </div>
           ))}
 
-          {tablesOccupato.map((table) => (
+          {tablesOccupato !== null && tablesOccupato.map((table) => (
             <div
-              key={table}
+              key={table.table_id}
               style={{
                 position: 'absolute',
-                top: clickableAreas[table - 1].y,
-                left: clickableAreas[table - 1].x,
-                width: clickableAreas[table - 1].width,
-                height: clickableAreas[table - 1].height,
-                backgroundColor: 'rgba(200, 0, 0, 0.5)', // Red color for occupied tables
+                top: clickableAreas[table.table_id - 1].y,
+                left: clickableAreas[table.table_id - 1].x,
+                width: clickableAreas[table.table_id - 1].width,
+                height: clickableAreas[table.table_id - 1].height,
+                backgroundColor: 'rgba(200, 0, 0, 0.5)',
                 border: '2px solid red',
               }}>
-                <Select defaultValue={'occupato'} onChange={(value) => changeTableStatus(value, table)}>
-                  <Option value="lib" >libero</Option>
-                  <Option value="pre" >prenotato</Option>
-                  <Option value="occ" >occupato</Option>
+                <br />
+
+                <Tooltip title={`${table.name} ${table.surname} - ${table.cover_number}`}>
+                  <span style={{
+                    backgroundColor: 'beige',
+                    borderRadius: '2px',
+                    padding: '2px'
+                  }}>
+                    info
+                  </span>
+                </Tooltip>
+
+                <br />
+                <br />
+
+
+                <Select defaultValue={'occupato'} onChange={(value) => changeTableStatus(value, table, occupatoSelectRef.current)}
+                  style={{
+                    width: '100px'
+                  }}>
+                  <Option value="libero" >libero</Option>
+                  <Option value="prenotato" >prenotato</Option>
+                  <Option value="occupato" >occupato</Option>
                 </Select>
               </div>
           ))}
@@ -316,12 +410,68 @@ function Private_Area() {
 
         <hr />
 
-        <section className={style.review}>
-            <Review />
-            <Review />
-            <Review />
-            <Review />
+        <section>
+          <h2>Recensioni</h2>
+          {newData.map((review: Review) => {
+            return (
+              <div key={review._id} className={style.review}>
+
+                <div className={style.star}>
+                  <h3>Location</h3>
+                  <div>{`${review.location}/5`}</div>
+              
+                  <h3>Menù</h3>
+                  <div>{`${review.menu}/5`}</div>
+
+                  <h3>Servizio</h3>
+                  <div>{`${review.service}/5`}</div>
+
+                  <h3>Conto</h3>
+                  <div>{`${review.bill}/5`}</div>
+                </div>
+
+                <div className={style.text}>
+                  <p>{`${review.name} ${review.surname} - ${new Date(review.date).toLocaleDateString('en-GB')}`}</p>
+                  <p>
+                    {review.comment}
+                  </p>
+                </div>
+
+                <a className={style.link} onClick={showModal}>Rispondi alla Recensione</a>
+
+                <Modal
+                  title="Risposta"
+                  open={open}
+                  onCancel={onCancel}
+                  footer={null}>
+                  <Form 
+                    form={formModal}
+                    name="Response"
+                    onFinish={(values) => onResponse(values, review._id)}>
+
+                    <Form.Item
+                      name="response"
+                      label="response"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Inserire una risposta',
+                        },
+                      ]}
+                    >
+                      <Input.TextArea />
+
+                    </Form.Item>
+
+                    <Button htmlType='submit' block loading={loading}>
+                      Invia
+                    </Button>
+                  </Form>
+                </Modal>
+              </div>
+            );
+          })}
         </section>
-    </section>
+      </section>
     )
 } export default Private_Area
