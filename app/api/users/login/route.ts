@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/login:
+ * /api/users/login:
  *   post:
  *     summary: User Login
  *     description: Authenticates a user based on the provided email and password.
@@ -52,12 +52,12 @@ export async function POST(req: NextRequest) {
 
         const user = await User.findOne({ email: req_body.email });
         if (!user) {
-            throw new my_error("(!!) Non esiste un utente registrato con questo indirizzo e-mail", 404);
+            throw new my_error("Non esiste un utente registrato con questo indirizzo e-mail", 404);
         }
 
         const password_match = await bcrypt.compare(req_body.password, user.password);
         if (!password_match) {
-            throw new my_error("(!!) Credenziali inserite non valide", 401);
+            throw new my_error("Credenziali inserite non valide", 401);
         }
 
         return NextResponse.json({
@@ -70,11 +70,11 @@ export async function POST(req: NextRequest) {
             status: 201
         });
     } catch (error: any) {
-        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/login' --> ", error.message);
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/login' --> ", error.message);
 
         return NextResponse.json({
             success: false,
-            message: error.message || "Si è verificato un errore durante il login dell'utente",
+            message: error.message || "Si è verificato un errore durante la procedurav di login",
         }, {
             status: error.status || 500
         });

@@ -4,7 +4,7 @@ import { connect_DB } from "../../../../config/db-config";
 
 /**
  * @swagger
- * /api/user/{email}:
+ * /api/users/user/{email}:
  *   get:
  *     summary: Retrieve user information
  *     description: Retrieves user information based on the provided email.
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
     try {
         const user = await User.findOne({ email: params.email });
         if (!user){
-            throw new my_error("(!!) Utente non trovato", 404);
+            throw new my_error("Utente non trovato", 404);
         }
 
         return NextResponse.json({
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
             status: 200
         });
     } catch (error: any) {
-        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/user/[email]' --> ", error.message);
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/user/[email]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

@@ -23,17 +23,17 @@ function Reset_Password() {
       setLoading(true);
 
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.put(`/api/users/reset-password/${email}`, values);
+      await axios.patch(`/api/users/reset-password/${email}`, values);
       localStorage.clear();
       localStorage.setItem('log', 'false');
 
       message.success('Password Modificata');
       router.push('/login');
-  } catch (error: any) {
+    } catch (error: any) {
       message.error(error.response.data.message);
-  } finally {
+    } finally {
       setLoading(false);
-  }
+    }
   };
     
   return (

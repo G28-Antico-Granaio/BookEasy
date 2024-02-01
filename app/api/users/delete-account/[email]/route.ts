@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/delete-account/{email}:
+ * /api/users/delete-account/{email}:
  *   post:
  *     summary: Delete user account
  *     description: Deletes the user account based on the provided email and password.
@@ -60,25 +60,25 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
 
         const user = await User.findOne({ email: params.email });
         if (!user) {
-            throw new my_error("(!!) Login non effettuato", 404);
+            throw new my_error("Login non effettuato", 404);
         }
         
         const password_match = await bcrypt.compare(req_body.password, user.password);
         if (!password_match) {
-            throw new my_error("(!!) Credenziali inserite non valide", 401);
+            throw new my_error("Credenziali inserite non valide", 401);
         }
 
         await User.findOneAndDelete({ email: user.email });
 
         return NextResponse.json({
             success: true,
-            message: "Eliminazione account Effettuata",
+            message: "Eliminazione Account Effettuata",
         }, {
             status: 200
         });
 
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/users/delete-account' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/delete-account7[email]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

@@ -57,11 +57,11 @@ function Private_Area() {
   };
 
   const onModify = async () => {
-    await router.push('/modify-credentials')
+    router.push('/modify-credentials')
   }
 
   const onDeleteAcc = async () => {
-    await router.push('/delete-account')
+    router.push('/delete-account')
   }
 
   const onDelete = async (_id: string) => {

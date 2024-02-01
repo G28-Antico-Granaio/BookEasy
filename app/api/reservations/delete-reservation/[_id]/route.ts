@@ -4,7 +4,7 @@ import Reservation from "@/app/models/reservation_model";
 
 /**
  * @swagger
- * /api/reservation/delete-reservation:
+ * /api/reservations/delete-reservation/{_id}:
  *   delete:
  *     summary: Delete reservation
  *     description: Deletes a reservation based on the provided parameters.
@@ -20,13 +20,10 @@ import Reservation from "@/app/models/reservation_model";
  *             properties:
  *               id:
  *                 type: string
- *                 description: The ID of the reservation to be deleted.
  *               date:
  *                 type: string
- *                 description: The date of the reservation.
  *               turn:
  *                 type: string
- *                 description: The turn of the reservation.
  *     responses:
  *       200:
  *         description: OK. Reservation deletion successful.
@@ -55,17 +52,17 @@ export async function DELETE(req: NextRequest, {params}: {params: Params}) {
         const result = await Reservation.findByIdAndDelete({ _id: params._id });
 
         if (!result) {
-            throw new my_error("(!!) Non esiste nessuna prenotazione", 404);
+            throw new my_error("Non esiste nessuna prenotazione", 404);
         }
 
         return NextResponse.json({
             sccess: true,
-            message: "Eliminazione prenotazione effettuata",
+            message: "Eliminazione Prenotazione Effettuata",
         }, {
             status: 200,
         });  
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservation/delete-reservation' --> ", error.message)
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/delete-reservation/[_id]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

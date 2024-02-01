@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 /**
  * @swagger
- * /api/register:
+ * /api/users/register:
  *   post:
  *     summary: User Registration
  *     description: Handles user registration and password hashing.
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
 
         const user_exist = await User.findOne({ email: req_body.email });
         if (user_exist) {
-            throw new my_error("(!!) Esiste già un utente registrato con questo indirizzo e-mail", 409);
+            throw new my_error("Esiste già un utente registrato con questo indirizzo e-mail", 409);
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
             status: 201
         });
     } catch (error: any) {
-        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/register' --> ", error.message);
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/register' --> ", error.message);
 
         return NextResponse.json({
             success: false,

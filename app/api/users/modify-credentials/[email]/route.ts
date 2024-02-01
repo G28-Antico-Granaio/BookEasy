@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
- * /api/modify-credentials/{email}:
+ * /api/users/modify-credentials/{email}:
  *   put:
  *     summary: Modify user credentials
  *     description: Modifies user credentials based on the provided email.
@@ -69,7 +69,7 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
     );
 
     if (!user) {
-      throw new my_error("(!!) Utente non trovato", 404);
+      throw new my_error("Utente non trovato", 404);
     }
 
     return NextResponse.json({
@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
       status: 200
     });
   } catch (error: any) {
-    console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/modify-credentials' --> ", error.message);
+    console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/modify-credentials/[email]' --> ", error.message);
 
     return NextResponse.json({
       success: false,

@@ -21,13 +21,10 @@ import moment from "moment";
  *             properties:
  *               id:
  *                 type: string
- *                 description: The ID of the table to be reserved.
  *               turn:
  *                 type: string
- *                 description: The turn for the reservation.
  *               date:
  *                 type: string
- *                 description: The date for the reservation.
  *     responses:
  *       201:
  *         description: Created. Table reservation successful.
@@ -74,10 +71,10 @@ export async function POST(req: NextRequest) {
                 status: 201,
             });  
         } else {
-            throw new my_error("(!!) Tavolo già prenotato", 409);
+            throw new my_error("Tavolo già prenotato", 409);
         }
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservations/reserve' --> ", error.message)
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/reserve' --> ", error.message)
 
         return NextResponse.json({
             success: false,

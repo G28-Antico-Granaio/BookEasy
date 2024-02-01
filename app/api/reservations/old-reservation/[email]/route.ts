@@ -2,6 +2,29 @@ import { connect_DB } from "@/app/config/db-config";
 import Reservation from "@/app/models/reservation_model";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/reservations/old-reservation/{email}:
+ *   get:
+ *     summary: Get old reservations for a user
+ *     description: Retrieves reservations made by the user in the last 7 days.
+ *     tags:
+ *       - Reservation
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: The email of the user whose old reservations need to be retrieved.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK. Old reservations retrieved successfully.
+ *       500:
+ *         description: Internal Server Error. An error occurred during the retrieval of old reservations.
+ */
+
+
 interface Params {
     email: string;
 }
@@ -21,20 +44,14 @@ export async function GET(req: NextRequest, {params}: {params: Params}) {
             date: { $gte: sevenDaysAgo, $lt: today },
         });
 
-        let message: string = "Prenotazioni Caricate"
-        if (!data || data.length === 0) {
-            message = "Non ci sono prenotazioni"
-        }
-
         return NextResponse.json({
             success: true,
-            message: message,
             data: data,
         }, {
             status: 200,
         })        
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservations/old-reservation' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/old-reservation/[email]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

@@ -6,11 +6,6 @@ import { Form, Button, Input } from 'antd';
 
 import style from '../reach.module.css'
 
-
-interface user{
-  email: string;
-}
-
 function Password_Recovery() {
   return (
     <section className='container'>

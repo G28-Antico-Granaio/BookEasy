@@ -95,7 +95,7 @@ function Private_Area() {
     try {
       setLoading(true);
 
-      await axios.put(`/api/reviews/response/${_id}`, response)
+      await axios.patch(`/api/reviews/response/${_id}`, response)
       message.success("risposta Inaviata");
     } catch (error: any) {
       message.error(error.response.data.message)
@@ -172,11 +172,11 @@ function Private_Area() {
         if (prevValue === 'libero') {
           await axios.post(`/api/reservations/reserve`, table);
         } else if (prevValue === 'occupato') {
-          await axios.put(`/api/reservations/change-status/${table._id}`);
+          await axios.patch(`/api/reservations/change-status/${table._id}`);
         }
       } else if (value === 'occupato') {
         if (prevValue === 'prenotato') {
-          await axios.put(`/api/reservations/change-status/${table._id}`);
+          await axios.patch(`/api/reservations/change-status/${table._id}`);
         } else if (prevValue === 'libero') {
           table.status = true;
           await axios.post(`/api/reservations/reserve`, table);

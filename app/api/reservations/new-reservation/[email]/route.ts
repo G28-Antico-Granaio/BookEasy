@@ -20,8 +20,6 @@ import { NextRequest, NextResponse } from "next/server";
  *     responses:
  *       200:
  *         description: OK. Reservations retrieved successfully.
- *       404:
- *         description: Not Found. No reservations found for the provided email.
  *       500:
  *         description: Internal Server Error. An error occurred during the retrieval of reservations.
  */
@@ -43,20 +41,14 @@ export async function GET(req: NextRequest, {params}: {params: Params}) {
             date: { $gte: today },
         });
 
-        let message: string = "Prenotazioni Caricate"
-        if (!data || data.length === 0) {
-            message = "Non ci sono prenotazioni"
-        }
-
         return NextResponse.json({
             success: true,
-            message: message,
             data: data,
         }, {
             status: 200,
         })        
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reservations/new-reservation' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/new-reservation/[email]' --> ", error.message);
 
         return NextResponse.json({
             success: false,
