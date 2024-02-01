@@ -202,17 +202,17 @@ function Reserve() {
                         }}/>
 
                     </Form.Item>
-
-                    <Button htmlType="submit" block loading={loading}
-                        style={{
-                            marginTop: '3rem',
-                            marginRight: 'auto',
-                            marginLeft: 'auto'
-                    }}>
-                        Controlla
-                    </Button>
                 </Form>
             </section>
+
+            <Button form='check' htmlType="submit" block loading={loading}
+                style={{
+                marginTop: '3rem',
+                marginRight: 'auto',
+                marginLeft: 'auto'
+            }}>
+                Controlla
+            </Button>   
 
             <section onClick={handleClick} className={style.plan} style={{ position: 'relative' }}>
                 <Image src={map} alt="map" id='map' width={500} height={500} />

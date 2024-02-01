@@ -136,7 +136,7 @@ main {
 
   padding: 1rem;
 
-  overflow: auto;
+  overflow-x: hidden;
 }
 
 .container {

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button, message, InputNumber } from 'antd';
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -59,7 +59,7 @@ function Modify_Credentials() {
       setLoading(true);
 
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.put(`/api/modify-credentials/${email}`, values);
+      await axios.put(`/api/users/modify-credentials/${email}`, values);
       message.success('Modifica delle Credenziali effettuata');
       localStorage.setItem('email', values.email);
       router.push("/private-area");
@@ -135,11 +135,17 @@ function Modify_Credentials() {
             },
           ]}>
 
-            <Input addonBefore={prefixSelector} placeholder='Numero di Telefono'
+            <InputNumber addonBefore={prefixSelector} placeholder='Numero di Telefono'
+              min={1000000000} max={9999999999}
+              controls={false}
+              formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
+              parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}
               style={{
                 width: '75%',
+                height: '3rem',
+                borderRadius: '30px'
             }}/>
-                    
+          
           </Form.Item>
 
           <Form.Item

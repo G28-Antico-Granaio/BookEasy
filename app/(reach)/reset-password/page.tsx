@@ -48,7 +48,7 @@ function Reset_Password() {
 
           <h2>Resetta la Password</h2>
 
-          <hr />
+          <hr className={style.hr_form}  />
 
           <Form.Item
             name={'password'}
@@ -56,6 +56,14 @@ function Reset_Password() {
             {
               required: true,
               message: 'Inserisci la tua Password'
+            },
+            {
+              min: 8,
+              message: 'La password deve essere composta da almeno 8 caratteri',
+            },
+            {
+              pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
+              message: 'La password deve contenere almeno un numero e un carattere speciale',
             },
             ]}
             hasFeedback>
@@ -72,6 +80,14 @@ function Reset_Password() {
                   {
                 required: true,
                 message: 'Conferma la password',
+              },
+              {
+                min: 8,
+                message: 'La password deve essere composta da almeno 8 caratteri',
+              },
+              {
+                pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
+                message: 'La password deve contenere almeno un numero e un carattere speciale',
               },
               ({ getFieldValue }) => ({validator(_, value) {
 

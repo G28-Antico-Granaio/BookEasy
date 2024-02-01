@@ -59,6 +59,10 @@ function Private_Area() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
+
+  //*************************
+  /* Logout */
+
   const onLogout = async () => {
     try {
       if (localStorage.getItem('email') && localStorage.getItem('role') && localStorage.getItem('log')) {
@@ -80,9 +84,15 @@ function Private_Area() {
     }
   };
 
+  //*************************
+  /* Modify Credentials */
+
   const onModify = async () => {
     await router.push('/modify-credentials')
   }
+
+  //*************************
+  /* Response */
 
   const [open, setOpen] = useState(false);
   const [formModal] = Form.useForm();
@@ -115,9 +125,12 @@ function Private_Area() {
     setOpen(true);
   };
 
+  //*************************
+  /* Select Date */
 
   const onDate = async (values: Check) => {
 
+    // get saved form values
     localStorage.setItem('form', JSON.stringify(values));
 
     try {
@@ -127,7 +140,6 @@ function Private_Area() {
 
       const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
       const data = response.data.data;
-
 
       const newTables = data.map((reservation: any) => reservation);
       const prenotatoTables = newTables.filter((reservation: Reservation) => !reservation.status);
@@ -151,8 +163,6 @@ function Private_Area() {
       }));
 
       tablesLibero = fakeReservations;
-
-      message.success('Dati Raccolti');
     } catch (error: any) {
       message.error(error.message);
     } finally {
@@ -160,10 +170,14 @@ function Private_Area() {
     }
   }
 
+  //*************************
+  /* Show tables on map */
+
   const liberoSelectRef = useRef('libero');
   const prenotatoSelectRef = useRef('prenotato');
   const occupatoSelectRef = useRef('occupato');
 
+  // change status based on selected status an previus status
   const changeTableStatus = async (value: string, table: Reservation, prevValue: string) => {
     try {
       if (value === 'libero') {
@@ -188,34 +202,42 @@ function Private_Area() {
     }
   };
 
+  // area you can click on top of the map
   const clickableAreas = [
-    { id: 1, x: 0, y: 0, width: 100, height: 100 },
-    { id: 2, x: 195, y: 0, width: 100, height: 100 },
-    { id: 3, x: 397, y: 0, width: 100, height: 100 },
-    { id: 4, x: 99, y: 100, width: 100, height: 100 },
-    { id: 5, x: 299, y: 100, width: 100, height: 100 },
-    { id: 6, x: 397, y: 200, width: 100, height: 100 },
-    { id: 7, x: 99, y: 300, width: 100, height: 100 },
-    { id: 8, x: 299, y: 300, width: 100, height: 100 },
-    { id: 9, x: 0, y: 397, width: 100, height: 100 },
-    { id: 10, x: 196, y: 397, width: 100, height: 100 },
-    { id: 11, x: 397, y: 397, width: 100, height: 100 }
+    { id: 1, x: 0, y: 0, width: 96, height: 96 },
+    { id: 2, x: 200, y: 0, width: 96, height: 96 },
+    { id: 3, x: 400, y: 0, width: 96, height: 96 },
+    { id: 4, x: 100, y: 100, width: 96, height: 96 },
+    { id: 5, x: 300, y: 100, width: 96, height: 96 },
+    { id: 6, x: 400, y: 200, width: 96, height: 96 },
+    { id: 7, x: 100, y: 300, width: 96, height: 96 },
+    { id: 8, x: 300, y: 300, width: 96, height: 96 },
+    { id: 9, x: 0, y: 400, width: 96, height: 96 },
+    { id: 10, x: 200, y: 400, width: 96, height: 96 },
+    { id: 11, x: 400, y: 400, width: 96, height: 96 }
   ]; 
 
+  //*************************
+  /* UseEffect */
+
+  // useState for review with no response
   const [newData, setNewData] = useState([]);
 
   React.useEffect(() => {
+    // if not logged or with no role send to login
     const log = localStorage.getItem('log');
     const role = localStorage.getItem('role');
     if (!log || !role) {
       router.push("/login");
     }
 
+    // Load review with no response
     const onLoad = async () => {
       const response = await axios.get('/api/reviews/no-response-review')
       setNewData(response.data.data);
     }
 
+    // automatically load last info in to the form
     const formValues = localStorage.getItem('form');
     if (formValues) {
       const data = JSON.parse(formValues);
@@ -245,7 +267,7 @@ function Private_Area() {
         <a onClick={onLogout}>Logout</a>
       </section>
 
-      <hr />
+      <hr className={style.hr_form} />
 
       <section className={style.date}>
         <Form
@@ -312,6 +334,7 @@ function Private_Area() {
                 height: clickableAreas[table.table_id - 1].height,
                 backgroundColor: 'rgba(150, 100, 0, 0.5)',
                 border: '2px solid yellow',
+                borderRadius: '10px',
             }}>
               <br />
 
@@ -319,7 +342,9 @@ function Private_Area() {
                 <span style={{
                   backgroundColor: 'beige',
                   borderRadius: '2px',
-                  padding: '2px'
+                  padding: '4px',
+                  paddingLeft: '8px',
+                  paddingRight: '8px',
                 }}>
                   info
                 </span>
@@ -350,6 +375,7 @@ function Private_Area() {
                 height: clickableAreas[table.table_id - 1].height,
                 backgroundColor: 'rgba(0, 200, 0, 0.5)',
                 border: '2px solid green',
+                borderRadius: '10px',
             }}>
               <br />
               <br />
@@ -376,6 +402,7 @@ function Private_Area() {
                 height: clickableAreas[table.table_id - 1].height,
                 backgroundColor: 'rgba(200, 0, 0, 0.5)',
                 border: '2px solid red',
+                borderRadius: '10px',
               }}>
                 <br />
 
@@ -383,7 +410,9 @@ function Private_Area() {
                   <span style={{
                     backgroundColor: 'beige',
                     borderRadius: '2px',
-                    padding: '2px'
+                    padding: '4px',
+                    paddingLeft: '8px',
+                    paddingRight: '8px',
                   }}>
                     info
                   </span>
@@ -403,14 +432,9 @@ function Private_Area() {
                 </Select>
               </div>
           ))}
-
-
         </section>
 
-        <hr />
-
         <section>
-          <h2>Recensioni</h2>
           {newData.map((review: Review) => {
             return (
               <div key={review._id} className={style.review}>
@@ -427,16 +451,21 @@ function Private_Area() {
 
                   <h3>Conto</h3>
                   <div>{`${review.bill}/5`}</div>
+
+                  <div className={style.modal}>
+                    <a className={style.link} onClick={showModal}>Rispondi alla Recensione</a>
+                  </div>
                 </div>
 
                 <div className={style.text}>
-                  <p>{`${review.name} ${review.surname} - ${new Date(review.date).toLocaleDateString('en-GB')}`}</p>
-                  <p>
+                  <p className={style.name_date}>
+                    <b>{`${review.name} ${review.surname}`}</b>{` - ${new Date(review.date).toLocaleDateString('en-GB')}`}
+                  </p>
+
+                  <p className={style.review_text}>
                     {review.comment}
                   </p>
                 </div>
-
-                <a className={style.link} onClick={showModal}>Rispondi alla Recensione</a>
 
                 <Modal
                   title="Risposta"

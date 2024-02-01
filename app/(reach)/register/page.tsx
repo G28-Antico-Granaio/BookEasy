@@ -63,7 +63,7 @@ function Register() {
 
           <h1>Registrati</h1>
 
-          <hr className='hr_r_l' />
+          <hr className={style.hr_form}  />
 
           <Form.Item
             name={'name'}
@@ -137,7 +137,7 @@ function Register() {
             }}/>
           </Form.Item>
 
-          <hr className='hr_r_l' />
+          <hr className={style.hr_form}  />
 
           <Form.Item
               name={'password'}
@@ -188,7 +188,7 @@ function Register() {
             Registrati
           </Button>
 
-          <hr className='hr_r_l' />
+          <hr className={style.hr_form}  />
 
           <div>
             Hai già un account?

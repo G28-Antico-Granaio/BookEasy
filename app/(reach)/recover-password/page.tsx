@@ -16,7 +16,7 @@ function Password_Recovery() {
 
           <h2>Recupero password</h2>
 
-          <hr />
+          <hr className={style.hr_form}  />
 
           <Form.Item
             name={'email'}

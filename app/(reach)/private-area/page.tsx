@@ -162,7 +162,7 @@ function Private_Area() {
         <a onClick={onLogout}>Logout</a>
       </section>
 
-      <hr />
+      <hr className={style.hr_form} />
 
       <section>
         <h2>Prenotazioni Attive</h2>
@@ -177,7 +177,7 @@ function Private_Area() {
       })}
       </section>
 
-      <hr />
+      <hr className={style.hr_form} />
 
       <section>
         <h2>Prenotazioni Passate</h2>
@@ -293,7 +293,7 @@ function Private_Area() {
         })}
       </section>
 
-      <hr />
+      <hr className={style.hr_form} />
 
       <section className={style.link}>
         <a onClick={onDeleteAcc}>Elimina l&apos;Account</a>
