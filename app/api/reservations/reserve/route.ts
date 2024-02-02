@@ -44,7 +44,7 @@ class my_error extends Error {
       super(text);
       this.status = status;
     }
-} 
+}
 
 connect_DB();
 
