@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
- * /api/reservations/get-all-reservation/{email}:
+ * /api/reservations/new-reservation/{email}:
  *   get:
  *     summary: Get all reservations for a user
  *     description: Retrieves all reservations associated with the provided email.

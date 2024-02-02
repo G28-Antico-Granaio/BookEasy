@@ -64,22 +64,31 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
   try {
     const req_body = await req.json();
 
-    const user_exists = await User.findOne({ email: req_body.email })
-    if (user_exists) {
-      throw new my_error("Indirizzo e-mail è già associato ad un account esistente", 409);
+    if (params.email !== req_body.email) {
+      const user_exists = await User.findOne({ email: req_body.email })
+      if (user_exists) {
+        throw new my_error("Indirizzo e-mail è già associato ad un account esistente", 409);
+      }
+    }
+    
+    const user = await User.findOne({ email: params.email});
+    if (!user) {
+      throw new my_error("Utente non trovato", 404);
     }
 
-    const used_tel_numb = await User.findOne({ tel_number: req_body.tel_number});
-    if (used_tel_numb) {
-      throw new my_error("Numero di telefono è già associato ad un account esistente", 409)
+    if (user.tesl_number !== req_body.tel_number) {
+      const used_tel_numb = await User.findOne({ tel_number: req_body.tel_number});
+      if (used_tel_numb) {
+        throw new my_error("Numero di telefono è già associato ad un account esistente", 409)
+      }
     }
 
-    const user = await User.findOneAndUpdate(
+    const updated_user = await User.findOneAndUpdate(
       { email: params.email },
       req_body,
       { new: true }
     );
-    if (!user) {
+    if (!updated_user) {
       throw new my_error("Utente non trovato", 404);
     }
 

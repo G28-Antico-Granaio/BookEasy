@@ -56,7 +56,8 @@ function Header() {
   let show_header = true;
   if (pathname === "/login" ||
     pathname === "/register" ||
-    pathname === "/private-area"){
+    pathname === "/private-area" ||
+    pathname === "/private-area/ristoratore"){
 
     show_header = false;
   }

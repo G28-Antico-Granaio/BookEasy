@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
 
         const user = await User.findOne({ email: params.email });
         if (!user) {
-            throw new my_error("Login non effettuato", 404);
+            throw new my_error("Utente non trovato", 404);
         }
         
         const password_match = await bcrypt.compare(req_body.password, user.password);

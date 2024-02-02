@@ -25,6 +25,8 @@ import moment from "moment";
  *                 type: string
  *               date:
  *                 type: string
+ *               cover_number:
+ *                 type: number
  *     responses:
  *       201:
  *         description: Created. Table reservation successful.

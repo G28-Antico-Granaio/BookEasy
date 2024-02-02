@@ -54,18 +54,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const req_body = await req.json();
 
-    const apiBaseUrl = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000'
-    : 'https://bookeasy-antico-granaio.vercel.app'; 
-
-    const response = await fetch(`${apiBaseUrl}/api/users/user/${params.email}`);
-    if (!response.ok) {
+    const user = await User.findOne({ email: params.email});
+    if (!user) {
       throw new my_error("Utente non trovato", 404);
     }
 
-    const user = await response.json();
-
-    const is_password_different = await bcrypt.compare(req_body.password, user.data.password);
+    const is_password_different = await bcrypt.compare(req_body.password, user.password);
     
     if (is_password_different) {
       throw new my_error("Password vecchia e nuova corrispondono", 409);
