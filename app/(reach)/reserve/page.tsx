@@ -1,20 +1,19 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 import Image from 'next/image'
 import { Button, DatePicker, Form, InputNumber, Select, message } from 'antd'
-
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-
 import style from '../reach.module.css'
 import map from '@/public/img/plan.png'
-import Loader from '@/app/components/loader';
+const { Option } = Select;
 
+// interface
 interface Reservation {
     table_id: number;
     date: Date;
@@ -25,35 +24,43 @@ interface Reservation {
     surname: string;
 }
 
-const { Option } = Select;
-dayjs.extend(customParseFormat);
-
 function Reserve() {
 
+    // basics
     const [form] = Form.useForm();
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
 
+    // handle check of table on data given
     const [checkValues, setCheckValues] = React.useState<Reservation | null>(null);
-
     const [selectedTables, setSelectedTables] = useState<number[]>([]);
 
+    // handle check
     const onCheck = async (values: Reservation) => {
         try {
+            // start loading animation
             setLoading(true);
-
+            
+            // save checked values
             setCheckValues(values);
 
+            // format recived date
             const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
 
+            // call API to get reservation
             const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
             const data = response.data.data;
 
-            const newSelectedTables  = data.map((reservation: any) => reservation.table_id);
+            // save the reserved tables
+            const newSelectedTables = data.map((reservation: any) => reservation.table_id);
             setSelectedTables(newSelectedTables);
 
-            message.success('Dati Raccolti');
-
+            if (data.length === 11) {
+                message.warning("Impossibile prenotare un tavolo nel turno selezionato");
+            } else {
+                // view success
+                message.success(response.data.message);
+            }
         } catch (error: any) {
             message.error(error.message);
         } finally {
@@ -61,18 +68,25 @@ function Reserve() {
         }
     }
 
+    // handle reservation
     const onReserve = async (values: Reservation) => {
         try {
+            // if a table is not selected throw error
             if (selectedArea === null || selectedArea === undefined) {
-                throw new Error("Selezionare un tavolo");
+                throw new Error("Impossibile procedere con la prenotazione, nessun tavolo selezionato");
             }
 
+            // start loading animation
             setLoading(true);
 
+            // get email from localStorage
             const email: string | null = localStorage.getItem('email') || '';
+
+            // call API to get user info
             const response = await axios.get(`/api/users/user/${email}`);
             const user = response.data.data;
 
+            // add missing info to inteface
             const data: Reservation = {
                 ...values,
                 email: user.email,
@@ -81,37 +95,33 @@ function Reserve() {
                 table_id: selectedArea
             };
 
-            await axios.post('/api/reservations/reserve', data);
+            // call API to reserve table
+            const result = await axios.post('/api/reservations/reserve', data);
 
-            message.success('Prenotazione Effettuata');
-            router.push('/private-area');
+            // get role
+            const role = localStorage.getItem('role');
+
+            // view success and send to right page based on role
+            message.success(result.data.message);
+            if (role === 'true') {
+                router.push("/private-area/ristoratore");
+            } else {
+                router.push("/private-area");
+            }
         } catch (error: any) {
-            message.error(error.message);
+            const error_message = error.response?.data?.message || error.message || "Errore durante la prenotazione";
+            message.error(error_message);
         } finally {
             setLoading(false);
         }
     };
 
-    const [selectedArea, setSelectedArea] = useState<number | null>(null);
-    const handleClick = (event: { nativeEvent: { offsetX: any; offsetY: any } }) => {
-        const { offsetX, offsetY } = event.nativeEvent;
+    // handle select table
 
-        const selectedArea = clickableAreas.find((area) => {
-            const isInside =
-                offsetX >= area.x &&
-                offsetX <= area.x + area.width &&
-                offsetY >= area.y &&
-                offsetY <= area.y + area.height;
-            return isInside;
-        });
-        
-        if (selectedArea) {
-            setSelectedArea(selectedArea.id);
-        } else {
-            setSelectedArea(null);
-        }
-    }
-   
+    // save selected area
+    const [selectedArea, setSelectedArea] = useState<number | null>(null);
+    
+    // clickable areas
     const clickableAreas = [
         { id: 1, x: 0, y: 0, width: 100, height: 100 },
         { id: 2, x: 195, y: 0, width: 100, height: 100 },
@@ -126,11 +136,40 @@ function Reserve() {
         { id: 11, x: 397, y: 397, width: 100, height: 100 }
     ];      
 
+    // handle click on screen
+    const handleClick = (event: { nativeEvent: { offsetX: any; offsetY: any } }) => {
+        // get coordinates of click
+        const { offsetX, offsetY } = event.nativeEvent;
+
+        // check if click corresponds to a clickable area
+        const selectedArea = clickableAreas.find((area) => {
+            const isInside =
+                offsetX >= area.x &&
+                offsetX <= area.x + area.width &&
+                offsetY >= area.y &&
+                offsetY <= area.y + area.height;
+            return isInside;
+        });
+        
+        // if an area is selected
+        if (selectedArea) {
+            // save the id
+            setSelectedArea(selectedArea.id);
+        } else {
+            // set to null
+            setSelectedArea(null);
+        }
+    }
+
+    // useEffect
     React.useEffect(() => {
+        // get data
         const log = localStorage.getItem('log');
         const role = localStorage.getItem('role');
+
+        // if data doesn't exist send to login
         if (!log || !role) {
-            router.push('/login');
+        router.push('/login');
         }
     }, [router]);
 
@@ -149,7 +188,7 @@ function Reserve() {
                         rules={[
                             {
                                 required: true,
-                                message: 'seleziona una data'
+                                message: 'Seleziona una data'
                             }
                         ]}>
 
@@ -166,7 +205,7 @@ function Reserve() {
                         rules={[
                         {
                             required: true,
-                            message: 'seleziona un turno',
+                            message: 'Seleziona un turno',
                         }
                         ]}>
 
@@ -185,20 +224,25 @@ function Reserve() {
                         label='Coperti'
                         name={'cover_number'}
                         rules={[
-                        {
-                            required: true,
-                            message: 'Inserire i coperti'
-                        }
+                            {
+                                type: 'number',
+                                message: 'Inserire un numero valido',
+                            },
+                            {
+                                required: true,
+                                message: 'Inserire i coperti'
+                            },
+                            {
+                                pattern: /^[1-8]{1}$/,
+                                message: 'Formato del numero di coperti non è valido. Inserire un numero compreso tra 1 e 8',
+                            },
                         ]}>
 
-                        <InputNumber min={1} max={8}
+                        <InputNumber 
                         controls={false}
-                        formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-                        parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}
                         style={{
                             width: '10rem',
                             height: '2rem',
-                            fontSize: 'medium'
                         }}/>
 
                     </Form.Item>

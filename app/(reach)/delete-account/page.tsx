@@ -1,115 +1,116 @@
 'use client'
 
+// logic
 import React, { useState } from 'react'
-
-import { Form, Input, Button, message } from 'antd'
-
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+// UI
+import { Form, Input, Button, message } from 'antd'
 import style from '../reach.module.css'
-import Loader from '@/app/components/loader';
 
-interface user{
-    password: string;
+// interface
+interface User{
+  password: string;
 }
 
 function Delete_Account() {
 
+  // basics
   const [form] = Form.useForm();
-
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
-  const onDelete = async (values: user) => {
+  // handle delete
+  const onDelete = async (values: User) => {
     try {
+      // statrt loading animation
       setLoading(true);
 
+      // get email from localStorage
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.post(`/api/users/delete-account/${email}`, values);
 
+      // call API to delete account
+      const response = await axios.post(`/api/users/delete-account/${email}`, values);
+
+      // remove localStoreage data and set log to false
       localStorage.clear();
       localStorage.setItem('log', 'false');
 
-      message.success("Account Eliminato");
+      // view success and send to Home
+      message.success(response.data.message);
       router.push("/");
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message);
     } finally {      
-     setLoading(false);
+      // end loading animation
+      setLoading(false);
     }
   };
-
-  const [userLog, setUserLog] = useState<string | null>(null);
-  const [loadingUserLog, setLoadingUserLog] = useState(true)
+  
+  // useEffect
   React.useEffect(() => {
-    if(localStorage.getItem('log')) {
-      const log = localStorage.getItem('log');
-      setUserLog(log);
-      setLoadingUserLog(false);
-    }    
-  }, []);
-    
-  if(loadingUserLog){
-    return(
-      <Loader />
-    )
-  }
+    // get data
+    const log = localStorage.getItem('log');
+    const role = localStorage.getItem('role');
 
-  if (userLog === 'true') {
-    return (
-      <section className='container'>
+    // if data doesn't exist send to login
+    if (!log || !role) {
+      router.push('/login');
+    }
+  }, [router]);
 
-        <h1>Eliminazione Account</h1>
+  return (
+    <section className='container'>
 
-        <section className={style.blabla}>
-          Quando elimini il tuo account, non potrai più recuperare
-          le tue vecchie credemziali e lo storico delle prenotazioni.
-          Inoltre non sarà più possibile prenotare online in questo 
-          ristornate.
-        </section>
+      <h1>Eliminazione Account</h1>
 
-        <section className={style.blabla}>
-          Se desideri procedere con l&apos;operazione, inserisci la
-          password e clicca conferma
-        </section>
-
-        <Form
-          name='delete'
-          form={form}
-          onFinish={onDelete}
-          scrollToFirstError>
-
-          <Form.Item
-            name={'password'}
-            rules={[
-            {
-              required: true,
-              message: 'Inserisci la tua Password'
-            }
-          ]}>
-
-            <Input.Password placeholder='Password'
-              style={{
-                width: '25%',
-                height: '3rem'
-            }}/>
-
-          </Form.Item>
-
-          <Button htmlType='submit' block loading={loading}
-            style={{
-              width: '25% !important',
-              height: '3rem'
-            }}>
-            
-            Cancella definitivamente l&apos;account 
-
-          </Button>
-        </Form>
+      <section className={style.blabla}>
+        Quando elimini il tuo account, non potrai più recuperare
+        le tue vecchie credemziali e lo storico delle prenotazioni.
+        Inoltre non sarà più possibile prenotare online in questo 
+        ristornate.
       </section>
-    )
-  } else {
-    router.push('/login');
-  }
+
+      <section className={style.blabla}>
+        Se desideri procedere con l&apos;operazione, inserisci la
+        password e clicca conferma
+      </section>
+
+      <Form
+        name='delete'
+        form={form}
+        onFinish={onDelete}
+        scrollToFirstError>
+
+        <Form.Item
+          name={'password'}
+          rules={[
+          {
+            required: true,
+            message: 'Inserisci la tua Password'
+          }
+        ]}>
+
+          <Input.Password placeholder='Password'
+            style={{
+              width: '25%',
+              height: '3rem'
+          }}/>
+
+        </Form.Item>
+
+        <Button htmlType='submit' block loading={loading}
+          style={{
+            width: '25% !important',
+            height: '3rem'
+          }}>
+          
+          Cancella definitivamente l&apos;account 
+
+        </Button>
+      </Form>
+    </section>
+  )
 } export default Delete_Account

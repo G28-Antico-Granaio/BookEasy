@@ -22,13 +22,18 @@ connect_DB();
 
 export async function GET(req: NextRequest) {
   try {
-        
     const data = await Review.find({
       response: { $exists: false }
     });
 
+    let message = "Recensioni seza rispota trovate";
+    if (!data || data.length === 0) {
+      message = "Non ci sono recensioni senza risposta";
+    }
+
     return NextResponse.json({
       success: true,
+      message: message,
       data: data,
     }, {
       status: 200

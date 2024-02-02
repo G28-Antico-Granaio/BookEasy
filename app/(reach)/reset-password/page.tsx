@@ -1,37 +1,50 @@
 'use client'
 
+// logic
 import React from 'react';
-
-import { Form, Button, Input, message } from 'antd';
-
-import style from '../reach.module.css'
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+// UI
+import { Form, Button, Input, message } from 'antd';
+import style from '../reach.module.css'
+
+//interface
 interface User{
   password: string;
 }
 
 function Reset_Password() {
 
+  // basics
   const [form] = Form.useForm();
-
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+
+  // handle password reset
   const onSend = async (values: User) => {
     try {
+      // start loading animation
       setLoading(true);
 
+      // get email from localStorage
       const email: string | null = localStorage.getItem('email') || '';
-      await axios.patch(`/api/users/reset-password/${email}`, values);
+
+      // call API to reset user password
+      const response = await axios.patch(`/api/users/reset-password/${email}`, values);
+
+      // remove data from localStorage and set log to false
       localStorage.clear();
       localStorage.setItem('log', 'false');
 
-      message.success('Password Modificata');
+      // view success and send to login
+      message.success(response.data.message);
       router.push('/login');
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message);
     } finally {
+      // end loading animation
       setLoading(false);
     }
   };
@@ -53,18 +66,14 @@ function Reset_Password() {
           <Form.Item
             name={'password'}
             rules={[
-            {
-              required: true,
-              message: 'Inserisci la tua Password'
-            },
-            {
-              min: 8,
-              message: 'La password deve essere composta da almeno 8 caratteri',
-            },
-            {
-              pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
-              message: 'La password deve contenere almeno un numero e un carattere speciale',
-            },
+                {
+                  required: true,
+                  message: 'Inserisci la tua Password'
+                },
+                {
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                  message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
+                },
             ]}
             hasFeedback>
                     
@@ -77,24 +86,20 @@ function Reset_Password() {
             dependencies={['password']}
             hasFeedback
             rules={[
-                  {
+              {
                 required: true,
-                message: 'Conferma la password',
+                message: 'Inserisci la tua Password'
               },
               {
-                min: 8,
-                message: 'La password deve essere composta da almeno 8 caratteri',
-              },
-              {
-                pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
-                message: 'La password deve contenere almeno un numero e un carattere speciale',
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
               },
               ({ getFieldValue }) => ({validator(_, value) {
 
               if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-                return Promise.reject(new Error('Le password inserite non coincidono!'));
+                return Promise.reject(new Error('La password e la sua conferma non corrispondono. Assicurarsi che entrambi i campi siano identici”'));
               },
             }),
           ]}>

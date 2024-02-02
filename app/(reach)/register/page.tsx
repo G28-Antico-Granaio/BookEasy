@@ -1,17 +1,17 @@
 'use client'
 
+// logic
 import React from 'react';
-
-import {Button, Form, Input, InputNumber, Select, message } from 'antd';
-import Link from 'next/link';
-
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+// UI
+import {Button, Form, Input, InputNumber, Select, message } from 'antd';
+import Link from 'next/link';
 import style from '../reach.module.css'
-
 const { Option } = Select;
 
+// interface
 interface user{
   name: string;
   surname: string;
@@ -23,19 +23,28 @@ interface user{
 
 function Register() {
 
+  //basics
   const [form] = Form.useForm();
-
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+
+  // handle register
   const onRegister = async (values: user) => {
     try {
+      // start loading animation
       setLoading(true);
-      await axios.post('/api/users/register', values);
-      message.success('Registrazione effettuata');
+
+      // call API to register
+      const response = await axios.post('/api/users/register', values);
+
+      // view success and send to login
+      message.success(response.data.message);
       router.push("/login");
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message);
     } finally {
+      // end loading animation
       setLoading(false);
     }
   };
@@ -101,17 +110,22 @@ function Register() {
             className={style.numb}
             name={'tel_number'}
             rules={[
-            {
-              required: true,
-              message: 'Inserisci il tuo Numero di Telefono'
-            },
+              {
+                type: 'number',
+                message: 'Inserire un numero valido',
+              },
+              {
+                required: true,
+                message: 'Inserisci il tuo Numero di Telefono'
+              },
+              {
+                pattern: /^[0-9]{10}$/,
+                message: 'Formato del numero di telefono non è valido. Inserire un numero di telefono nel formato corretto (+39 1234567890)',
+              },
           ]}>
 
             <InputNumber addonBefore={prefixSelector} placeholder='Numero di Telefono'
-              min={1000000000} max={9999999999}
               controls={false}
-              formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-              parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}
               style={{
                 width: '75%',
                 height: '3rem',
@@ -125,7 +139,7 @@ function Register() {
             rules={[
             {
               type: 'email',
-              message: 'E-Mail inserita non è valida'
+              message: "L'indirizzo e-mail inserito non è valido. Inserire un indirizzo e-mail nel formato corretto (nome@dominio.com)"
             },  {
               required: true,
               message: 'Inserire un indirizzo E-Mail'
@@ -147,12 +161,8 @@ function Register() {
                     message: 'Inserisci la tua Password'
                   },
                   {
-                    min: 8,
-                    message: 'La password deve essere composta da almeno 8 caratteri',
-                  },
-                  {
-                    pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
-                    message: 'La password deve contenere almeno un numero e un carattere speciale',
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                    message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
                   },
               ]}
               hasFeedback>
@@ -166,18 +176,22 @@ function Register() {
             dependencies={['password']}
             hasFeedback
             rules={[
-            {
-              required: true,
-              message: 'Conferma la password',
-            },
-            ({ getFieldValue }) => ({validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-                }
-                  return Promise.reject(new Error('Le password inserite non coincidono!'));
-                },
-            }),
-          ]}>
+              {
+                required: true,
+                message: 'Inserisci la tua Password'
+              },
+              {
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
+              },
+              ({ getFieldValue }) => ({validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                  }
+                    return Promise.reject(new Error('La password e la sua conferma non corrispondono. Assicurarsi che entrambi i campi siano identici”'));
+                  },
+              }),
+            ]}>
 
             <Input.Password placeholder='Conferma Password' />
                     

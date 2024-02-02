@@ -57,7 +57,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Params}) {
 
         return NextResponse.json({
             sccess: true,
-            message: "Eliminazione Prenotazione Effettuata",
+            message: "Eliminazione prenotazione effettuata",
         }, {
             status: 200,
         });  

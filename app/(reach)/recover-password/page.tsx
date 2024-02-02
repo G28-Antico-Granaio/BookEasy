@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Form, Button, Input } from 'antd';
-
 import style from '../reach.module.css'
 
 function Password_Recovery() {

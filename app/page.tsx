@@ -1,20 +1,20 @@
 'use client'
 
+// logic
 import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
+// UI
 import { Button } from 'antd';
 import Image from 'next/image';
-
 import style from './page.module.css'
 import styled from './(reach)/reach.module.css'
-
 import img1 from '@/public/img/carosello/1.jpg'
 import img2 from '@/public/img/carosello/2.jpg'
 import img3 from '@/public/img/carosello/3.jpg'
 
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
+// interface
 interface Review {
   _id: string;
   name: string;
@@ -29,66 +29,76 @@ interface Review {
 }
 
 export default function Home() {
+
+  // basics
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
+  // handle reservation
+  const onBook = async () => {
+    // get data
+    const log = localStorage.getItem('log');
+
+    // if logged send to page otherwise to login
+    if (log === 'true') {
+      router.push('/reserve');
+    } else {
+      router.push('/login');
+    }
+  };
+
+  // handle review
+
+  // is response visible
   const [responseVisible, setResponseVisible] = useState<{ [key: string]: boolean }>({});
 
+  // togle visibility of response
   const toggleResponse = (reviewId: string) => {
     setResponseVisible((prev) => ({ ...prev, [reviewId]: !prev[reviewId] }));
   };
 
-  const onBook = async () => {
-    setLoading(true);
-
-    const log = localStorage.getItem('log');
-    if (log === 'true') {
-      await router.push('/reserve');
-    } else {
-      router.push('/login');
-    }
-
-    setLoading(false);
-  };
-
+  // handle button to next rev
   const nextReview = () => {
     setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % newData.length);
   };
 
+  // handle button to prev review
   const prevReview = () => {
     setCurrentReviewIndex(
       (prevIndex) => (prevIndex - 1 + newData.length) % newData.length
     );
   };
+  
 
+  //useEffect
+
+  //
   const downloadButtonRef = useRef<HTMLButtonElement>(null);
-
   const [newData, setNewData] = useState<Review[]>([]);
 
   React.useEffect(() => {
-
+    // load reviews
     const onLoad = async () => {
+      // call API to get last reviews
       const response = await axios.get('/api/reviews/last-reviews');
-      console.log(response.data.data);
+
+      // set data
       setNewData(response.data.data);
     }
-
     onLoad();
 
+    //handle download
     const handleDownload = () => {
       const link = document.createElement('a');
       link.href = '/download/menu.pdf';
       link.download = 'menu.pdf';
       link.click();
     };
-
     const buttonRefCurrent = downloadButtonRef.current;
-
     if (buttonRefCurrent) {
       buttonRefCurrent.addEventListener('click', handleDownload);
     }
-
     return () => {
       if (buttonRefCurrent) {
         buttonRefCurrent.removeEventListener('click', handleDownload);

@@ -57,7 +57,12 @@ export async function POST(req: NextRequest) {
 
         const user_exist = await User.findOne({ email: req_body.email });
         if (user_exist) {
-            throw new my_error("Esiste già un utente registrato con questo indirizzo e-mail", 409);
+            throw new my_error("Indirizzo e-mail è già associato ad un account esistente", 409);
+        }
+
+        const used_tel_numb = await User.findOne({ tel_number: req_body.tel_number});
+        if (used_tel_numb) {
+            throw new my_error("Numero di telefono è già associato ad un account esistente", 409)
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -71,7 +76,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({
             success: true,
-            message: "Utente Creato",
+            message: "Utente creato",
         }, {
             status: 201
         });

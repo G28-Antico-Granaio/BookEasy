@@ -1,17 +1,18 @@
 'use client'
 
+// logic
 import React, { useState } from 'react'
-
-import {  Button, Form, Input, InputNumber, Modal, message } from 'antd';
-
 import { useRouter } from 'next/navigation';
-
-import style from '../reach.module.css'
 import axios from 'axios';
-
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
+// UI
+import {  Button, Form, Input, InputNumber, Modal, message } from 'antd';
+import style from '../reach.module.css'
+
+// interfaces
 interface Reservation {
   _id: string;
   table_id: number;
@@ -32,61 +33,88 @@ interface Review {
   comment: string
 }
 
-dayjs.extend(customParseFormat);
-
 function Private_Area() {
 
+  // basics
   const router = useRouter();
+  const [loading, setLoading] = useState(false);  
 
+  // handle logout
   const onLogout = async () => {
     try {
+      // if the values exist in the localStorage
       if (localStorage.getItem('email') && localStorage.getItem('role') && localStorage.getItem('log')) {
-
+        // start loading animation
+        setLoading(true);
+        
+        // remove value from localStorage
         localStorage.removeItem('email');
         localStorage.removeItem('role');
         localStorage.setItem('log', 'false');
 
+        // view success and send to login
         message.success("Logout Effettuato");
         router.push("/login");
       } else {
-        message.warning("Impossibile eseguire il logout");
+        // view error
+        message.error("Impossibile eseguire il logout");
       }
     } catch (error: any) {
-      message.error(error.response.data.message);
-    }  
+      // view error
+      message.error("Impossibile eseguire il logout");
+    } finally {
+      // end loading animation
+      setLoading(false);
+    }
   };
 
+  // handle modify credentials
   const onModify = async () => {
+    // send to page
     router.push('/modify-credentials')
   }
 
+  // handle delete account
   const onDeleteAcc = async () => {
+    // send to page
     router.push('/delete-account')
   }
-
+  
+  // handle delete reservation
   const onDelete = async (_id: string) => {
     try {
-      await axios.delete(`/api/reservations/delete-reservation/${_id}`)
-      message.success("Prenotazione Eliminata")
+      // call API to delete reservation
+      const response = await axios.delete(`/api/reservations/delete-reservation/${_id}`);
+
+      // view success
+      message.success(response.data.message);
+
+      // reload window to remove the UI
       window.location.reload();
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message);
     }
   }
 
-  const [loading, setLoading] = useState(false);  
-
+  // modals
   const [pastModalVisible, setPastModalVisible] = useState(false);
   const [currentPastReservation, setCurrentPastReservation] = useState<Reservation | null>(null);
 
+  // handle review
   const onRev = async (values: Review, reservation: Reservation) => {
     try {
+      // start loading animation
       setLoading(true);
 
+      // get email from localStorage
       const email: string | null = localStorage.getItem('email') || '';
+
+      // call API to get user info
       const response = await axios.get(`/api/users/user/${email}`);
       const user = response.data.data;
 
+      // add missing infor to interface
       const data: Review = {
         ...values,
         name: user.name,
@@ -94,65 +122,82 @@ function Private_Area() {
         reservation_id: reservation._id,
         date: reservation.date
       }
+      
+      // call API to post review
+      const result = await axios.post(`/api/reviews/review/${reservation._id}`, data)
 
-      await axios.post(`/api/reviews/review/${reservation._id}`, data)
-      message.success("Recensione Postata");
-
+      // view successs
+      message.success(result.data.message);
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message)
     } finally {
+      // close modal
       setPastModalVisible(false);
+      //end loading animation
       setLoading(false);
     }    
   };
 
+  // handle exit modal
   const onCancel = () => {
     setPastModalVisible(false);
   };
 
+  // handle open modal
   const showModal = (reservation: Reservation) => {
     setCurrentPastReservation(reservation);
     setPastModalVisible(true);
   };
   
+  // useEffect
+
+  //
   const [newData, setNewData] = useState([]);
   const [oldData, setOldData] = useState([]);
 
   React.useEffect(() => {
+    // get data
     const log = localStorage.getItem('log');
     const role = localStorage.getItem('role');
+    // if not logged send to login
     if (!log || !role) {
       router.push('/login');
     } else {
+      // if is admin sent right page
       if (role === 'true') {
         router.push('/private-area/ristoratore')
       }
     }
 
+    // handele new reservation
     const onReserveNew =async () => {
-      try {
-        const email: string | null = localStorage.getItem('email');
-        const response = await axios.get(`/api/reservations/new-reservation/${email}`);
-        setNewData(response.data.data);
-      } catch (error: any) {
-        //
-      }
+      // get email from localStorage
+      const email: string | null = localStorage.getItem('email');
+
+      // call API to get new reservation
+      const response = await axios.get(`/api/reservations/new-reservation/${email}`);
+
+      // set data
+      setNewData(response.data.data);
     };
 
+    // handle old reservation
     const onReserveOld =async () => {
-      try {
-        const email: string | null = localStorage.getItem('email');
-        const response = await axios.get(`/api/reservations/old-reservation/${email}`);
-        setOldData(response.data.data);
-      } catch (error: any) {
-        //
-      }
+      // get email from localStorage
+      const email: string | null = localStorage.getItem('email');
+
+      // call API to get old reservations
+      const response = await axios.get(`/api/reservations/old-reservation/${email}`);
+
+      // set data
+      setOldData(response.data.data);
     };
 
     onReserveNew();
     onReserveOld();
   }, [router]);
-  
+ 
   return(
     <section className='container'>
       <section className={style.link}>
@@ -276,11 +321,11 @@ function Private_Area() {
                   rules={[
                     {
                       required: true,
-                      message: 'Inserire una risposta',
+                      message: 'Inserire recensione scritta',
                     },
                   ]}
                 >
-                  <Input.TextArea />
+                  <Input.TextArea maxLength={500}/>
 
                 </Form.Item>
 

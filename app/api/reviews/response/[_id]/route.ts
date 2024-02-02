@@ -67,7 +67,7 @@ export async function PATCH(req: NextRequest, { params } : { params: Params }) {
 
         return NextResponse.json({
             success: true,
-            message: "Risposta Pubblicata"
+            message: "Risposta pubblicata"
         }, {
             status: 201,
         })

@@ -45,8 +45,14 @@ export async function GET(req: NextRequest, {params} : {params: Params}) {
             date: params.date,
         });
 
+        let message = "Prenotazioni trovate";
+        if (!data || data.length === 0) {
+            message = "Non ci sono prenotazioni";
+        }
+
         return NextResponse.json({
             success: true,
+            message: message,
             data: data,
         }, {
             status: 200,

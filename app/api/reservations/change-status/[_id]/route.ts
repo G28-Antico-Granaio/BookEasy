@@ -58,6 +58,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
 
         return NextResponse.json({
             success: true,
+            message: "Stato tavolo cambiato"
         }, {
             status: 200,
         })        

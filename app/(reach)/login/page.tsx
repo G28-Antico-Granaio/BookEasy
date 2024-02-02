@@ -1,15 +1,16 @@
 'use client'
 
+//logic
 import React from 'react';
-
-import { Form, Input, Button, message } from 'antd';
-import Link from 'next/link';
-
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+// UI
+import { Form, Input, Button, message } from 'antd';
+import Link from 'next/link';
 import style from '../reach.module.css'
 
+// interface
 interface User{
   email: string;
   password: string;
@@ -17,34 +18,67 @@ interface User{
 
 function Login(){
 
+  // basics
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
+  // handle login
   const onLogin = async (values: User) => {
     try {
+      // start loading
       setLoading(true);
+
+      // call API to login
       const response = await axios.post("/api/users/login", values);
       const result = response.data;
 
+      // save non sensitive informations in localStorage
       await localStorage.setItem('email', values.email);
       await localStorage.setItem('role', result.data.isAdmin);
       await localStorage.setItem('log', 'true');
 
+      // get role
       const role = localStorage.getItem('role');
 
-      message.success("Login Effettuato");
+      // view success and send to right page based on role
+      message.success(response.data.message);
       if (role === 'true') {
         router.push("/private-area/ristoratore");
       } else {
         router.push("/private-area");
       }
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message);
-    } finally {            
+    } finally {      
+      // end loading animation      
       setLoading(false);
     }
   };
+
+  const onForgot = async () => {
+    try {
+      const email = form.getFieldValue('email');
+      if (!email) {
+        throw new Error("Inserire l'email e riprovare")
+      }
+
+      localStorage.setItem('email', email);
+      router.push('/recover-password')
+
+
+    } catch (error: any) {
+      message.error(error.message);
+    }
+    
+
+
+  }
+
+  const onReg = async () => {
+    router.push('/register')
+  }
 
   return(
     <section className='container'>
@@ -54,7 +88,12 @@ function Login(){
           name='login'
           form={form}
           onFinish={onLogin}
-          scrollToFirstError>
+          scrollToFirstError
+          onValuesChange={(changedValues, allValues) => {
+            if (changedValues.email) {
+              localStorage.setItem('email', changedValues.email);
+            }
+          }}>
 
           <h2>Login</h2>
 
@@ -68,7 +107,7 @@ function Login(){
               message: 'E-Mail inserita non è valida'
             },  {
               required: true,
-              message: 'Inserire un indirizzo E-Mail'
+              message: 'Inserire il tuo indirizzo E-Mail'
             },
           ]}>
 
@@ -93,9 +132,9 @@ function Login(){
           </Form.Item>
 
           <Form.Item>
-            <Link href='/recover-password' className={style.link} prefetch={false}>
+            <a onClick={onForgot} className={style.link}>
               Recupera Password
-            </Link>
+            </a>
           </Form.Item>
 
           <Button htmlType='submit' block loading={loading}>
@@ -109,9 +148,9 @@ function Login(){
 
             <br />
 
-            <Link href='/register' className={style.link}>
+            <a onClick={onReg} className={style.link}>
               Registrati
-            </Link>
+            </a>
           </div>
         </Form>
       </section>

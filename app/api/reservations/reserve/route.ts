@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
 
             return NextResponse.json({
                 sccess: true,
-                message: "Tavolo Prenotato",
+                message: "Tavolo prenotato",
             }, {
                 status: 201,
             });  

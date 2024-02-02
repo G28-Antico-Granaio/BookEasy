@@ -79,7 +79,7 @@ export async function POST(req: NextRequest, { params }: { params: Params}) {
 
             return NextResponse.json({
                 success: true,
-                message: "Prenotazione Effetuata"
+                message: "Prenotazione effetuata"
             }, {
                 status: 201,
             })

@@ -35,9 +35,15 @@ export async function GET(req: NextRequest) {
                 $lt: lastMonthEndDate
             }
         });
+
+        let message = "Recensioni trovate";
+        if (!data || data.length === 0) {
+            message = "Non ci sono recensioni";
+        }
     
         return NextResponse.json({
             success: true,
+            message: message,
             data: data,
         }, {
             status: 200

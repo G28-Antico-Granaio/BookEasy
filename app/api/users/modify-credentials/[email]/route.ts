@@ -40,6 +40,8 @@ import { NextRequest, NextResponse } from "next/server";
  *         description: OK. User credentials modified successfully.
  *       404:
  *         description: Not Found. User not found.
+ *       409:
+ *         description: Conflict. User already exists.
  *       500:
  *         description: Internal Server Error. An error occurred while modifying user credentials.
  */
@@ -62,19 +64,28 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
   try {
     const req_body = await req.json();
 
+    const user_exists = await User.findOne({ email: req_body.email })
+    if (user_exists) {
+      throw new my_error("Indirizzo e-mail è già associato ad un account esistente", 409);
+    }
+
+    const used_tel_numb = await User.findOne({ tel_number: req_body.tel_number});
+    if (used_tel_numb) {
+      throw new my_error("Numero di telefono è già associato ad un account esistente", 409)
+    }
+
     const user = await User.findOneAndUpdate(
       { email: params.email },
       req_body,
       { new: true }
     );
-
     if (!user) {
       throw new my_error("Utente non trovato", 404);
     }
 
     return NextResponse.json({
       success: true,
-      message: "Credenziali Modificate",
+      message: "Credenziali modificate",
     }, {
       status: 200
     });

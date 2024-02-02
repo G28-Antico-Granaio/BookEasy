@@ -72,7 +72,7 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
 
         return NextResponse.json({
             success: true,
-            message: "Eliminazione Account Effettuata",
+            message: "Account Eliminato",
         }, {
             status: 200
         });

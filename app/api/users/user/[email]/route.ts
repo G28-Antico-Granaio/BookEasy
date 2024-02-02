@@ -49,6 +49,7 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 
         return NextResponse.json({
             success: true,
+            message: "Utente trovato",
             data: user
         }, {
             status: 200

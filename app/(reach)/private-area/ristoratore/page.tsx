@@ -1,24 +1,23 @@
 'use client'
 
+// logic
 import React, { useRef, useState } from 'react'
-
-import Image from 'next/image'
-import { Button, DatePicker, Form, Input, Modal, Select, Tooltip, message } from 'antd';
-
-import { useRouter } from 'next/navigation';
-
-import style from '../../reach.module.css'
-import map from '@/public/img/plan.png'
 import axios from 'axios';
-
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import mongoose from 'mongoose';
 import moment from 'moment';
-
-const { Option } = Select;
+import { useRouter } from 'next/navigation';
 dayjs.extend(customParseFormat);
 
+// UI
+import Image from 'next/image'
+import { Button, DatePicker, Form, Input, Modal, Select, Tooltip, message } from 'antd';
+import style from '../../reach.module.css'
+import map from '@/public/img/plan.png'
+const { Option } = Select;
+
+// interfaces
 interface Check {
   date: Date;
   turn: number;
@@ -48,6 +47,11 @@ interface Review {
   comment: string;
 }
 
+interface Response {
+  comment: string
+}
+
+// tabels lists
 let tablesPrenotato: Reservation[] = [];
 let tablesLibero: Reservation[] = [];
 let tablesOccupato: Reservation[] = [];
@@ -55,101 +59,116 @@ let allTables: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 function Private_Area() {
 
+  // basics
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
-
-  //*************************
-  /* Logout */
-
+  // handle logout
   const onLogout = async () => {
     try {
+      // if the values exist in the localStorage
       if (localStorage.getItem('email') && localStorage.getItem('role') && localStorage.getItem('log')) {
+        // start loading animation
         setLoading(true);
-
+        
+        // remove value from localStorage
         localStorage.removeItem('email');
         localStorage.removeItem('role');
         localStorage.setItem('log', 'false');
 
+        // view success and send to login
         message.success("Logout Effettuato");
         router.push("/login");
       } else {
-        message.warning("Impossibile eseguire il logout");
+        // view error
+        message.error("Impossibile eseguire il logout");
       }
     } catch (error: any) {
-      message.error(error.response.data.message);
+      // view error
+      message.error("Impossibile eseguire il logout");
     } finally {
+      // end loading animation
       setLoading(false);
     }
   };
 
-  //*************************
-  /* Modify Credentials */
-
+  // handle modify credentials
   const onModify = async () => {
-    await router.push('/modify-credentials')
+    // send to page
+    router.push('/modify-credentials')
   }
 
-  //*************************
-  /* Response */
+  // handle response to review
 
+  // modal consts
   const [open, setOpen] = useState(false);
   const [formModal] = Form.useForm();
 
-  interface Response {
-    comment: string
-  }
-
+  // handle response
   const onResponse = async (response: Response, _id: string) => {
     try {
+      // start loading animation
       setLoading(true);
 
-      await axios.patch(`/api/reviews/response/${_id}`, response)
-      message.success("risposta Inaviata");
+      // call API to post response
+      const result = await axios.patch(`/api/reviews/response/${_id}`, response);
+
+      // view success
+      message.success(result.data.message);
     } catch (error: any) {
+      // view error
       message.error(error.response.data.message)
     } finally {
+      // close modal
       setOpen(false);
+
+      // end loading animation
       setLoading(false);
 
+      //reload page to remove responded review
       window.location.reload();
     }    
   };
 
+  // handle exit modal
   const onCancel = () => {
+    // close modal
     setOpen(false);
   };
 
+  // handle open modal
   const showModal = () => {
+    // open modal
     setOpen(true);
   };
 
-  //*************************
-  /* Select Date */
-
+  // andle view table request
   const onDate = async (values: Check) => {
 
     // get saved form values
     localStorage.setItem('form', JSON.stringify(values));
 
     try {
+      // start loading animation
       setLoading(true);
 
+      // format the date recived in input
       const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
 
+      // call API to get reservation of that day
       const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
       const data = response.data.data;
 
+      // set tables
       const newTables = data.map((reservation: any) => reservation);
       const prenotatoTables = newTables.filter((reservation: Reservation) => !reservation.status);
       const occupatoTables = newTables.filter((reservation: Reservation) => reservation.status);
-
       tablesPrenotato  = prenotatoTables;
       tablesOccupato = occupatoTables;
-
       const nonSelectedTables = allTables.filter((tableId: number) => !newTables.some((newReservation: Reservation) => newReservation.table_id === tableId));
 
+      // create a fake reservation for free tables
       const fakeReservations: Reservation[] = nonSelectedTables.map((tableId: number) => ({
         _id: new mongoose.Types.ObjectId().toString(),
         table_id: tableId,
@@ -161,25 +180,25 @@ function Private_Area() {
         name: 'Anonimo',
         surname: 'Nobody',
       }));
-
       tablesLibero = fakeReservations;
     } catch (error: any) {
-      message.error(error.message);
+      // veiew error
+      message.error(error.response.data.message);
     } finally {
+      // end loading
       setLoading(false);
     }
   }
 
-  //*************************
-  /* Show tables on map */
-
+  // 
   const liberoSelectRef = useRef('libero');
   const prenotatoSelectRef = useRef('prenotato');
   const occupatoSelectRef = useRef('occupato');
 
-  // change status based on selected status an previus status
+  // handle change status
   const changeTableStatus = async (value: string, table: Reservation, prevValue: string) => {
     try {
+      // change status based on selected status an previus status
       if (value === 'libero') {
         await axios.delete(`/api/reservations/delete-reservation/${table._id}`);
       } else if (value === 'prenotato') {
@@ -196,8 +215,11 @@ function Private_Area() {
           await axios.post(`/api/reservations/reserve`, table);
         }
       }
+
+      // reload window to show update UI
       window.location.reload();
     } catch (error: any) {
+      // view error message
       message.error(error.response.data.message)
     }
   };
@@ -217,44 +239,60 @@ function Private_Area() {
     { id: 11, x: 400, y: 400, width: 96, height: 96 }
   ]; 
 
-  //*************************
-  /* UseEffect */
+  // useEffect
 
   // useState for review with no response
   const [newData, setNewData] = useState([]);
 
   React.useEffect(() => {
-    // if not logged or with no role send to login
+    // get data
     const log = localStorage.getItem('log');
     const role = localStorage.getItem('role');
+
+    // if data doesn't exist send to login
     if (!log || !role) {
-      router.push("/login");
+      router.push('/login');
     }
 
     // Load review with no response
     const onLoad = async () => {
-      const response = await axios.get('/api/reviews/no-response-review')
+      // call API to che review with no response
+      const response = await axios.get('/api/reviews/no-response-review');
+
+      // set values
       setNewData(response.data.data);
     }
 
-    // automatically load last info in to the form
+    // load last info in to the form check
+
+    // get data from localStorage
     const formValues = localStorage.getItem('form');
+
+    // if the value exists
     if (formValues) {
+      // parse the json
       const data = JSON.parse(formValues);
+
+      // format the date
       data.date = data.date ? moment(data.date) : null;
+
+      // set field values
       form.setFieldsValue({
         date: data.date,
         turn: data.turn
       });
 
+      // create varieble
       const info: Check = {
         date: data.date,
         turn: data.turn
       };
 
+      // load the UI
       onDate(info);
     }
 
+    // 
     onLoad();
   }, [form, router]);
   
@@ -309,15 +347,15 @@ function Private_Area() {
               <Option value="21.00" >21.00</Option>
             </Select>
           </Form.Item>
-          
-            <Button htmlType='submit' block loading={loading} style={{
-              width: '10rem !important', 
-              height: '2rem !important', 
-              marginBottom: '24px !important',
-              marginLeft: '24px !important'}}>
-              Controlla
-            </Button>
           </Form>
+
+          <Button form='check' htmlType='submit' block loading={loading} style={{
+            marginTop: '3rem',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+          }}>
+              Controlla
+          </Button>
         </section>
 
         <section className={style.plan} style={{ position: 'relative' }}>

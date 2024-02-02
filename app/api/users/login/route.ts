@@ -52,17 +52,17 @@ export async function POST(req: NextRequest) {
 
         const user = await User.findOne({ email: req_body.email });
         if (!user) {
-            throw new my_error("Non esiste un utente registrato con questo indirizzo e-mail", 404);
+            throw new my_error("E-mail e/o password errate", 404);
         }
 
         const password_match = await bcrypt.compare(req_body.password, user.password);
         if (!password_match) {
-            throw new my_error("Credenziali inserite non valide", 401);
+            throw new my_error("E-mail e/o password errate", 401);
         }
 
         return NextResponse.json({
             success: true,
-            message: "Login Effettuato",
+            message: "Login effettuato",
             data: {
                 isAdmin: user.isAdmin,
             },
