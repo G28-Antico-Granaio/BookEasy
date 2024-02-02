@@ -77,7 +77,7 @@ function Modify_Credentials() {
         const email: string | null = localStorage.getItem('email') || '';
 
         // call API to get user info
-        const response = await axios.get(`/api/users/user/${email}`);
+        const response = await axios.get(`/api/users/get-user/${email}`);
         const user: User = response.data.data;
 
         // set form field

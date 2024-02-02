@@ -7,7 +7,6 @@ import axios from 'axios';
 
 // UI
 import { Form, Input, Button, message } from 'antd';
-import Link from 'next/link';
 import style from '../reach.module.css'
 
 // interface
@@ -80,6 +79,17 @@ function Login(){
     // sendo to page
     router.push('/register')
   }
+
+  // useEffect
+  React.useEffect(() => {
+    // get data
+    const log = localStorage.getItem('log');
+
+    // if data doesn't exist send to login
+    if (log === 'true') {
+      router.push('/');
+    }
+  }, [router]);
 
   return(
     <section className='container'>

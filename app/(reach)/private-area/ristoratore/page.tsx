@@ -112,7 +112,7 @@ function Private_Area() {
       setLoading(true);
 
       // call API to post response
-      const result = await axios.patch(`/api/reviews/response/${_id}`, response);
+      const result = await axios.patch(`/api/reviews/responde/${_id}`, response);
 
       // view success
       message.success(result.data.message);
@@ -153,11 +153,11 @@ function Private_Area() {
       // start loading animation
       setLoading(true);
 
-      // format the date recived in input
+      // format the date recived in inputapi
       const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
 
       // call API to get reservation of that day
-      const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
+      const response = await axios.get(`/api/reservations/day-turn-reservations/${formattedDate}/${values.turn}`);
       const data = response.data.data;
 
       // set tables
@@ -257,7 +257,7 @@ function Private_Area() {
     // Load review with no response
     const onLoad = async () => {
       // call API to che review with no response
-      const response = await axios.get('/api/reviews/no-response-review');
+      const response = await axios.get('/api/reviews/no-response-reviews');
 
       // set values
       setNewData(response.data.data);

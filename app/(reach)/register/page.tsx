@@ -55,6 +55,17 @@ function Register() {
     router.push('login');
   }
 
+  // useEffect
+  React.useEffect(() => {
+    // get data
+    const log = localStorage.getItem('log');
+
+    // if data doesn't exist send to login
+    if (log === 'true') {
+      router.push('/');
+    }
+  }, [router]);
+
   const prefixSelector = (
     <Form.Item name="tel_area_code" noStyle>
       <Select>

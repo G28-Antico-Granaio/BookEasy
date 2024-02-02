@@ -111,7 +111,7 @@ function Private_Area() {
       const email: string | null = localStorage.getItem('email') || '';
 
       // call API to get user info
-      const response = await axios.get(`/api/users/user/${email}`);
+      const response = await axios.get(`/api/users/get-user/${email}`);
       const user = response.data.data;
 
       // add missing infor to interface
@@ -176,7 +176,7 @@ function Private_Area() {
       const email: string | null = localStorage.getItem('email');
 
       // call API to get new reservation
-      const response = await axios.get(`/api/reservations/new-reservation/${email}`);
+      const response = await axios.get(`/api/reservations/new-reservations/${email}`);
 
       // set data
       setNewData(response.data.data);
@@ -188,7 +188,7 @@ function Private_Area() {
       const email: string | null = localStorage.getItem('email');
 
       // call API to get old reservations
-      const response = await axios.get(`/api/reservations/old-reservation/${email}`);
+      const response = await axios.get(`/api/reservations/old-reservations/${email}`);
 
       // set data
       setOldData(response.data.data);

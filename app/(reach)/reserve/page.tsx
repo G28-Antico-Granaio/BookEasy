@@ -48,7 +48,7 @@ function Reserve() {
             const formattedDate = dayjs(values.date).format('YYYY-MM-DD');
 
             // call API to get reservation
-            const response = await axios.get(`/api/reservations/all-reservation/${formattedDate}/${values.turn}`);
+            const response = await axios.get(`/api/reservations/day-turn-reservations/${formattedDate}/${values.turn}`);
             const data = response.data.data;
 
             // save the reserved tables
@@ -83,7 +83,7 @@ function Reserve() {
             const email: string | null = localStorage.getItem('email') || '';
 
             // call API to get user info
-            const response = await axios.get(`/api/users/user/${email}`);
+            const response = await axios.get(`/api/users/get-user/${email}`);
             const user = response.data.data;
 
             // add missing info to inteface
