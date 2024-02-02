@@ -49,6 +49,12 @@ function Register() {
     }
   };
 
+  // handle login
+  const onLogin = async () => {
+    // send to page
+    router.push('login');
+  }
+
   const prefixSelector = (
     <Form.Item name="tel_area_code" noStyle>
       <Select>
@@ -209,9 +215,9 @@ function Register() {
 
           <br />
 
-            <Link href='/login' className={style.link}>
+            <a onClick={onLogin} className={style.link}>
               Accedi
-            </Link>
+            </a>
           </div>
         </Form>
       </div>

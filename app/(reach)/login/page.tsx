@@ -57,26 +57,27 @@ function Login(){
     }
   };
 
+  // handle forgot password
   const onForgot = async () => {
     try {
+      // check if there is email in localStorage
       const email = form.getFieldValue('email');
       if (!email) {
         throw new Error("Inserire l'email e riprovare")
       }
 
+      // saves email in localStorage and sends to recove password
       localStorage.setItem('email', email);
       router.push('/recover-password')
-
-
     } catch (error: any) {
+      // view error
       message.error(error.message);
     }
-    
-
-
   }
 
+  // handle register
   const onReg = async () => {
+    // sendo to page
     router.push('/register')
   }
 
