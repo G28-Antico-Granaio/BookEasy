@@ -79,7 +79,7 @@ function Private_Area() {
 
         // view success and send to login
         message.success("Logout Effettuato");
-        router.push("/login");
+        router.push("/");
       } else {
         // view error
         message.error("Impossibile eseguire il logout");
@@ -239,10 +239,25 @@ function Private_Area() {
     { id: 11, x: 400, y: 400, width: 96, height: 96 }
   ]; 
 
+  // handle review
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+
+  // handle button to next rev
+  const nextReview = () => {
+    setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % newData.length);
+  };
+
+  // handle button to prev review
+  const prevReview = () => {
+    setCurrentReviewIndex(
+      (prevIndex) => (prevIndex - 1 + newData.length) % newData.length
+    );
+  };
+
   // useEffect
 
   // useState for review with no response
-  const [newData, setNewData] = useState([]);
+  const [newData, setNewData] = useState<Review[]>([]);
 
   React.useEffect(() => {
     // get data
@@ -254,14 +269,15 @@ function Private_Area() {
       router.push('/login');
     }
 
-    // Load review with no response
+    // load reviews
     const onLoad = async () => {
-      // call API to che review with no response
+      // call API to get last reviews
       const response = await axios.get('/api/reviews/no-response-reviews');
 
-      // set values
+      // set data
       setNewData(response.data.data);
     }
+    onLoad();
 
     // load last info in to the form check
 
@@ -472,72 +488,82 @@ function Private_Area() {
           ))}
         </section>
 
-        <section>
-          {newData.map((review: Review) => {
-            return (
-              <div key={review._id} className={style.review}>
+      <section>
+        {newData.length > 0 && (
+          <div className={style.review}>
+            <div className={style.star}>
+              <h3>Location</h3>
+              <div>{`${newData[currentReviewIndex].location}/5`}</div>
 
-                <div className={style.star}>
-                  <h3>Location</h3>
-                  <div>{`${review.location}/5`}</div>
-              
-                  <h3>Menù</h3>
-                  <div>{`${review.menu}/5`}</div>
+              <h3>Menù</h3>
+              <div>{`${newData[currentReviewIndex].menu}/5`}</div>
 
-                  <h3>Servizio</h3>
-                  <div>{`${review.service}/5`}</div>
+              <h3>Servizio</h3>
+              <div>{`${newData[currentReviewIndex].service}/5`}</div>
 
-                  <h3>Conto</h3>
-                  <div>{`${review.bill}/5`}</div>
+              <h3>Conto</h3>
+              <div>{`${newData[currentReviewIndex].bill}/5`}</div>
 
-                  <div className={style.modal}>
-                    <a className={style.link} onClick={showModal}>Rispondi alla Recensione</a>
-                  </div>
+              <div className={style.modal}>
+                  <a className={style.link} onClick={showModal}>Rispondi</a>
                 </div>
+            </div>
 
-                <div className={style.text}>
-                  <p className={style.name_date}>
-                    <b>{`${review.name} ${review.surname}`}</b>{` - ${new Date(review.date).toLocaleDateString('en-GB')}`}
-                  </p>
-
-                  <p className={style.review_text}>
-                    {review.comment}
-                  </p>
-                </div>
-
-                <Modal
-                  title="Risposta"
-                  open={open}
-                  onCancel={onCancel}
-                  footer={null}>
-                  <Form 
-                    form={formModal}
-                    name="Response"
-                    onFinish={(values) => onResponse(values, review._id)}>
-
-                    <Form.Item
-                      name="response"
-                      label="response"
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Inserire una risposta',
-                        },
-                      ]}
-                    >
-                      <Input.TextArea maxLength={500}/>
-
-                    </Form.Item>
-
-                    <Button htmlType='submit' block loading={loading}>
-                      Invia
-                    </Button>
-                  </Form>
-                </Modal>
+            <div className={style.text}>
+              <div className={style.name_date}>
+                <b>{`${newData[currentReviewIndex].name} ${newData[currentReviewIndex].surname}`}</b>{` - ${new Date(newData[currentReviewIndex].date).toLocaleDateString('en-GB')}`}
               </div>
-            );
-          })}
-        </section>
+
+              <div className={style.review_text}>
+                {newData[currentReviewIndex].comment}
+              </div>
+            </div>
+
+            {newData.length > 0 && (
+              <div className={style.navigationButtons}>
+                <button onClick={prevReview} disabled={currentReviewIndex === 0}>
+                  <div className={style.arrowUp}></div>
+                </button>
+                <button onClick={nextReview} disabled={currentReviewIndex === newData.length - 1}>
+                  <div className={style.arrowDown}></div>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </section>
-    )
+
+      <Modal
+        title="Risposta"
+        open={open}
+        onCancel={onCancel}
+        footer={null}>
+
+        <Form 
+          form={formModal}
+          name="Response"
+          onFinish={(values) => onResponse(values, newData[currentReviewIndex]._id)}>
+
+          <Form.Item
+            name="response"
+            label="response"
+            rules={[
+              {
+                required: true,
+                message: 'Inserire una risposta',
+              },
+            ]}
+          >
+            <Input.TextArea maxLength={500}/>
+
+          </Form.Item>
+
+          <Button htmlType='submit' block loading={loading}>
+            Invia
+          </Button>
+        </Form>
+      </Modal>
+
+    </section>
+  )
 } export default Private_Area

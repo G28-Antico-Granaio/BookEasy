@@ -60,6 +60,12 @@ function Modify_Credentials() {
     }
   };
 
+  // handle modify password
+  const onPass = async () => {
+    // send to paeg
+    router.push('/reset-password')
+  }
+
   // useEffect
   React.useEffect(() => {
     // get data
@@ -198,8 +204,14 @@ function Modify_Credentials() {
 
           </Form.Item>
 
+          <Form.Item>
+            <a onClick={onPass}>
+              Modifica Password
+            </a>
+          </Form.Item>
+
           <Button htmlType='submit' block loading={loading}>
-            Conferma le Modifiche
+            Conferma Modifiche
           </Button>
 
         </Form>

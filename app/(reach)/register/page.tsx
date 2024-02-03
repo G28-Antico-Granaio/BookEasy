@@ -37,6 +37,8 @@ function Register() {
       // call API to register
       const response = await axios.post('/api/users/register', values);
 
+      // send email
+
       // view success and send to login
       message.success(response.data.message);
       router.push("/login");
@@ -216,7 +218,7 @@ function Register() {
 
 
           <Button htmlType='submit' block loading={loading}>
-            Registrati
+            Crea Account
           </Button>
 
           <hr className={style.hr_form}  />

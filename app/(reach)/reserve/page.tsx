@@ -255,7 +255,7 @@ function Reserve() {
                 marginRight: 'auto',
                 marginLeft: 'auto'
             }}>
-                Controlla
+                Controlla Disponibilità
             </Button>   
 
             <section onClick={handleClick} className={style.plan} style={{ position: 'relative' }}>
@@ -320,7 +320,7 @@ function Reserve() {
                         marginRight: 'auto',
                         marginLeft: 'auto'
                     }}>
-                    Prenota
+                    Richiedi Prenotazione
                 </Button>
             </section>
         </section>

@@ -1,11 +1,68 @@
 'use client'
 
+// logic
 import React from 'react';
 
-import { Form, Button, Input } from 'antd';
+// UI
+import { Form, Button, Input, message, Modal } from 'antd';
 import style from '../reach.module.css'
 
+// inteface
+interface Email {
+  email: string;
+}
+
 function Password_Recovery() {
+
+  // basics
+  const [loading, setLoading] = React.useState(false);
+
+  const onResend = async (values: Email) => {
+    try{
+      // start loading animation
+      setLoading(true);
+
+      // send email
+
+      // view success
+      message.success("Le abbiamo inviato una e-mail contenente le istruzioni per il recupero della sua password")
+    } catch (error: any) {
+      message.error(error.response.data.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function error() {
+    Modal.error({
+      title: 'Funzione non ancora implementata',
+      content: 'Se si vuole procedere con il ripristino della password andare alla pagina https://bookeasy-antico-granaio.vercel.app/reset-password (online) o http://localhost:3000/recover-password (locale)',
+    });
+  }
+
+  // useEffect
+  React.useEffect(() => {
+    // send email logic
+    try {
+      // check if wrote the email in login form
+      const email = localStorage.getItem('email');
+      if (!email) {
+        throw new Error("Inserire nel campo un indirizzo e-mail")
+      }
+
+      // send email
+      /*
+      const data: Email = {
+        email: email
+      }
+      onResend(data);
+      */
+
+    } catch (error: any) {
+      message.error(error.message)
+    }
+  }, []);
+
   return (
     <section className='container'>
       <div className={style.form}>
@@ -43,9 +100,9 @@ function Password_Recovery() {
             o che la mail riportata sopra sia corretta ed eventualmente 
             modificarla
           </section>
-
-          <Button htmlType='submit' block>
-            Accedi
+          
+          <Button onClick={error} type="primary" htmlType='submit' block loading={loading}>
+            Recupera Password
           </Button>
         </Form>
       </div>

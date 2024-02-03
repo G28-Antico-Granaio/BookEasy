@@ -54,7 +54,7 @@ function Private_Area() {
 
         // view success and send to login
         message.success("Logout Effettuato");
-        router.push("/login");
+        router.push("/");
       } else {
         // view error
         message.error("Impossibile eseguire il logout");
@@ -88,6 +88,8 @@ function Private_Area() {
 
       // view success
       message.success(response.data.message);
+
+      // send email
 
       // reload window to remove the UI
       window.location.reload();
@@ -213,10 +215,10 @@ function Private_Area() {
         <h2>Prenotazioni Attive</h2>
         {newData.map((reservation: Reservation) => {
         return (
-          <div key={reservation.table_id} className={style.post_rev}>
+          <div key={reservation._id} className={style.post_rev}>
             <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
             <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
-            <a className={style.link} onClick={() => onDelete(reservation._id)}>Cancella la prenotazione</a>
+            <a className={style.link} onClick={() => onDelete(reservation._id)}>Cancella prenotazione</a>
           </div>
         );
       })}
@@ -230,11 +232,11 @@ function Private_Area() {
 
         {oldData.map((reservation: Reservation) => {
         return (
-          <div key={reservation.table_id} className={style.past_rev}>
+          <div key={reservation._id} className={style.past_rev}>
             <div>{`Prenotazione - ${new Date(reservation.date).toLocaleDateString('en-GB')}`}</div>
             <div>{`Orario: ${reservation.turn}.00 - ${reservation.turn + 2}.00 | ${reservation.cover_number} Persone | Tavolo ${reservation.table_id}`}</div>
 
-            <a className={style.link} onClick={() => showModal(reservation)}>Recensisci Prenotazione</a>
+            <a className={style.link} onClick={() => showModal(reservation)}>Lascia una recensione</a>
 
             <Modal
               title="Recensione"
@@ -266,8 +268,9 @@ function Private_Area() {
 
                   <InputNumber min={1} max={5}
                     controls={false}
-                    formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-                    parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}/>
+                    style={{
+                      width: "auto",
+                    }}/>
 
                 </Form.Item>
 
@@ -291,8 +294,9 @@ function Private_Area() {
 
                   <InputNumber min={1} max={5}
                     controls={false}
-                    formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-                    parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}/>
+                    style={{
+                      width: "auto",
+                    }}/>
                     
                 </Form.Item>
 
@@ -316,8 +320,9 @@ function Private_Area() {
 
                   <InputNumber min={1} max={5}
                     controls={false}
-                    formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-                    parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}/>
+                    style={{
+                      width: "auto",
+                    }}/>
                     
                 </Form.Item>
 
@@ -341,15 +346,16 @@ function Private_Area() {
 
                   <InputNumber
                     controls={false}
-                    formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
-                    parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}/>
+                    style={{
+                      width: "auto",
+                    }}/>
                     
                 </Form.Item>
 
 
                 <Form.Item
                   name={'comment'}
-                  label="comme"
+                  label="comment"
                   rules={[
                     {
                       required: true,
@@ -357,12 +363,13 @@ function Private_Area() {
                     },
                   ]}
                 >
-                  <Input.TextArea maxLength={500}/>
+                  <Input.TextArea maxLength={500}
+                    autoSize={{ minRows: 2, maxRows: 20 }} />
 
                 </Form.Item>
 
                 <Button htmlType='submit' block loading={loading}>
-                  Invia
+                  Conferma recensione
                 </Button>
               </Form>
             </Modal>
@@ -373,7 +380,7 @@ function Private_Area() {
       <hr className={style.hr_form} />
 
       <section className={style.link}>
-        <a onClick={onDeleteAcc}>Elimina l&apos;Account</a>
+        <a onClick={onDeleteAcc}>Elimina Account</a>
       </section>
     </section>
   )

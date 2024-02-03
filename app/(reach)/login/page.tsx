@@ -8,6 +8,7 @@ import axios from 'axios';
 // UI
 import { Form, Input, Button, message } from 'antd';
 import style from '../reach.module.css'
+import NumCalculator from 'antd/es/theme/util/calc/NumCalculator';
 
 // interface
 interface User{
@@ -33,9 +34,9 @@ function Login(){
       const result = response.data;
 
       // save non sensitive informations in localStorage
-      await localStorage.setItem('email', values.email);
-      await localStorage.setItem('role', result.data.isAdmin);
-      await localStorage.setItem('log', 'true');
+      localStorage.setItem('email', values.email);
+      localStorage.setItem('role', result.data.isAdmin);
+      localStorage.setItem('log', 'true');
 
       // get role
       const role = localStorage.getItem('role');
@@ -58,20 +59,14 @@ function Login(){
 
   // handle forgot password
   const onForgot = async () => {
-    try {
-      // check if there is email in localStorage
-      const email = form.getFieldValue('email');
-      if (!email) {
-        throw new Error("Inserire l'email e riprovare")
-      }
-
-      // saves email in localStorage and sends to recove password
+    // if mail in localStorage
+    const email: string | null = form.getFieldValue('email');
+    if (email) {
       localStorage.setItem('email', email);
-      router.push('/recover-password')
-    } catch (error: any) {
-      // view error
-      message.error(error.message);
     }
+
+    //sends to recove password
+    router.push('/recover-password')
   }
 
   // handle register

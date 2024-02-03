@@ -33,7 +33,6 @@ export default function Home() {
   // basics
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
-  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   // handle reservation
   const onBook = async () => {
@@ -49,6 +48,7 @@ export default function Home() {
   };
 
   // handle review
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   // is response visible
   const [responseVisible, setResponseVisible] = useState<{ [key: string]: boolean }>({});
@@ -81,7 +81,7 @@ export default function Home() {
     // load reviews
     const onLoad = async () => {
       // call API to get last reviews
-      const response = await axios.get('/api/reviews/last-reviews');
+      const response = await axios.get('/api/reviews/last-month-reviews');
 
       // set data
       setNewData(response.data.data);
@@ -140,7 +140,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={style.recnsioni}>
+      <section>
         {newData.length > 0 && (
           <div className={styled.review}>
             <div className={styled.star}>
@@ -159,9 +159,7 @@ export default function Home() {
 
             <div className={styled.text}>
               <div className={styled.name_date}>
-                <b>{`${newData[currentReviewIndex].name} ${newData[currentReviewIndex].surname}`}</b>{` - ${new Date(
-                  newData[currentReviewIndex].date
-                ).toLocaleDateString('en-GB')}`}
+                <b>{`${newData[currentReviewIndex].name} ${newData[currentReviewIndex].surname}`}</b>{` - ${new Date(newData[currentReviewIndex].date).toLocaleDateString('en-GB')}`}
               </div>
 
               <div className={styled.review_text}>
