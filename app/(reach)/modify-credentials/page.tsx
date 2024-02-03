@@ -36,7 +36,7 @@ function Modify_Credentials() {
       const email: string | null = localStorage.getItem('email') || '';
 
       // call API to change user info
-      const response = await axios.put(`/api/users/modify-credentials/${email}`, values);
+      const response = await axios.patch(`/api/users/modify-credentials/${email}`, values);
 
       // set localStorage variable to new email
       localStorage.setItem('email', values.email);

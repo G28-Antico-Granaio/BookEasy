@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * @swagger
  * /api/users/modify-credentials/{email}:
- *   put:
+ *   patch:
  *     summary: Modifica delle credenziali
  *     description: Modifica le credeniali dell'utente che corrisponde al parametro email passato con i dati passatogli
  *     tags:
@@ -60,7 +60,7 @@ class my_error extends Error {
 
 connect_DB();
 
-export async function PUT(req: NextRequest, { params }: { params: Params }) {
+export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const req_body = await req.json();
 
