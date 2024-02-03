@@ -251,9 +251,17 @@ function Private_Area() {
                   name={'location'}
                   rules={[
                     {
+                      type: 'number',
+                      message: 'Inserire un numero valido',
+                    },
+                    {
                       required: true,
-                      message: 'Inserire le stelle'
-                    }
+                      message: 'Inserisci una valutazione'
+                    },
+                    {
+                      pattern: /^[0-5]{1}$/,
+                      message: 'Formato della valutazione non è valido. Inserire un numero compreso tra 1 e 5',
+                    },
                 ]}>
 
                   <InputNumber min={1} max={5}
@@ -268,9 +276,17 @@ function Private_Area() {
                   name={'menu'}
                   rules={[
                     {
+                      type: 'number',
+                      message: 'Inserire un numero valido',
+                    },
+                    {
                       required: true,
-                      message: 'Inserire le stelle'
-                    }
+                      message: 'Inserisci una valutazione'
+                    },
+                    {
+                      pattern: /^[0-5]{1}$/,
+                      message: 'Formato della valutazione non è valido. Inserire un numero compreso tra 1 e 5',
+                    },
                 ]}>
 
                   <InputNumber min={1} max={5}
@@ -285,9 +301,17 @@ function Private_Area() {
                   name={'service'}
                   rules={[
                     {
+                      type: 'number',
+                      message: 'Inserire un numero valido',
+                    },
+                    {
                       required: true,
-                      message: 'Inserire le stelle'
-                    }
+                      message: 'Inserisci una valutazione'
+                    },
+                    {
+                      pattern: /^[0-5]{1}$/,
+                      message: 'Formato della valutazione non è valido. Inserire un numero compreso tra 1 e 5',
+                    },
                 ]}>
 
                   <InputNumber min={1} max={5}
@@ -302,12 +326,20 @@ function Private_Area() {
                   name={'bill'}
                   rules={[
                     {
+                      type: 'number',
+                      message: 'Inserire un numero valido',
+                    },
+                    {
                       required: true,
-                      message: 'Inserire le stelle'
-                    }
+                      message: 'Inserisci una valutazione'
+                    },
+                    {
+                      pattern: /^[0-5]{1}$/,
+                      message: 'Formato della valutazione non è valido. Inserire un numero compreso tra 1 e 5',
+                    },
                 ]}>
 
-                  <InputNumber min={1} max={5}
+                  <InputNumber
                     controls={false}
                     formatter={(value: string | number | undefined) => (value ? `${value}`.replace(/\D/g, '') : '')}
                     parser={(value: string | undefined) => (value ? value.replace(/\D/g, '') : '')}/>

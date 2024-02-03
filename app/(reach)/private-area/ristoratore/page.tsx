@@ -525,7 +525,7 @@ function Private_Area() {
                         },
                       ]}
                     >
-                      <Input.TextArea />
+                      <Input.TextArea maxLength={500}/>
 
                     </Form.Item>
 
