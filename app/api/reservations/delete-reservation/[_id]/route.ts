@@ -10,16 +10,13 @@ import Reservation from "@/app/models/reservation_model";
  *     description: Cancella la prenotazione che corrisponde alla _id passato
  *     tags:
  *       - Reservation
- *     requestBody:
- *       description: Il campo _id della prenotazione che si vuole cancellare
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         required: true
+ *         description: parametro _id della recensione che si intende cancellare
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: OK. Reservation deletion successful

@@ -6,52 +6,53 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/reviews/review/{reservation_id}:
  *   post:
- *     summary: Publica una recensione
- *     description: Publica una recensione sulla recensione che corrisponde al parametro reservation_id passato
+ *     summary: Pubblica una recensione per una prenotazione specifica
+ *     description: Pubblica una recensione per una prenotazione specifica se non esiste già una recensione per quella prenotazione
  *     tags:
  *       - Review
  *     parameters:
  *       - in: path
  *         name: reservation_id
  *         required: true
- *         description: Il parametro _id della prenotazione su di cui è la recensione
+ *         description: _id della prenotazione per la quale si vuole pubblicare una recensione
  *         schema:
  *           type: string
  *     requestBody:
- *       description: Dati Recensione
+ *       description: Dati della recensione
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               table_id:
- *                  type: number
- *               date:
- *                  type: string
- *                  format: date
- *               turn:
- *                  type: number
- *               cover_number:
- *                  type: number
- *               status:
- *                  type: boolean
- *               email:
- *                  type: string
+ *               reservation_id:
+ *                 type: string
  *               name:
- *                  type: string
+ *                 type: string
  *               surname:
- *                  type: string
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: "yyyy-MM-dd"
+ *               location:
+ *                 type: integer
+ *               menu:
+ *                 type: integer
+ *               service:
+ *                 type: integer
+ *               bill:
+ *                 type: integer
  *               comment:
- *                  type:string
+ *                 type: string
  *     responses:
  *       201:
- *         description: Created. Prenotazione effetuata
+ *         description: Creata. Recensione pubblicata con successo
  *       409:
- *         description: Conflict.Recensione è già stata effettuata
+ *         description: Conflitto. Recensione già effettuata per la prenotazione specificata
  *       500:
- *         description: Internal Server Error. Si è verificato un errore durante la publicazione della recensione
+ *         description: Errore interno del server. Si è verificato un errore durante la pubblicazione della recensione
  */
+
 
 
 interface Params {

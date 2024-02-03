@@ -20,19 +20,20 @@ import moment from "moment";
  *             type: object
  *             properties:
  *               table_id:
- *                 type: number
+ *                 type: integer
  *               turn:
- *                 type: number
+ *                 type: integer
  *               date:
  *                 type: string
- *                 format: date 
+ *                 format: "yyyy-MM-dd"
  *               cover_number:
- *                 type: number
- *               status
- *                 type: boolean
- *               email
+ *                 type: integer
+ *               status:
  *                 type: string
- *               name
+ *                 enum: ["reserved", "unreserved"]
+ *               email:
+ *                 type: string
+ *               name:
  *                 type: string
  *               surname:
  *                 type: string
@@ -44,6 +45,7 @@ import moment from "moment";
  *       500:
  *         description: Internal Server Error. Si è verificato un errore durante la prenotazione del tavolo
  */
+
 
 
 

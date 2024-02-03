@@ -7,14 +7,14 @@ import { connect_DB } from "../../../../config/db-config";
  * /api/users/get-user/{email}:
  *   get:
  *     summary: Prende le informazioni dell'utente
- *     description:Restituisce le informazioni dell'utente a cui corrisponde il paraetro email passato
+ *     description: Restituisce le informazioni dell'utente a cui corrisponde il paraetro email passato
  *     tags:
  *       - User
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: L'indirizzo e-mail dell'utente di cui si vogliono ottenere le informazioni
+ *         description: L'indirizzo E-Mail dell'utente del quale si vogliono avere le informazioni
  *         schema:
  *           type: string
  *     responses:
