@@ -4,26 +4,26 @@ import { connect_DB } from "../../../../config/db-config";
 
 /**
  * @swagger
- * /api/users/user/{email}:
+ * /api/users/get-user/{email}:
  *   get:
- *     summary: Retrieve user information
- *     description: Retrieves user information based on the provided email.
+ *     summary: Prende le informazioni dell'utente
+ *     description:Restituisce le informazioni dell'utente a cui corrisponde il paraetro email passato
  *     tags:
  *       - User
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user to retrieve information.
+ *         description: L'indirizzo e-mail dell'utente di cui si vogliono ottenere le informazioni
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: OK. User information retrieved successfully.    
+ *         description: OK. Utente non trovato
  *       404:
  *         description: Not Found. User not found.
  *       500:
- *         description: Internal Server Error. An error occurred while retrieving user information.
+ *         description: Internal Server Error. Si è verificato un errore durante il recupero delle informazioni dell'utente
  */
 
 interface Params {
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
             status: 200
         });
     } catch (error: any) {
-        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/user/[email]' --> ", error.message);
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/get-user/[email]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

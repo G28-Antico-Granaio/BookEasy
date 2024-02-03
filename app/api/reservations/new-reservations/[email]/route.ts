@@ -6,22 +6,22 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/reservations/new-reservation/{email}:
  *   get:
- *     summary: Get all reservations for a user
- *     description: Retrieves all reservations associated with the provided email.
+ *     summary: Prende le prenotazioni future di un utente
+ *     description: Restituisce tutte le prenotazioni fututre dell'utente che corrisponde alla email passata
  *     tags:
  *       - Reservation
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user whose reservations need to be retrieved.
+ *         description: Indirizzo e-mail dell'utente di cui devono essere restituite le prenotazioni
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: OK. Reservations retrieved successfully.
+ *         description: OK. Prenotazioni trovate/Non ci sono prenotazioni
  *       500:
- *         description: Internal Server Error. An error occurred during the retrieval of reservations.
+ *         description: Internal Server Error. Si è verificato un errore durante la raccolta delle prenotazioni
  */
 
 

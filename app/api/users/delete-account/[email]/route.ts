@@ -7,19 +7,19 @@ import bcrypt from "bcryptjs";
  * @swagger
  * /api/users/delete-account/{email}:
  *   post:
- *     summary: Delete user account
- *     description: Deletes the user account based on the provided email and password.
+ *     summary: Cancella l'account di un utente
+ *     description: Cancella l'account dell'utente che corrisponde al parametro email passato se corrisponde il parametro password con quello all'interno del DataBase
  *     tags:
  *       - User
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user whose account needs to be deleted.
+ *         description: L'indirizzo E-Mail dell'utente il cui account deve essere cancellato
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User deletion data.
+ *       description: Dati cancellazione utente
  *       required: true
  *       content:
  *         application/json:
@@ -28,16 +28,16 @@ import bcrypt from "bcryptjs";
  *             properties:
  *               password:
  *                 type: string
- *                 description: The user's password for authentication.
+ *                 description: La password dell'utente
  *     responses:
  *       200:
- *         description: OK. User account deletion successful.
+ *         description: OK. Account Eliminato
  *       404:
- *         description: Not Found. User not found.
+ *         description: Not Found. Utente non trovato
  *       401:
- *         description: Unauthorized. Invalid credentials.
+ *         description: Unauthorized. Credenziali inserite non valide
  *       500:
- *         description: Internal Server Error. An error occurred during account deletion.
+ *         description: Internal Server Error. Si è verificato un errore durante la cancellazione dell'account
  */
 
 interface Params {

@@ -6,19 +6,19 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/users/modify-credentials/{email}:
  *   put:
- *     summary: Modify user credentials
- *     description: Modifies user credentials based on the provided email.
+ *     summary: Modifica delle credenziali
+ *     description: Modifica le credeniali dell'utente che corrisponde al parametro email passato con i dati passatogli
  *     tags:
  *       - User
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user whose credentials need to be modified.
+ *         description: L'indirizzo e-mail dell'utente di cui si vuole modificare le credenziali
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User credentials modification data.
+ *       description: Nuove credenziali
  *       required: true
  *       content:
  *         application/json:
@@ -37,11 +37,11 @@ import { NextRequest, NextResponse } from "next/server";
  *                 type: string
  *     responses:
  *       200:
- *         description: OK. User credentials modified successfully.
+ *         description: OK. Si è verificato un errore durante la modifica delle credenziali dell'utente
  *       404:
- *         description: Not Found. User not found.
+ *         description: Not Found. Utente non trovato
  *       409:
- *         description: Conflict. User already exists.
+ *         description: Conflict. Indirizzo e-mail è già associato ad un account esistente/Numero di telefono è già associato ad un account esistente
  *       500:
  *         description: Internal Server Error. An error occurred while modifying user credentials.
  */

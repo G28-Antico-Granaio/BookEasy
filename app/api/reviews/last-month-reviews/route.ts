@@ -5,17 +5,17 @@ import dayjs from 'dayjs';
 
 /**
  * @swagger
- * /api/reviews/last-review:
+ * /api/reviews/last-month-review:
  *   get:
- *     summary: Get reviews from the last month
- *     description: Retrieves reviews submitted in the last month.
+ *     summary: Prende le recensioni dell'ultimo mese
+ *     description: Restituisce tutte le recensioni pubblicate nell'ultimo mese
  *     tags:
  *       - Review
  *     responses:
  *       200:
- *         description: OK. Reviews retrieved successfully.
+ *         description: OK. Recensioni trovate/Non ci sono recensioni
  *       500:
- *         description: Internal Server Error. An error occurred during the retrieval of reviews.
+ *         description: Internal Server Error. Si è verificato un errore durante l'estrazione delle recensioni
  */
 
 
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
             status: 200
         });
     } catch (error: any) {
-        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reviews/last-reviews' --> ", error.message);
+        console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di 'api/reviews/last-month-reviews' --> ", error.message);
     
         return NextResponse.json({
             success: false,

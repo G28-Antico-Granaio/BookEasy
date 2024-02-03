@@ -7,12 +7,12 @@ import bcrypt from "bcryptjs";
  * @swagger
  * /api/users/register:
  *   post:
- *     summary: User Registration
- *     description: Handles user registration and password hashing.
+ *     summary: Registrazione
+ *     description: Crea un nuovo account con le credenialoi passate
  *     tags:
  *       - User
  *     requestBody:
- *       description: User registration data.
+ *       description: Dati registrazione
  *       required: true
  *       content:
  *         application/json:
@@ -33,11 +33,11 @@ import bcrypt from "bcryptjs";
  *                 type: string
  *     responses:
  *       201:
- *         description: OK. User successfully registered.
+ *         description: OK. Utente creato
  *       409:
- *         description: Conflict. User already exists.
+ *         description: Conflict. Indirizzo e-mail è già associato ad un account esistente/Numero di telefono è già associato ad un account esistente
  *       500:
- *         description: Internal Server Error. An error occurred during user registration.
+ *         description: Internal Server Error. Si è verificato un errore durante la registrazione dell'utente
  */
 
 

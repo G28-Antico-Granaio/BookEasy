@@ -6,15 +6,15 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/reviews/no-response-review:
  *   get:
- *     summary: Get reviews without responses
- *     description: Retrieves reviews that do not have a response.
+ *     summary: Prende le recensioni senza risposta
+ *     description: Restituisce tutte le recensioni senza il campo response
  *     tags:
  *       - Review
  *     responses:
  *       200:
- *         description: OK. Reviews retrieved successfully.
+ *         description: OK. Recensioni senza rispota trovate/Non ci sono recensioni senza rispota trovate
  *       500:
- *         description: Internal Server Error. An error occurred during the retrieval of reviews.
+ *         description: Internal Server Error. Si è verificato un errore durante l'estrazione delle recensioni
  */
 
 
@@ -26,9 +26,9 @@ export async function GET(req: NextRequest) {
       response: { $exists: false }
     });
 
-    let message = "Recensioni seza rispota trovate";
+    let message = "Recensioni senza rispota trovate";
     if (!data || data.length === 0) {
-      message = "Non ci sono recensioni senza risposta";
+      message = "Non ci sono recensioni senza rispota trovate";
     }
 
     return NextResponse.json({

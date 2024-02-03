@@ -6,12 +6,12 @@ import Reservation from "@/app/models/reservation_model";
  * @swagger
  * /api/reservations/delete-reservation/{_id}:
  *   delete:
- *     summary: Delete reservation
- *     description: Deletes a reservation based on the provided parameters.
+ *     summary: Cancella la prenotazione
+ *     description: Cancella la prenotazione che corrisponde alla _id passato
  *     tags:
  *       - Reservation
  *     requestBody:
- *       description: Reservation deletion data.
+ *       description: Il campo _id della prenotazione che si vuole cancellare
  *       required: true
  *       content:
  *         application/json:
@@ -20,17 +20,13 @@ import Reservation from "@/app/models/reservation_model";
  *             properties:
  *               id:
  *                 type: string
- *               date:
- *                 type: string
- *               turn:
- *                 type: string
  *     responses:
  *       200:
- *         description: OK. Reservation deletion successful.
+ *         description: OK. Reservation deletion successful
  *       404:
- *         description: Not Found. Reservation not found.
+ *         description: Not Found. Prenotazione insistente
  *       500:
- *         description: Internal Server Error. An error occurred during reservation deletion.
+ *         description: Internal Server Error. Si è verificato un errore durante la cancellazione della prenotazione
  */
 
 interface Params {
@@ -52,7 +48,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Params}) {
         const result = await Reservation.findByIdAndDelete({ _id: params._id });
 
         if (!result) {
-            throw new my_error("Non esiste nessuna prenotazione", 404);
+            throw new my_error("Prenotazione insistente", 404);
         }
 
         return NextResponse.json({

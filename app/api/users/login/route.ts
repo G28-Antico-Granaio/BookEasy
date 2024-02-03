@@ -7,12 +7,12 @@ import bcrypt from "bcryptjs";
  * @swagger
  * /api/users/login:
  *   post:
- *     summary: User Login
- *     description: Authenticates a user based on the provided email and password.
+ *     summary: Login
+ *     description: Autentica un utente con i parametri passati
  *     tags:
  *       - User
  *     requestBody:
- *       description: User login data.
+ *       description: Dati login
  *       required: true
  *       content:
  *         application/json:
@@ -21,19 +21,19 @@ import bcrypt from "bcryptjs";
  *             properties:
  *               email:
  *                 type: string
- *                 description: The user's email address.
+ *                 description: L'indirizzo e-mail dell'utente
  *               password:
  *                 type: string
- *                 description: The user's password for authentication.
+ *                 description: La password dell'utente
  *     responses:
  *       201:
- *         description: OK. User successfully logged in.
+ *         description: OK. Login effettuato
  *       404:
- *         description: Not Found. User not found.
+ *         description: Not Found. E-mail e/o password errate
  *       401:
- *         description: Unauthorized. Invalid credentials.
+ *         description: Unauthorized. E-mail e/o password errate
  *       500:
- *         description: Internal Server Error. An error occurred during user login.
+ *         description: Internal Server Error. Login effettuato
  */
 
 class my_error extends Error {
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({
             success: false,
-            message: error.message || "Si è verificato un errore durante la procedurav di login",
+            message: error.message || "Login effettuato",
         }, {
             status: error.status || 500
         });

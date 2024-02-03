@@ -6,9 +6,9 @@ import bcrypt from "bcryptjs";
 /**
  * @swagger
  * /api/users/reset-password/{email}:
- *   put:
- *     summary: Reset user password
- *     description: Resets user password based on the provided email.
+ *   patch:
+ *     summary: Ripristina la password
+ *     description: Ripristina la password dell'utente che corrisponde all'email passata
  *     tags:
  *       - User
  *     parameters:
@@ -18,7 +18,7 @@ import bcrypt from "bcryptjs";
  *         schema:
  *           type: string
  *     requestBody:
- *       description: User password reset data.
+ *       description: Dati ripristino password
  *       required: true
  *       content:
  *         application/json:
@@ -29,11 +29,13 @@ import bcrypt from "bcryptjs";
  *                 type: string
  *     responses:
  *       201:
- *         description: OK. User password reset successfully.
+ *         description: OK. Password modificata
  *       404:
- *         description: Not Found. User not found.
+ *         description: Not Found. Utente non trovato
+ *       409:
+ *         description: Password vecchia e nuova corrispondono
  *       500:
- *         description: Internal Server Error. An error occurred while resetting the user password.rd
+ *         description: Internal Server Error. Si è verificato un errore durante il reset della password
  */
 
 interface Params {

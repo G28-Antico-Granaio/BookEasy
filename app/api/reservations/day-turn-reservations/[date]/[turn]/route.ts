@@ -3,31 +3,31 @@ import Reservation from "@/app/models/reservation_model";
 import { NextRequest, NextResponse } from "next/server";
 /**
  * @swagger
- * /api/reservations/all-reservation/{date}/{turn}:
+ * /api/reservations/day-turn-reservation/{date}/{turn}:
  *   get:
- *     summary: Get all reservations for a specific date and turn
- *     description: Retrieves all reservations for the provided date and turn.
+ *     summary: Prende tutte le recensioni di una data e turno
+ *     description: Restituisce tutte le prenotazioni per la data e turno che gli sono fornite
  *     tags:
  *       - Reservation
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: date
  *         required: true
- *         description: The date for which reservations need to be retrieved.
+ *         description: La data di cui si vogliono avere le prenotazoini
  *         schema:
  *           type: string
  *           format: date
- *       - in: query
+ *       - in: path
  *         name: turn
  *         required: true
- *         description: The turn for which reservations need to be retrieved.
+ *         description: Il turno di cui si vogliono avere le prenotazioni
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: OK. Reservations retrieved successfully.
+ *         description: OK. Prenotazioni trovate/Non ci sono Prenotazioni
  *       500:
- *         description: Internal Server Error. An error occurred during the retrieval of reservations.
+ *         description: Internal Server Error. Si è verificato un errore durante la raccolta delle prenotazioni
  */
 
 
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest, {params} : {params: Params}) {
             status: 200,
         }) 
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/all-reservation/[date]/[turn]' --> ", error.message);
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reservations/day-turn-reservation/[date]/[turn]' --> ", error.message);
 
         return NextResponse.json({
             success: false,

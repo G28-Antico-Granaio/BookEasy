@@ -5,25 +5,25 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * @swagger
  * /api/reservations/change-status/{_id}:
- *   put:
- *     summary: Change reservation status
- *     description: Changes the status of a reservation based on the provided reservation ID.
+ *   patch:
+ *     summary: Cambia lo stato della prenotazione
+ *     description: Cambia lo stato alla prenotazione che corrisponde al reservation_id passato
  *     tags:
  *       - Reservation
  *     parameters:
  *       - in: path
  *         name: _id
  *         required: true
- *         description: The ID of the reservation whose status needs to be changed.
+ *         description: Il campo _id della prenotazione di cui lo stato deve essere cambiato
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: OK. Reservation status changed successfully.
+ *         description: OK. Stato del tavolo cambiato
  *       404:
- *         description: Not Found. Reservation not found for the provided ID.
+ *         description: Not Found. Prenotazione non trovata
  *       500:
- *         description: Internal Server Error. An error occurred during the status change.
+ *         description: Internal Server Error. Si è verificato un problema durante il cambiamento di stato
  */
 
 interface Params {

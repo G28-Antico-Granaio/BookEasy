@@ -6,19 +6,19 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/reviews/review/{reservation_id}:
  *   post:
- *     summary: Post a review for a reservation
- *     description: Posts a review for the specified reservation.
+ *     summary: Publica una recensione
+ *     description: Publica una recensione sulla recensione che corrisponde al parametro reservation_id passato
  *     tags:
  *       - Review
  *     parameters:
  *       - in: path
  *         name: reservation_id
  *         required: true
- *         description: The ID of the reservation for which a review is being posted.
+ *         description: Il parametro _id della prenotazione su di cui è la recensione
  *         schema:
  *           type: string
  *     requestBody:
- *       description: Review data.
+ *       description: Dati Recensione
  *       required: true
  *       content:
  *         application/json:
@@ -42,13 +42,15 @@ import { NextRequest, NextResponse } from "next/server";
  *                  type: string
  *               surname:
  *                  type: string
+ *               comment:
+ *                  type:string
  *     responses:
  *       201:
- *         description: Created. Review posted successfully.
+ *         description: Created. Prenotazione effetuata
  *       409:
- *         description: Conflict. Review already exists for the specified reservation.
+ *         description: Conflict.Recensione è già stata effettuata
  *       500:
- *         description: Internal Server Error. An error occurred during the review posting.
+ *         description: Internal Server Error. Si è verificato un errore durante la publicazione della recensione
  */
 
 
@@ -79,12 +81,12 @@ export async function POST(req: NextRequest, { params }: { params: Params}) {
 
             return NextResponse.json({
                 success: true,
-                message: "Prenotazione effetuata"
+                message: "Recensione publicata"
             }, {
                 status: 201,
             })
         } else {
-            throw new my_error("Recensione è già stata fatta", 409);
+            throw new my_error("Recensione è già stata effettuata", 409);
         } 
     } catch (error: any) {
         console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reviews/review/[reservation_id]' --> ", error.message)

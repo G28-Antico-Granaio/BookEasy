@@ -4,21 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
- * /api/reviews/response/{_id}:
- *   put:
- *     summary: Post a response to a review
- *     description: Posts a response to the specified review.
+ * /api/reviews/responde/{_id}:
+ *   patch:
+ *     summary: Pubblica la reiposta an una recensione
+ *     description: Pubblica la risposta alla recensione che corrisponde al parametro _id passato
  *     tags:
  *       - Review
  *     parameters:
  *       - in: path
  *         name: _id
  *         required: true
- *         description: The ID of the review to which a response is being posted.
+ *         description: Il parametro _id della recensione su cui viene publicata la risposta
  *         schema:
  *           type: string
  *     requestBody:
- *       description: Response data.
+ *       description: Dati risposta
  *       required: true
  *       content:
  *         application/json:
@@ -29,11 +29,11 @@ import { NextRequest, NextResponse } from "next/server";
  *                 type: string
  *     responses:
  *       201:
- *         description: Created. Response posted successfully.
+ *         description: Created. Risposta pubblicata
  *       404:
- *         description: Not Found. Review not found for the specified ID.
+ *         description: Not Found. Recensione non Trovata
  *       500:
- *         description: Internal Server Error. An error occurred during the response posting.
+ *         description: Internal Server Error. Si è verificato un problema durante la publicazione della risposta
  */
 
 
@@ -62,7 +62,7 @@ export async function PATCH(req: NextRequest, { params } : { params: Params }) {
         );
 
         if (!review) { 
-            throw new my_error("Recensione non Trovata", 404)
+            throw new my_error("Recensione non trovata", 404)
         }
 
         return NextResponse.json({
@@ -72,11 +72,11 @@ export async function PATCH(req: NextRequest, { params } : { params: Params }) {
             status: 201,
         })
     } catch (error: any) {
-        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reviews/response/[_id]' --> ", error.message)
+        console.log(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reviews/responde/[_id]' --> ", error.message)
 
         return NextResponse.json({
             success: false,
-            message: "Si è verificato un errore durante la publicazione della risposta",
+            message: "Si è verificato un problema durante la publicazione della risposta",
             }, {
                 status: 500
             }

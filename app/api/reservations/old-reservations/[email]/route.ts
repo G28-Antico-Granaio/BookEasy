@@ -6,22 +6,22 @@ import { NextRequest, NextResponse } from "next/server";
  * @swagger
  * /api/reservations/old-reservation/{email}:
  *   get:
- *     summary: Get old reservations for a user
- *     description: Retrieves reservations made by the user in the last 7 days.
+ *     summary: Prende le prenotazioni passate degli ultimi 7 giorni di un utente
+ *     description: Restituisce tutte le prenotazioni passate degli ultimi 7 giorni dell'utente che corrisponde alla email passata
  *     tags:
  *       - Reservation
  *     parameters:
  *       - in: path
  *         name: email
  *         required: true
- *         description: The email of the user whose old reservations need to be retrieved.
+ *         description: Indirizzo e-mail dell'utente di cui devono essere restituite le prenotazioni
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: OK. Old reservations retrieved successfully.
+ *         description: OK. Prenotazioni trovate/Non ci sono prenotazioni
  *       500:
- *         description: Internal Server Error. An error occurred during the retrieval of old reservations.
+ *         description: Internal Server Error. Si è verificato un errore durante la raccolta delle prenotazioni
  */
 
 

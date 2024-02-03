@@ -7,33 +7,42 @@ import moment from "moment";
  * @swagger
  * /api/reservations/reserve:
  *   post:
- *     summary: Reserve a table
- *     description: Reserves a table based on the provided parameters.
+ *     summary: Prenota un tavolo
+ *     description: Prenota un tavolo con i parametri che gli sono passati
  *     tags:
  *       - Reservation
  *     requestBody:
- *       description: Reservation data.
+ *       description: Dati prenotazione
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: string
+ *               table_id:
+ *                 type: number
  *               turn:
- *                 type: string
+ *                 type: number
  *               date:
  *                 type: string
+ *                 format: date 
  *               cover_number:
  *                 type: number
+ *               status
+ *                 type: boolean
+ *               email
+ *                 type: string
+ *               name
+ *                 type: string
+ *               surname:
+ *                 type: string
  *     responses:
  *       201:
- *         description: Created. Table reservation successful.
+ *         description: Created. Tavolo prenotato
  *       409:
- *         description: Conflict. Table already reserved.
+ *         description: Conflict. Tavolo già prenotato
  *       500:
- *         description: Internal Server Error. An error occurred during table reservation.
+ *         description: Internal Server Error. Si è verificato un errore durante la prenotazione del tavolo
  */
 
 
