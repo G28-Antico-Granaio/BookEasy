@@ -71,12 +71,15 @@ connect_DB();
 
 export async function POST(req: NextRequest, { params }: { params: Params}) {
     try {
-        const review_exist = await Review.findOne({ reservaion_id: params.reservation_id });
+        const review_exist = await Review.findOne({ reservation_id: params.reservation_id });
 
         if (!review_exist) {
             const req_body = await req.json();
 
-            const new_review = new Review(req_body);
+            const new_review = new Review({
+                reservation_id: params.reservation_id,
+                ...req_body,
+            });
 
             await new_review.save()
 
@@ -84,7 +87,7 @@ export async function POST(req: NextRequest, { params }: { params: Params}) {
                 success: true,
                 message: "Recensione publicata"
             }, {
-                status: 201,
+                status: 200,
             })
         } else {
             throw new my_error("Recensione è già stata effettuata", 409);

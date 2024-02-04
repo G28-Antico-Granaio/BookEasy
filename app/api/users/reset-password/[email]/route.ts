@@ -28,12 +28,12 @@ import bcrypt from "bcryptjs";
  *               password:
  *                 type: string
  *     responses:
- *       201:
+ *       200:
  *         description: OK. Password modificata
+ *       401:
+ *         description: Forbidden. Password vecchia e nuova corrispondono
  *       404:
  *         description: Not Found. Utente non trovato
- *       409:
- *         description: Password vecchia e nuova corrispondono
  *       500:
  *         description: Internal Server Error. Si è verificato un errore durante il reset della password
  */
@@ -64,7 +64,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
     const is_password_different = await bcrypt.compare(req_body.password, user.password);
     
     if (is_password_different) {
-      throw new my_error("Password vecchia e nuova corrispondono", 409);
+      throw new my_error("Password vecchia e nuova corrispondono", 403);
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -81,7 +81,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
       success: true,
       message: "Password modificata",
     }, {
-      status: 201
+      status: 200
     });
   } catch (error: any) {
     console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/reset-password/[email]' --> " + error.message);

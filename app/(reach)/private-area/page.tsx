@@ -121,7 +121,6 @@ function Private_Area() {
         ...values,
         name: user.name,
         surname: user.surname,
-        reservation_id: reservation._id,
         date: reservation.date
       }
       

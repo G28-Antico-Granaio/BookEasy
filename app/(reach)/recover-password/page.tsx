@@ -2,6 +2,7 @@
 
 // logic
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 // UI
 import { Form, Button, Input, message, Modal } from 'antd';
@@ -16,6 +17,7 @@ function Password_Recovery() {
 
   // basics
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const onResend = async (values: Email) => {
     try{
@@ -33,10 +35,11 @@ function Password_Recovery() {
     }
   }
 
-  function error() {
+  function error(callback: () => void) {
     Modal.error({
       title: 'Funzione non ancora implementata',
-      content: 'Se si vuole procedere con il ripristino della password andare alla pagina https://bookeasy-antico-granaio.vercel.app/reset-password (online) o http://localhost:3000/recover-password (locale)',
+      content: 'Se si vuole procedere con il ripristino premondo il bottone ok sarete reinderizzati alla pagina dedicata',
+      onOk: callback,
     });
   }
 
@@ -101,7 +104,7 @@ function Password_Recovery() {
             modificarla
           </section>
           
-          <Button onClick={error} type="primary" htmlType='submit' block loading={loading}>
+          <Button onClick={() => error(() => router.push('/reset-password'))} type="primary" htmlType='submit' block loading={loading}>
             Recupera Password
           </Button>
         </Form>

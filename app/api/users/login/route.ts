@@ -26,10 +26,8 @@ import bcrypt from "bcryptjs";
  *                 type: string
  *                 description: La password dell'utente
  *     responses:
- *       201:
+ *       200:
  *         description: OK. Login effettuato
- *       404:
- *         description: Not Found. E-mail e/o password errate
  *       401:
  *         description: Unauthorized. E-mail e/o password errate
  *       500:
@@ -52,7 +50,7 @@ export async function POST(req: NextRequest) {
 
         const user = await User.findOne({ email: req_body.email });
         if (!user) {
-            throw new my_error("E-mail e/o password errate", 404);
+            throw new my_error("E-mail e/o password errate", 401);
         }
 
         const password_match = await bcrypt.compare(req_body.password, user.password);
@@ -67,7 +65,7 @@ export async function POST(req: NextRequest) {
                 isAdmin: user.isAdmin,
             },
         }, {
-            status: 201
+            status: 200
         });
     } catch (error: any) {
         console.error(" - ERRORE: è avvenuto un problema durante l'uso dell'api di '/api/users/login' --> ", error.message);

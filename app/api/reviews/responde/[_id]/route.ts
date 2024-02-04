@@ -59,7 +59,7 @@ export async function PATCH(req: NextRequest, { params } : { params: Params }) {
             params._id,
             { $set: { response: req_body.response } },
             { new: true }
-        );
+        )
 
         if (!review) { 
             throw new my_error("Recensione non trovata", 404)
@@ -76,9 +76,9 @@ export async function PATCH(req: NextRequest, { params } : { params: Params }) {
 
         return NextResponse.json({
             success: false,
-            message: "Si è verificato un problema durante la publicazione della risposta",
+            message: error.message || "Si è verificato un problema durante la publicazione della risposta",
             }, {
-                status: 500
+                status: error.status || 500
             }
         )
     }

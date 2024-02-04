@@ -68,7 +68,7 @@ function Reset_Password() {
             rules={[
                 {
                   required: true,
-                  message: 'Inserisci la tua Password'
+                  message: 'Inserisci la tua nuova Password'
                 },
                 {
                   pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
@@ -88,11 +88,7 @@ function Reset_Password() {
             rules={[
               {
                 required: true,
-                message: 'Inserisci la tua Password'
-              },
-              {
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
-                message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
+                message: 'Conferma la tua nuova Password'
               },
               ({ getFieldValue }) => ({validator(_, value) {
 

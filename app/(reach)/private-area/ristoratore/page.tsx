@@ -177,8 +177,8 @@ function Private_Area() {
         status: false,
         cover_number: 0,
         email: 'ristoratore@anticogranio.com',
-        name: 'Anonimo',
-        surname: 'Nobody',
+        name: 'Antico',
+        surname: 'Granaio',
       }));
       tablesLibero = fakeReservations;
     } catch (error: any) {
