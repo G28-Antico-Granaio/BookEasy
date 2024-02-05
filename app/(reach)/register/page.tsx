@@ -199,15 +199,11 @@ function Register() {
                 required: true,
                 message: 'Inserisci la tua Password'
               },
-              {
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
-                message: 'Assicurarsi che la password abbia almeno 8 caratteri, includa almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale come !, @, #, _',
-              },
               ({ getFieldValue }) => ({validator(_, value) {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                   }
-                    return Promise.reject(new Error('La password e la sua conferma non corrispondono. Assicurarsi che entrambi i campi siano identici”'));
+                    return Promise.reject(new Error('La password e la sua conferma non corrispondono. Assicurarsi che entrambi i campi siano identici'));
                   },
               }),
             ]}>

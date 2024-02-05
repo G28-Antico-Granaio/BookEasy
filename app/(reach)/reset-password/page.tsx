@@ -59,7 +59,7 @@ function Reset_Password() {
           initialValues={{ tel_area_code: '39' }}
           scrollToFirstError>
 
-          <h2>Resetta la Password</h2>
+          <h2>Ripristina la Password</h2>
 
           <hr className={style.hr_form}  />
 
