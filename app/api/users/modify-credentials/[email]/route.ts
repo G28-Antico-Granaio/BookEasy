@@ -76,7 +76,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Params }) {
       throw new my_error("Utente non trovato", 404);
     }
 
-    if (user.tesl_number !== req_body.tel_number) {
+    if (user.tel_number !== req_body.tel_number) {
       const used_tel_numb = await User.findOne({ tel_number: req_body.tel_number});
       if (used_tel_numb) {
         throw new my_error("Numero di telefono è già associato ad un account esistente", 409)
